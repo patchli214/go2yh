@@ -1,0 +1,52 @@
+<html>
+<head>
+    <title>CRM帮助－关联crm和真朴在线学围棋网站</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+.block{cursor:pointer;padding-left:6px;padding-right:16px;padding-top:6px;float:left;height:114px;}
+</style>
+</head>
+<body >
+<div style="margin:10px;">
+  <a href="/go_static/howto/index.html"><返回帮助主页</a>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<center><h4>关联CRM和真朴在线学围棋网站</h4></center>
+<div style="margin:20px;">
+通过关联真朴在线学围棋网站和CRM系统，CRM系统可以抓取学生在线做题下棋数据，形成学生完整的学习档案信息。
+<p>每天夜间数据同步，第二天可以看到前一天的做题数据。<p>
+<p>关联分两步：<br>
+1、在CRM里填写老师的在线围棋后台老师账号：（如果老师账号密码忘记了，请找白起重置密码）<p>
+
+<div style="width:70%;padding-top:6px;margin:0 auto;border:1px solid black;"><img src="/go_static/img/howto/crm_go01.jpg" style="max-width:800px;width:100%;"></div>
+
+<div style="width:70%;margin:0 auto;border:1px solid black;"><img src="/go_static/img/howto/crm_go02.jpg" style="max-width:800px;width:100%;"></div>
+<br>2、CRM里的学生名字要和他（她）的在线围棋账号匹配（在线围棋用户名去掉校区前缀后，应该和CRM里学生名字相同）。如果不同可以修改CRM的学生名字。<p>
+<div style="width:70%;padding-top:6px;margin:0 auto;border:1px solid black;"><img src="/go_static/img/howto/crm_go03.jpg" style="max-width:800px;width:100%;"></div>
+<br>
+
+
+</div>
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>

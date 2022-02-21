@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+{%endblock%}
+{% block scripts %}
+<script>
+{%if track_txt%}
+
+//alert('name-{{student.name}},mobile-{{student.prt1mobile}},regBranchName-{{student.regBranchName}}')
+  var first= '{{track_txt}}';
+  var date = new Date();
+  var keyword4= date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes();
+  {%for openId in openIds%}
+    inform(first,'{{openId}}','{{student.name}}','{{student.prt1mobile}}',keyword4,'{{student.regBranchName}}');
+  {% endfor %}
+{%endif%}
+alert("保存成功");
+var url = '{% url 'regUser:student_list' %}';
+console.log(url);
+document.location.href=url;
+</script>
+{%endblock%}

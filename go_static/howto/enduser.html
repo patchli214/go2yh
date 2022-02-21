@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>CRM帮助－课程结束</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+.block{cursor:pointer;padding-left:6px;padding-right:16px;padding-top:6px;float:left;height:114px;}
+</style>
+</head>
+<body >
+<div style="margin:10px;">
+  <a href="/go_static/howto/index.html"><返回帮助主页</a>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<center><h4>流失（课程结束）</h4></center>
+<div style="margin:20px;">
+
+在学生页面，找到要结束课程的学生，点击“结束”按钮
+<br>(两种情况会出现“结束”按钮：1、预计结课日期已到，2、剩余课时数小于等于0)
+<div class="demopicDiv"><img src="/go_static/img/howto/enduser01.png" style="width:90%;"></div>
+在弹出框里填写结束日期，然后点“确定结束”按钮，学生会自动从班级里退出，合同自动变更为结束状态，客户状态也自动改为结束
+<div class="demopicDiv"><img src="/go_static/img/howto/enduser02.png" style="width:90%;"></div>
+
+
+
+</div>
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>

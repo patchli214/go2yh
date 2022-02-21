@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+<link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">    
+        <style>
+   
+    .inactiveNam{background:#555555;color:white;}
+
+    .showMemo{cursor:pointer;}
+    .showMemo2{cursor:pointer;}
+    td{padding:1px;}
+    </style>
+{% include 'subNav.html' %}
+
+
+<div style="margin-left:0px;float:left;">
+<table id="datatable" >
+        <thead>
+        <tr>
+<th></th>
+        {%if login_teacher.branchType == '1'%}
+        <th>编号</th>
+        {%endif%}
+        <th></th>
+        <th>孩子</th>
+        <th width="60"></th>
+        <th>电话</th>
+        {%if login_teacher.branchType == '1'%}
+        <th>意向</th>
+        {%else%}        
+        <th>拜访老师</th>
+        <th width="100">拜访时间</th>
+        {%endif%}
+        
+        <th width="60">提醒老师</th>
+        
+        
+        <th width="120">跟进提醒</th>
+        <th width="350">联络记录</th>
+        <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for remind in reminds %}
+          {% if remind.student %}
+            {% if remind.student.id %}
+            <tr {% if remind.isDone == 1 %}style="background:#f3fff2"{%endif%}
+            {%if remind.student.probability == 'A'%} class="A" {%endif%}
+             {%if remind.student.probability == 'B'%} class="B" {%endif%}
+             {%if remind.student.probability == 'C'%} class="C" {%endif%}
+            >
+            <td>{% if remind.isDone == 1 %}<span  style="color:green"  class="glyphicon glyphicon-ok-sign"></span>{%endif%}</td>
+                {%if login_teacher.branchType == '1'%}
+                <td width="60" nowrap>{{remind.student.code}}</td>
+                {%endif%}
+                <td width="10">{{remind.student.probability|default:""}}</td>
+                <td width="70"><a href="{% url 'regUser:student_info' remind.student.id %}" >{%if remind.student.name%}{{remind.student.name}}{%elif remind.student.name2%}{{remind.student.name2}}{%else%}无{%endif%}</a></td>
+                <td width="60">{{remind.yearMonth|default:""}}</td>
+                
+                <td width="60">{{remind.student.prt1mobile}}</td>
+                {%if login_teacher.branchType == '1'%}
+        <td  width="70" nowrap>{{remind.student.branchName|default:""}}</td>
+        {%else%}        
+        <td width="60">{{remind.student.regTeacherName|default:""}}</td>
+        <td width="60">{{remind.student.regTime|date:"Y-m-d"|default:""}}</td>
+        {%endif%}
+                
+                
+                
+                <td width="100" nowrap>
+                {% for teacher in remind.remindTeachers %}
+                  {%if teacher.name != '管理员'%}{{teacher.name}}&nbsp;{%endif%}
+                {% endfor %}
+                </td>
+                
+                
+                
+                <td width="100" nowrap>[{{remind.remindTime|date:"Y-m-d"}}]{{remind.remind_txt}}</td>
+                <td width="350">
+
+<div onclick="gotrack('{{remind.student.id}}')" class="showMemo" goid="{{remind.student.id}}" style="{%if student.probability == 'A'%}color:black;{%endif%}overflow:hidden;min-height:40px;max-height:100px;text-overflow:ellipsis;width:350px;">
+        {{remind.student.memo|default:""}}
+        </div>
+        <div onclick="gotrack('{{remind.student.id}}')"  class="showMemo2" id="{{remind.student.id}}" style="{%if student.probability == 'A'%}color:black;{%endif%}display:none;position:fixed;left:0;top:0;min-height:40px;max-height:700px;width:350px;">
+        {{remind.student.memo|default:""}}</div>
+
+</td>
+                <td width="40">
+                    <button style="width:40px;font-size:12px;padding:2px;"
+                            {% if remind.student.isDemo == 1 %}
+                                class="btn btn-success" onclick="click_demo('{{ remind.student.id }}');"
+                            {% elif remind.student.isDemo == -1 %}
+                                class="btn btn-warning"  onclick="click_demo('{{ remind.student.id }}');"
+                            {% elif remind.student.demo%}
+                                class="btn btn-danger" onclick="click_demo('{{ remind.student.id }}');"
+                            {% else %}
+                                class="btn btn-default" onclick = "addDemo('{{ remind.student.id }}');"
+                            {% endif %}
+                                >试听
+                    </button>
+
+                    <button style="font-size:12px;padding:2px;" id="depositButton" onclick="go_deposit('{{remind.student.id}}')"
+                {% if remind.student.deposit and remind.student.deposit > 0 %}
+                class="btn btn-success"
+                {%else%}
+                class="btn btn-default"
+                {%endif%}
+                >定金</button>
+                <button  style="font-size:12px;padding:4px;" class=
+                {% if remind.student.status == 1 %}
+                    "btn btn-success"
+                {%  elif remind.student.status == 0 %}
+                    "btn btn-default"
+                {%  elif remind.student.status > 1 %}
+                    "btn btn-warning"
+                {%  endif %}
+                 onclick="click_contract('{{ remind.student.id }}');">合同</button>
+                
+                </td>
+                </td>
+                
+            </tr>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+$("#subNav9").attr("class","activeNav");
+
+function addDemo(studentId) {
+	var url = '{% url 'gradeClass:studentDemo' '111111111111111111111111'%}';
+	url = url.replace("111111111111111111111111", studentId);
+    document.location.href=url;
+}
+
+function click_demo(oid) {
+	var url = '{% url 'gradeClass:studentDemo' '111111111111111111111111'%}';
+	url = url.replace("111111111111111111111111", oid);
+    document.location.href=url;
+}
+
+function go_deposit(oid) {
+    var url = "{% url 'regUser:student_deposit' %}";
+    url = url+"?student_oid="+oid;
+    document.location.href=url;
+}
+
+$(".showMemo").hover(function (e) {
+	var x = $(this).offset()
+	var top = x.top
+	top = top - $(window).scrollTop()
+	var left = x.left
+	var div = $("#"+$(this).attr("goid"))
+	div.css("top",top+"px")
+	div.css("left",left+"px")
+	div.css("opacity","1")
+	div.css("background","white")
+	div.css("border","1px solid black")
+	div.css("display","block")
+})
+$(".showMemo2").hover(function(){},function (e) {
+	$(this).css("display","none")
+})
+$(window).scroll(function(){$(".showMemo2").css("display","none")})  
+
+$(".showDemo-").hover(function (e) {
+	var x = $(this).offset()
+	var top = x.top
+	top = top - $(window).scrollTop()
+	var left = x.left
+	var div = $("#"+$(this).attr("goid"))
+	div.css("top",top+"px")
+	div.css("left",left+"px")
+	div.css("opacity","1")
+	div.css("background","white")
+	div.css("border","1px solid black")
+	div.css("display","block")
+})
+$(".showDemo2-").hover(function(){},function (e) {
+	$(this).css("display","none")
+})
+$(window).scroll(function(){$(".showDemo2-").css("display","none")}) 
+
+function gotrack(student_oid){
+	var url = "{%url 'regUser:student_info' '111111111111111111111111'%}"
+	url = url.replace("111111111111111111111111", student_oid);
+	window.location.href=url
+}
+
+{% include 'subNavJs.html' %}
+
+
+
+$(document).ready(function() {
+	$('#datatable').DataTable({
+	"paging":   false,
+	"searching": false,
+	"info":false,
+	"order": [[ 6, "asc" ]],
+	"columns": [
+                { "orderable": false },
+	            { "orderable": false },
+	            { "orderable": false },
+	            { "orderable": false },
+	            { "orderable": false },
+	            { "orderable": false },
+	            null,
+	            { "orderable": false },
+	            { "orderable": false },
+	            { "orderable": false },
+	            { "orderable": false }
+	            
+	          ]
+	});
+});
+
+
+function click_contract(oid) {
+	//if(isZB()){
+	if(false){
+		alert("没有权限");
+		return;
+	}
+    var url = "{%url 'contract:studentContracts'%}?student_oid="+oid;
+    document.location.href=url;
+}
+
+</script>
+{% endblock %}

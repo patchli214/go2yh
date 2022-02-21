@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.divTitle{
+    float:left;vertical-align:top;width:80px;padding:8px;}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="/go2/regUser/studentInfo/{{student_oid}}"><返回</a>
+</div>
+<div style="width:100%;background:white;padding:10px 20px 8px 0;">
+
+<div style="float:right;">
+<button onclick="newpage()">新页面</button>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/web/uploadPic?type={{type}}&student_oid={{student_oid}}"><button>上传图片</button></a>
+</div>
+<div style="clear:both;"></div>
+</div>
+
+<div style="width:100%;border:1px solid black;background:white;padding:10px;">
+<div style="width:100%;text-align:center;">{%if type == '3'%}校区{%else%}学生&nbsp;{{student.name|default:""}}{{student.name2|default:""}}&nbsp;{%endif%}相册列表</div>
+{%for page in pages%}
+
+<div style="float:left;width:49%;background:#{%if page.id == editPage.id%}caf3b6{%else%}f8f8f8{%endif%};margin:4px 8px 0 0;padding:6px;">
+<a target="_blank" href="{%url 'showPage' page.sn%}?teacherId={%if type == '3'%}{{login_teacher.id}}{%else%}{{page.teacher}}{%endif%}">{{page.title}}</a>
+&nbsp;&nbsp;{%if page.teacher == login_teacher.id%}<span onclick="goEdit('{{page.id}}')" style="cursor:pointer;" class="glyphicon glyphicon-pencil" title="修改"></span>{%endif%}</div>
+{%endfor%}
+<div style="clear:both;"></div>
+</div>
+<div style="width:100%;background:white;padding:6px;">
+
+</div>
+<div style="padding-top:10px;">
+<div>
+<div style="text-align:center;padding:0 0 10px 0">{%if editPage%}修改{%else%}添加{%endif%}页面</div>
+<div class="divTitle">页面标题</div>
+<div style="float:left;width:90%"><input style="width:90%;" type="text" id="title" value="{{editPage.title|default:''}}"></div>
+<div style="clear: both;"></div>
+
+<div class="divTitle">发布日期</div>
+<div style="float:left;width:90%"><input style="width:90%;" type="text" id="publishDate" value="{{editPage.publishDate|default:''}}"></div>
+
+<div style="clear: both;"></div>
+<div class="divTitle">导语</div>
+<div style="float:left;width:90%"><textarea style="width:90%" id="text">{{editPage.text|default:''}}</textarea></div>
+</div>
+<div style="clear: both;"></div>
+<div class="divTitle">背景</div>
+
+<div style="padding:8px;">
+<input type="hidden" id="bg" value="{{page.bg|default:''}}" />
+<div class="bgdiv" id="b1" style="float:left;width:20%;padding:2px;"><img style="width:100%;" src="/go_static/img/background04.png" /></div>
+<!--div class="bgdiv" id="b2" style="float:left;width:20%;padding:2px;"><img style="width:100%;" src="/go_static/img/background03.png" /></div-->
+<div class="bgdiv" id="b3" style="float:left;width:20%;padding:2px;"><img style="width:100%;" src="/go_static/img/background02.png" /></div>
+<!--div class="bgdiv" id="b4" style="float:left;width:20%;padding:2px;"><img style="width:100%;" src="/go_static/img/background01.png" /></div-->
+<div style="float:right;width:20%;padding:2px;vertical-align:top"><button onclick="savePage()">保存页面</button></div>
+</div>
+<div style="clear: both;"></div>
+<div class="divTitle">图片</div>
+<div style="padding:8px;">
+
+
+{%for file in sortedPics%}
+<div id="{{file.id}}div" style="float:left;width:30%;padding:2px;border:5px solid #2aa809 ;margin:1px">
+<img style="width:100%" class="imgfile" src="{{imagePath}}{{file.filepath}}{{file.filename}}" />
+<textarea id="{{file.id}}" name="memo" placeholder="图片说明" style="margin-top:4px;width:90%;height:80px;">{{file.memo|default:""}}</textarea>
+<input type="checkbox" name="picpic" value="{{file.id}}" checked="checked">
+顺序<input type="text" name="picOrder" style="width:36px;" id="{{file.id}}order" value="{{file.order|default:''}}"  />
+&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:rotatePic0('{{file.id}}','{{imagePath}}{{file.filepath}}{{file.filename}}')"><span class="glyphicon glyphicon-refresh" title="旋转"></span></a>
+&nbsp;&nbsp;|&nbsp;&nbsp;
+<a href="javascript:removePic('{{file.id}}')"><i class="glyphicon glyphicon-trash" title="删除"></i></a>
+
+</div>
+{%endfor%}
+
+{%for file in files%}
+<div id="{{file.id}}div" style="float:left;width:30%;padding:2px;{%if file.selected%}border:5px solid #2aa809{%endif%} ;margin:1px">
+<img style="width:100%" class="imgfile" src="{{imagePath}}{{file.filepath}}{{file.filename}}?tag={{millis}}" />
+<textarea id="{{file.id}}" name="memo" placeholder="图片说明" style="margin-top:4px;width:90%;height:80px;">{{file.memo|default:""}}</textarea>
+<input type="checkbox" name="picpic" value="{{file.id}}">
+顺序<input type="text" name="picOrder" style="width:36px;" id="{{file.id}}order" value="{{file.order|default:''}}"  />
+&nbsp;<input id="filedate" placeholder="日期" value="{{file.fileCreateTime|date:'Y-m-d'}}">
+&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:rotatePic0('{{file.id}}','{{imagePath}}{{file.filepath}}{{file.filename}}')"><span class="glyphicon glyphicon-refresh" title="旋转"></span></a>
+&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:removePic('{{file.id}}')"><i class="glyphicon glyphicon-trash" title="删除"></i></a>
+</div>
+{%endfor%}
+
+
+
+</div>
+<div style="clear:both;"></div>
+</div>
+<div style="padding:10px;"></div>
+<div onclick="savePage()" style="background:#{%if editPage%}91f477{%else%}dddddd{%endif%};clear:both;width:100%;text-align:center;padding:20px;"><button onclic="savePage()">保存页面</button></div>
+
+
+
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <div>点击右面按钮旋转图片&nbsp;<a onclick="rotatePic()"><i class="glyphicon glyphicon-refresh"></i></button></div>
+            </div>
+            <div class="modal-body" id="info-body">
+                <div style="padding:10px">
+
+                    <div id="image"></div>
+
+
+
+                    <input id="file_oid" type="hidden" />
+                    <input id="file_name" type="hidden" />
+                  </div>
+
+
+            </div>
+
+        </div>
+    </div>
+  </center>
+</div>
+
+
+
+
+{%endblock%}
+{% block scripts %}
+<script>
+{%if err%}
+alert('上传图片失败：{{err}}')
+{%endif%}
+function goEdit(id){
+    var url = '{% url "web:pages" %}'+'?type={{type}}&pageId='+id+'&student_oid={{student_oid}}';
+    window.location.href = url;
+}
+
+function rotatePic0(file_oid,filename){
+  var d = new Date();
+  var n = d.getTime();
+  $("#image").html('<img src="'+filename+'?tag='+n+'" />');
+  $("#file_oid").val(file_oid)
+  $("#file_name").val(filename)
+  $("#imageModal").modal();
+}
+
+function rotatePic(){
+    var file_oid = $("#file_oid").val()
+    var file_name = $("#file_name").val()
+	  var url = '{% url 'web:rotatePic' %}';
+
+    $.post(url, {
+        'file_oid':file_oid
+
+      }, function (res) {
+        if (res.error == 0) {
+            alert("成功");
+            rotatePic0(file_oid,file_name)
+        } else {
+            alert(res.msg);
+        }
+      });
+
+}
+
+function removePic(id){
+	if(confirm('确定删除图片?')){
+	  var url = '{% url 'web:removePic' %}'+'?type={{type}}&banch={{login_teacher.branch}}&student_oid={{student.id}}'+'&file_oid='+id;
+	  window.location.href = url;
+	}
+}
+function picMemo(id){
+	var memo = $("#"+id).val();
+	var order = $("#"+id+"order").val();
+	$.post("{% url 'regUser:picMemo'%}", {
+  	  'id':id,
+  	  'order':order,
+  	  'memo':memo
+    }, function (res) {
+      if (res.error == 0) {
+          alert("成功");
+          location.reload(true);
+      } else {
+          alert(res.msg);
+      }
+    });
+}
+
+function savePage(){
+	var title = $("#title").val();
+	var publishDate = $("#publishDate").val();
+	var text = $("#text").val();
+	var bg = $("#bg").val();
+	var i = 0;
+	var pics = '';
+	var allPics  = ''
+	var orders = ''
+	var memos = ''
+	if(title.length==0){
+		alert('请填写题目');
+		return;
+	}
+	$('input[type=checkbox]:checked').each(function () {
+		if(i>0)pics = pics+',';
+		pics = pics+($(this).val());
+		i++;
+	});
+	i = 0
+	$('input[type=checkbox]').each(function () {
+		if(i>0)allPics = allPics+',';
+		allPics = allPics+($(this).val());
+		i++;
+	});
+	console.log(allPics)
+    i = 0
+	$('textarea[name=memo]').each(function () {
+		if(i>0)memos = memos+'||';
+		memos = memos+($(this).val());
+		i++;
+	});
+	console.log(memos)
+	i = 0
+	$('input[name=picOrder]').each(function () {
+		if(i>0)orders = orders+',';
+		orders = orders+($(this).val());
+		i++;
+	});
+	console.log(orders)
+
+	//return
+	$.post("{% url 'web:savePage'%}", {
+  	  {%if student%}'student_oid':'{{student.id}}',{%endif%}
+  	  {%if editPage%}'id':'{{editPage.id|default:""}}',{%endif%}
+  	  'title':title,
+  	  'publishDate':publishDate,
+  	  'text':text,
+  	  'bg':bg,
+  	  'type':'{{type}}',
+  	  'pics':pics,
+  	  'allPics':allPics,
+  	  'memos':memos,
+  	  'orders':orders
+    }, function (res) {
+      if (res.error == 0) {
+          alert("成功");
+          location.reload(true);
+      } else {
+          alert(res.msg);
+      }
+    });
+}
+
+$('input[type=checkbox]').click(function(){
+
+	if($(this).prop("checked")){
+	    $("#"+$(this).val()+"div").css("border","5px solid #2aa809")
+    }else{
+	    $("#"+$(this).val()+"div").css("border","0px")
+    }
+});
+$(".imgfile").click(function(){
+	var obj = $(this).parent().children('input[type=checkbox]');
+	if(obj.prop("checked")){
+		obj.prop("checked",false);
+		$("#"+obj.val()+"div").css("border","0");
+	}else{
+	    obj.prop("checked",true);
+	    $("#"+obj.val()+"div").css("border","5px solid #2aa809");
+	}
+});
+$(".bgdiv").click(function(){
+	$(".bgdiv").each(function(){
+		$(this).css("border","0");
+	})
+	if($("#bg").val()==$(this).attr("id")){
+		$(this).css("border","0");
+		$("#bg").val("");
+	}else{
+		$(this).css("border","5px solid #2aa809");
+	    $("#bg").val($(this).attr("id"));
+	}
+
+});
+function newpage(){
+    var url = "{%url 'web:pages'%}?type={{type}}";
+    {%if student_oid%}url = url+"&student_oid={{student_oid}}";{%endif%}
+    window.location.href=url;
+}
+$(".container").css("background","#{%if editPage%}caf3b6{%else%}eeeeee{%endif%}");
+$(".container").css("padding","0");
+$("body").css("overflow","scroll");
+{%if editPage and editPage.background%}
+$("#{{editPage.background}}").css("border","5px solid #2aa809");
+$("#bg").val('{{editPage.background}}');
+{%endif%}
+</script>
+{%endblock%}

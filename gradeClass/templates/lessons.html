@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+{%if login_teacher.branch == gc.branch.id|stringformat:"s" %}
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="javascript:goback('{{mainurl}}')"><返回</a>
+</div>
+{%endif%}
+{%if gc%}
+<table width="100%">
+<tr>
+<td style="background:#eeeeee;">{{gc.name}}班</td>
+<td style="background:#eeeeee;">{{gc.start_date|date:"Y-m-d"}}开班</td>
+<td style="background:#eeeeee;">上课时间： 周{% ifequal gc.school_day 1%}一{%endifequal%}{% ifequal gc.school_day 2%}二{%endifequal%}{% ifequal gc.school_day 3%}三{%endifequal%}{% ifequal gc.school_day 4%}四{%endifequal%}{% ifequal gc.school_day 5%}五{%endifequal%}{% ifequal gc.school_day 6%}六{%endifequal%}{% ifequal gc.school_day 7%}日{%endifequal%}
+ {{gc.school_time}}</td>
+</tr>
+{%if login_teacher.branch == gc.branch.id|stringformat:"s" %}
+<tr>
+<td colspan="10" width="100%" align="right"><button id="makeLessons">生成下次课签到表</button></td></tr>
+{%endif%}
+</table>
+{%endif%}
+<table class="table table-hover">
+<tr style="background:#eeeeee;">
+<td></td>
+<td>上课时间</td>
+<td>老师</td>
+<td>学生</td>
+<td></td>
+</tr>
+{% for lesson in lessons %}
+ {%if lesson.type == 2 %}
+     <tr class="extraLesson">
+ {%else%}
+     <tr>
+ {% endif %}
+<td>{%if lesson.type == 2 %}补课{%endif%}</td>
+<td>{{lesson.lessonTime|date:"Y-m-d H:i"|default:""}}</td>
+<td>{{lesson.teacher.name}}</td>
+<td>{{lesson.student|default:""}}</td>
+<td>
+<button class="btn btn-{%if lesson.checked%}success{%else%}default{%endif%}"
+{%if login_teacher.branch == gc.branch.id|stringformat:"s" %}
+ onclick="sign('{{lesson.id}}','{{lesson.lessonTime|date:"Y-m-d H:i"|default:""}}')"
+{%endif%}
+ >内容及签到</button>
+        {%if lesson.type == 2 and not lesson.checked%}
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        {%if login_teacher.branch == gc.branch.id|stringformat:"s" %}
+        <button deleteId="{{lesson.id}}" confirmContent="{{lesson.student|default:""}} {{lesson.lessonTime|date:"Y-m-d H:i"|default:""}}" class="removeButton">删除</button>
+        {%endif%}
+        {%endif%}
+</td>
+</tr>
+{% endfor %}
+</table>
+
+
+<!-- confirm Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">真的要删除下面的补课吗？</h4>
+            </div>
+            <div class="modal-body" id="info-body">
+
+<div id="confirmContent"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="goRemove" onclick="remove()" type="button" class="btn btn-danger" data-dismiss="modal">确定删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="deleteId">
+
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#makeLessons").click(function(){
+	if(confirm("确定？")){
+	    var url = "{% url 'gradeClass:makePassLessons' %}";
+        $.post(url, {
+            "id": "{{gc.id}}"
+        }, function (res) {
+            alert(res["msg"]);
+            location.reload(true);
+        });
+    }
+});
+function sign(id,time){
+	var url = "{% url 'gradeClass:signLesson' %}?id="+id+"&lessonTime="+time;
+	window.location.href=url;
+}
+function remove(){
+  id = $("#deleteId").val()
+	var url = "{% url 'gradeClass:api_removeLesson' %}";
+	$.post(url, {
+            "id": id
+        }, function (res) {
+            alert(res["msg"]);
+            location.reload(true);
+        });
+}
+function goback(url){
+	$("#tip").html("<font style='color:red;'>返回中...</font>")
+	window.location.href=url
+}
+$(".removeButton").click(function(){
+  console.log('delete')
+  $("#confirmModal").modal();
+  console.log($(this).attr("deleteId"))
+  $("#deleteId").val($(this).attr("deleteId"))
+  console.log($(this).attr("confirmContent"))
+  $("#confirmContent").html($(this).attr("confirmContent"))
+  console.log('deleteId-'+$("#deleteId").val())
+});
+
+</script>
+{%endblock%}

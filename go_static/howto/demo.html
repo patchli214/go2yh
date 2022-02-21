@@ -1,0 +1,54 @@
+<html>
+<head>
+    <title>CRM帮助－如何添加修改试听课</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+.block{cursor:pointer;padding-left:6px;padding-right:16px;padding-top:6px;float:left;height:114px;}
+</style>
+</head>
+<body >
+<div style="margin:10px;">
+  <a href="/go_static/howto/index.html"><返回帮助主页</a>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<center><h4>如何添加修改试听课</h4>
+试听课按钮颜色含义：<button style="font-size:12px;padding:6px;" class="btn btn-default">试听课</button>灰色-未安排试听，<button style="font-size:12px;padding:6px;" class="btn btn-danger">试听课</button>红色-已安排未上，<button style="font-size:12px;padding:6px;" class="btn btn-success">试听课</button>绿色-已上，<button style="font-size:12px;padding:6px;" class="btn btn-warning">试听课</button>橙黄色-已取消</center>
+<div style="margin:20px;">
+
+1、在工作台或”孩子“列表页面找到要添加试听课的孩子（孩子列表页面可以用多种方式搜索）
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/demo1.png" style="max-width:1000px;width:100%;"></div>
+2、点”试听课“按钮进入试听课添加页面<br>
+3、选择试听课老师、教室、日期时间，保存后即可
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/demo2.png" style="max-width:600px;width:100%;"></div>
+4、如要修改试听课要素，再次找到这个孩子，点”试听课“按钮进入此页面，修改然后点”修改“按钮保存。如果试听课已上完，可以将上课情况填写进”备注，将”是否已上“选框钩选上，点”修改“按钮保存
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/demo3.png" style="max-width:600px;width:100%;"></div>
+5、试听课按钮颜色含义：灰色-未安排试听，红色-已安排未上，绿色-已上，黄色-已取消<br>
+6、试听课可以在”日程“页面里看到形象化的安排情况。日程页面显示所有本校区一周内的所有类型课程，蓝色代表正课，红色（未上）、绿色（已上）代表试听课，紫色代表补课
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/demo4.png" style="max-width:700px;width:100%;"></div>
+7、可以在孩子列表页面，按试听课已上、未上来搜索所有已安排试听课的孩子
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/demo5.png" style="max-width:1000px;width:100%;"></div>
+
+</div>
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>

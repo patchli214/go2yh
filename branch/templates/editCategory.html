@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+<div class="modal-body" id="info-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span id="sourceTypeSpan"></span>&nbsp;&nbsp;
+
+
+                    </div>
+                    <div class="panel-body">
+                        <p><span>类名：</span><input type="text" id="sourceCategoryName" value="{{category.categoryName}}">
+
+                        <p><span>编号：</span><input type="text" id="sourceCategoryCode" value="{{category.categoryCode}}">
+                        <p><span>删除（填“1”删除）：</span><input type="text" id="deleted" value="{{category.deleted|default:''}}">
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="save_category" type="button" class="btn btn-danger" data-dismiss="modal">保存
+                        </button>
+            </div>
+{% endblock %}
+{% block scripts %}
+<script>
+$("#save_category").click(function(id){
+	var url = "{% url 'branch:api_editCategory' %}";
+	var name = $("#sourceCategoryName").val();
+	var code = $("#sourceCategoryCode").val();
+	var deleted = $("#deleted").val();
+
+	if(!name)return;
+	if(!code)return;
+	if(!deleted)deleted = '';
+	$.post(url,{"id":'{{category.id}}',
+		"sourceCategoryName":name,
+		"sourceCategoryCode":code,
+		"deleted":deleted
+		},function(res){alert(res.msg)});
+});
+</script>
+{% endblock %}

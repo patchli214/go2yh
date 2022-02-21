@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block content %}
+    <div><center style="font-weight:bold;">增加城市</center>
+    <form  method="POST">{% csrf_token %}
+
+
+        <table class="table">
+            <tr>
+                <td>
+                     城市
+                </td>
+                <td>
+                    <input type="text" id="cityName" value="{{city.cityName|default:''}}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    顺序号
+                </td>
+                <td>
+                    <input type="text" id="sn" value="{{city.sn|default:''}}">
+                </td>
+            </tr>
+<tr>
+                <td>
+                    成交周数
+                </td>
+                <td>
+                    <input type="text" id="dealDuration"  value="{{city.dealDuration|default:''}}">
+                </td>
+            </tr>
+           <tr>
+             <td>财务审批人</td>
+             <td><select id="financialAdmin">
+               <option></option>
+               {%for t in financialAdmins%}
+               <option value="{{t.id}}" {%if t.id|stringformat:"s" == city.financialAdmin%}selected="selected"{%endif%}>{{t.branch.city.cityName}}-{{t.name}}</option>
+               {%endfor%}
+             </select>
+           </td></tr>
+
+
+           <tr>
+             <td>财务退款人</td>
+             <td><select id="financialRefund">
+               <option></option>
+               {%for t in financialRefunds%}
+               <option value="{{t.id}}" {%if t.id|stringformat:"s" == city.financialRefund%}selected="selected"{%endif%}>{{t.branch.city.cityName}}-{{t.name}}</option>
+               {%endfor%}
+             </select>
+           </td></tr>
+           <tr>
+             <td>开发票人</td>
+             <td><select id="financialReceipt">
+               <option></option>
+               {%for t in financialRefunds%}
+               <option value="{{t.id}}" {%if t.id|stringformat:"s" == city.financialReceipt%}selected="selected"{%endif%}>{{t.branch.city.cityName}}-{{t.name}}</option>
+               {%endfor%}
+             </select>
+           </td></tr>
+           <tr>
+             <td>报销人（有发票）</td>
+             <td><select id="financialReimburse">
+               <option></option>
+               {%for t in financialRefunds%}
+               <option value="{{t.id}}" {%if t.id|stringformat:"s" == city.financialReimburse%}selected="selected"{%endif%}>{{t.branch.city.cityName}}-{{t.name}}</option>
+               {%endfor%}
+             </select>
+           </td></tr>
+           <tr>
+             <td>报销人（无发票）</td>
+             <td><select id="financialReimburse2">
+               <option></option>
+               {%for t in financialRefunds%}
+               <option value="{{t.id}}" {%if t.id|stringformat:"s" == city.financialReimburse2%}selected="selected"{%endif%}>{{t.branch.city.cityName}}-{{t.name}}</option>
+               {%endfor%}
+             </select>
+           </td></tr>
+      
+
+
+            <tr>
+                <td colspan="2">
+                    <button class="btn btn-default" onclick="reg()">保存</button>
+                </td>
+            </tr>
+
+        </table>
+        </form>
+
+    <table class="table  table-hover"><tbody>
+    {% for city in cities %}
+            <tr>
+            <td>{{ city.sn }}</td>
+            <td>{{ city.cityName }}</td>
+            <td><button onclick="cityEdit('{{city.id}}')">修改</button>&nbsp;
+            <button onclick="cityContract('{{city.id}}')">合同类型</button>
+            </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        function reg() {
+            var cityName = $("#cityName").val();
+            var sn = $("#sn").val();
+            var dealDuration = $("#dealDuration").val();
+            var faId = $("#financialAdmin").val();
+            var frId = $("#financialRefund").val();
+            var rtId = $("#financialReceipt").val();
+            var rbId = $("#financialReimburse").val();
+            var rb2Id = $("#financialReimburse2").val();
+
+            if (!cityName ) {
+                alert("请填写城市名");
+                return;
+            }
+            console.log('[FA]'+faId)
+            $.post("{% url 'branch:api_city' %}", {
+                "cityName": cityName,
+                {%if city%}
+                "id":'{{city.id}}',
+                {%endif%}
+                "dealDuration":dealDuration,
+                "financialAdmin":faId,
+                "financialRefund":frId,
+                "financialReceipt":rtId,
+                "financialReimburse":rbId,
+                "financialReimburse2":rb2Id,
+                "sn": sn
+            }, function (res) {
+                console.log('[res]'+res['error']);
+                location.reload(true);
+                if (res["error"] == 0) {
+                    alert("成功")
+                } else {
+                    alert("失败:" + res["msg"])
+                }
+            });
+        }
+        function cityContract(id){
+            var url = '{% url 'branch:cityContract' %}?city='+id;
+            window.location.href=url;
+        }function cityEdit(id){
+            var url = "{% url 'branch:city' %}?cityId="+id;
+            window.location.href=url;
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+#editTable td{
+  padding:10px 0 0 5px;
+  text-align:right;
+}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="incomes"><返回</a>&nbsp;&nbsp;<span id="tip"></span>
+</div>
+    <div><center style="font-weight:bold;">收入修改</center>
+    <form method="POST">{% csrf_token %}
+      <input type="hidden" id="studentId" value="{{studentId|default:''}}">
+      <div style="float:left;" id="newIncomeDiv">
+        <table id="editTable" >
+            <tr>
+                <td>
+                     付款人
+                </td>
+                <td>
+                    <input type="text" id="payer" value="{{income.payer}}">
+                </td>
+                <td style="padding: 10px 0 0 20px;">
+                     付款日期
+                </td>
+                <td  style="padding:10px 10px 0 10px">
+                    <input type="text" id="payDate" value="{{income.payDate|date:'Y-m-d'}}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    类别
+                </td>
+                <td style="text-align:left">
+                    <select id="type">
+                      <option>请选择</option>
+                      {%for key,value in INCOME_TYPE.items%}
+                      <option value="{{key}}" {%if income.type == key%}selected="selected"{%endif%}>{{value}}</option>
+                      {%endfor%}
+
+                    </select>
+                </td>
+                <td style="padding: 10px 0 0 20px;">
+                    金额
+                </td>
+                <td  style="padding:10px 10px 0 10px">
+                    <input type="text" id="paid" value="{{income.paid}}">
+                </td>
+            </tr>
+
+            <tr>
+                <td align="right" width="160px">付款方式</td>
+                <td style="text-align:left">
+                    <select id="paymethod">
+                      <option value="">请选择</option>
+                      {%for key,value in paymethods.items%}
+                      <option value="{{key}}" {%if income.paymethod == key%}selected="selected"{%endif%}>{{value}}</option>
+                      {%endfor%}
+                </td>
+                <td></td><td></td>
+            </tr>
+
+
+            <tr>
+                            <td>
+                                备注
+                            </td>
+                            <td>
+                                <input type="text" id="memo" value="{{income.memo}}">
+                            </td>
+
+                <td>状态</td>
+                  <td style="text-align:left;padding-left:10px;">
+                    <select id="status">
+                    {%for key,value in CONTRACT_STATUS.items%}
+                    {%if key != '2' and key != '-1' %}<option value="{{key}}" {%if income.status|stringformat:"s" == key%}selected="selected"{%endif%}>{{value}}</option>{%endif%}
+                    {%endfor%}
+                  </select></td>
+
+            </tr>
+            <tr>
+              <td style="text-align:right;">
+                  <div class="btn btn-success" style="margin:0 10px 10px 0;" onclick="reg()">保存</div>
+              </td>
+            </tr>
+        </table>
+        </form>
+</div>
+
+    </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $('#payDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+        function reg() {
+            var status = $("#status").val();
+            var payer = $("#payer").val();
+            var payDate = $("#payDate").val();
+            var paid = $("#paid").val();
+            var paymethod = $('#paymethod').val();
+            var memo = $("#memo").val();
+            var type = $("#type").val();
+            var studentId = $("#studentId").val();
+            if (!paymethod||paymethod==''){
+            	alert("请选择付款方式");
+                return;
+            }
+            if(isNaN(paid)){
+              alert("金额必须是数字");
+              return;
+            }
+            if (!payer ) {
+                alert("请填写付款人");
+                return;
+            }
+            if (!payDate) {
+                alert("请填写付款日期");
+                return;
+            }
+            if (!paid ) {
+                alert("请填写金额");
+                return;
+            }
+
+            if (!type||type=='' ) {
+                alert("请选择类别");
+                return;
+            }
+
+            $.post("{% url 'contract:api_income' %}", {
+                "id":'{{income.id}}',
+                "status":status,
+                "payer": payer,
+                "payDate":payDate,
+                "paid":paid,
+                "paymethod":paymethod,
+                "memo":memo,
+                "studentId":studentId,
+                "type":type
+            }, function (res) {
+                console.log('[res]'+res['error']);
+                if (res["error"] == 0) {
+                    location.reload(true);
+                    alert("成功")
+                } else {
+                    alert("失败:" + res["msg"])
+                }
+            });
+        }
+
+</script>
+{% endblock %}

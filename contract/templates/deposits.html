@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+#editTable td{
+  padding:10px 0 0 5px;
+  text-align:right;
+}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{{backurl}}"><返回</a>&nbsp;&nbsp;<span id="tip"></span>
+</div>
+    <div><center style="font-weight:bold;">定金</center>
+
+    <div style="float:left;padding:10px;">
+      <select id="searchCity" name="searchCity">
+        {%for c in cities%}
+        <option value="{{c.id}}">{{c.cityName}}</option>
+        {%endfor%}
+      </select>
+    <input style="width:90px;" type="text" id="beginDate" name="beginDate" placeholder="起始日期">
+       <input style="width:90px;" type="text" id="endDate" name="endDate" placeholder="截至日期">
+
+       <select id="depositWay">
+         <option value="">全部支付方式</option>
+         {%for key,value in paymethods.items%}
+         <option value="{{key}}">
+           {{value}}
+         </option>
+         {%endfor%}
+       </select>
+
+       <select id="searchCompany" name="searchCompany">
+         <option value="">已存和未存</option>
+         <option value="1">已存</option>
+         <option value="0">未存</option>
+
+       </select>
+
+    <select id="searchStatus" name="searchStatus">
+      <option value="">全部状态</option>
+      <option value="1">已转合同</option>
+      <option value="2">已退</option>
+      <option value="0">未操作</option>
+
+
+    </select>
+
+
+    <button id="searchButton" onclick="search()">搜索</button>
+    </div>
+
+<div style="clear:both;">
+    <table  id="datatable"  class="table table-hover">
+      <thead>
+        <tr style="background:#eeeeee;border-bottom:#ffffff solid 3px;">
+          <th nowrap>校区</th>
+          <th nowrap>已存</th>
+          <th nowrap>状态</th>
+          <th nowrap>收款人</th>
+          <th nowrap>金额</th>
+          <th nowrap>付款方式</th>
+          <th nowrap>日期</th>
+
+
+</tr>
+</thead>
+<tbody>
+        {% for s in deposits %}
+
+            <tr style="background:{{s.color}}">
+                <td >{{s.branchName}}</td>
+                <td >{%if s.depositCompany == 1%}是{%elif s.depositCompany == 0%}否{%endif%}</td>
+                <td >{%if s.depositStatus == 1%}已转合同{%elif s.depositStatus == 2%}已退{%endif%}</td>
+                <td >{{s.depositCollecter.name}}</td>
+                <td >{{s.deposit}}</td>
+                <td >{%for key,value in paymethods.items%}{%if key == s.depositWay%}{{value}}{%endif%}{%endfor%}</td>
+                <td >{{s.depositDate|date:"Y-m-d"}}</td>
+
+
+            </tr>
+            {%endfor%}
+
+        </tbody>
+    </table>
+
+    <tr>
+      <td colspan="6"></td>
+
+      <td>共 {{length}} 个定金，合计</td>
+      <td>{{sum}} 元</td>
+    </tr>
+
+</div>
+
+<div class="modal fade" id="picModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="info-body">
+
+                  <div>
+                     <span id="attach"></span>
+                  </div>
+
+            </div>
+
+        </div>
+    </div>
+  </center>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+
+//选中的报销单id临时存储数组
+var ids = new Array();
+
+
+function show(id){
+  document.location.href="{% url 'branch:reimburseShow' %}?id="+id
+}
+
+
+
+function remove(id){
+  if(confirm('确定删除？')){
+    $.post("{% url 'branch:reimburseRemove_api'%}", {
+        'id':id
+
+    }, function (res) {
+        if (res.error == 0) {
+            alert("成功");
+            location.reload(true);
+        } else {
+            alert("失败:"+res.msg);
+        }
+    });
+  }
+}
+
+
+//日期控件
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+
+//查询报销单
+function search(){
+  var searchStatus = $("#searchStatus").val();
+  var searchCity = $("#searchCity").val();
+  var searchCompany = $("#searchCompany").val();
+  var depositWay = $("#depositWay").val();
+  //alert(searchTeacher)
+  var y = $("#beginDate").val();
+  var m = $("#endDate").val();
+  search = '?1=1';
+  if(y.length>0)search = search+'&beginDate='+y;
+  if(m.length>0)search = search+'&endDate='+m;
+  if(searchStatus.length>0){
+
+     search = search+'&searchStatus='+searchStatus;
+   }
+   if(searchCompany.length>0){
+      search = search+'&searchCompany='+searchCompany;
+    }
+
+  if(searchCity.length>0){
+     search = search+'&searchCity='+searchCity;
+   }
+   if(depositWay.length>0){
+      search = search+'&depositWay='+depositWay;
+    }
+  var url = "{% url 'contract:deposits' %}"+search
+  window.location.href=url;
+}
+
+
+$("#nav10").css("color","red");
+{%if searchStatus > -1%}$("#searchStatus").val('{{searchStatus}}'){%endif%}
+{%if searchCity%}$("#searchCity").val('{{searchCity}}'){%endif%}
+{%if searchCompany%}$("#searchCompany").val('{{searchCompany}}'){%endif%}
+
+{%if beginDate%}$("#beginDate").val('{{beginDate}}'){%endif%}
+{%if endDate%}$("#endDate").val('{{endDate}}'){%endif%}
+{%if depositWay%}$("#depositWay").val('{{depositWay}}'){%endif%}
+
+</script>
+{% endblock %}

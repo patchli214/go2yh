@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.leftTd{
+  padding:10px 0 0 5px;
+  text-align:right;
+}
+.rightTd{padding:10px 5px 0 5px;
+text-align:left;}
+.inputText{width:100px;}
+</style>
+
+    <div>
+      <div style="float:left;font-weight:bold;">元十九收入</div>
+      <div style="float:right;font-weight:bold;"><a href="Y19statTeacher?stat=1" target="_blank">统计</a></div>
+<div style="clear:both;">
+{%if statistic != '1'%}
+
+
+      <div style="float:left;" id="newIncomeDiv">
+        <table style="border:1px solid black;">
+          <tr>
+            <td class="leftTd">收款人</td>
+            <td class="rightTd">
+              <select id="sellerId">
+              {%for t in teachers%}
+              <option value="{{t.id}}">{{t.name}}</option>
+              {%endfor%}
+            </select>
+            </td>
+            <td class="leftTd">来源</td>
+            <td class="rightTd">
+              <input class="inputText" type="text" id="source"/>
+            </td>
+          </tr>
+          <tr>
+            <td class="leftTd">用户名</td>
+            <td class="rightTd">
+               <input class="inputText" type="text" id="regName" value="">
+            </td>
+            <td nowrap class="leftTd">注册手机</td>
+            <td class="rightTd"><input class="inputText" type="text" id="mobile" /></td>
+          </tr>
+          <tr>
+            <td nowrap class="leftTd">付款日期</td>
+            <td class="rightTd">
+               <input class="inputText" type="text" id="payDate" value="{{datenow|date:'Y-m-d'}}">
+            </td>
+            <td class="leftTd">类别</td>
+            <td class="rightTd">
+              <select id="type">
+                <option value="">请选择</option>
+                <option value="月卡">月卡</option>
+                <option value="年卡">年卡</option>
+                <option value="两年卡">两年卡</option>
+                <option value="终身卡">终身卡</option>
+                <option value="员工卡">员工卡</option>
+                <option value="续费">续费</option>
+
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td class="leftTd">金额</td>
+            <td class="rightTd">
+              <input class="inputText" type="text" id="paid">
+            </td>
+            <td class="leftTd">备注</td>
+            <td class="rightTd">
+              <input type="text" id="memo" class="inputText">
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4" style="padding:16px 0 10px 0;text-align:center;">
+              <button id="incomeSaveButton" class="btn btn-success" style="margin:0 10px 10px 0;" onclick="reg()">保存</button>
+            </td>
+          </tr>
+        </table>
+
+
+
+
+
+
+</div>
+<div style="float:right;width:300px;">
+
+  <table  style="border:1px solid black;">
+    <tr><td colspan="4" style="text-align:center;">{{now|date:"Y-m-d"}}</td></tr>
+    <tr><th></th><th>入群</th><th>注册</th><th>加微信</th>　</tr>
+    {%for t in yts%}
+    <tr>
+      <td nowrap style="padding:4px;">{{t.name}}</td>
+      <td style="padding:4px;"><input style="width:40px;" class="dayIn" id="dayIn|{{t.username}}" value="{%for y19 in y19data%}{%if y19.teacher == t.id|stringformat:"s"%}{{y19.dayIn|default:""}}{%endif%}{%endfor%}"/></td>
+      <td style="padding:4px;"><input style="width:40px;" class="dayReg" id="dayReg|{{t.username}}" value="{%for y19 in y19data%}{%if y19.teacher == t.id|stringformat:"s"%}{{y19.dayReg|default:""}}{%endif%}{%endfor%}"/></td>
+      <td style="padding:4px;"><input style="width:40px;" class="dayAdd" id="dayAdd|{{t.username}}" value="{%for y19 in y19data%}{%if y19.teacher == t.id|stringformat:"s"%}{{y19.dayAdd|default:""}}{%endif%}{%endfor%}"/></td>
+    </tr>
+    {%endfor%}
+    <tr>
+      <td colspan="4" style="text-align:center;"><button onclick="saveToday()">保存</button></td>
+    </tr>
+  </table>
+
+</div>
+{%endif%}
+<div id="searchDiv" style="clear:both;padding:10px 0 0 0;">
+
+<input style="width:100px;" id="searchBegin" placeholder="查询起始日期"/>
+<span style="padding-bottom:4px;">-</span>
+<input style="width:100px;" id="searchEnd" placeholder="查询截止日期"/>&nbsp;&nbsp;
+  <span class="btn btn-default" style="padding:3px 10px 3px 10px;" onclick="search()">查询</span>
+</div>
+
+    <table id="datatable" class="table table-hover">
+      <thead>
+      <tr style="background:#fff">
+
+        <th>校区-收款人</th>
+        <th>款到</th>
+        <th>开通</th>
+        <th>用户注册名</th>
+        <th>注册手机</th>
+        <th>来源</th>
+        <th>类型</th>
+        <th>付款日期</th>
+        <th>录入日期</th>
+        <th>金额</th>
+
+        <th>备注</th>
+        <th>查看</th>
+
+      </tr>
+    </thead>
+      <tbody>
+    {% for income in incomes %}
+            <tr {% if income.appDone %}style="background:#f3fff2"{%endif%}>
+
+            <td>{{income.branchName}}-{{ income.sellerName|default:'' }}</td>
+            <td><input type="checkbox"  class="changeFee" rid="{{income.id}}"  {%if income.appFee%}checked="checked"{%endif%} {%if login_teacher.branch != '5bc0439fe5c5e6899c06cec9' or login_teacher.role != 8%}disabled="disabled"{%endif%}/></td>
+            <td><input type="checkbox"  class="changeDone" rid="{{income.id}}"  {%if income.appDone%}checked="checked"{%endif%} {%if login_teacher.branch != '5bc0439fe5c5e6899c06cec9' or login_teacher.role != 5%}disabled="disabled"{%endif%}/></td>
+            <td>{{ income.regName }}</td>
+            <td>{{ income.mobile }}</td>
+            <td nowrap>{{income.source|default:''}}</td>
+            <td>{{ income.type|default:'' }}</td>
+            <td nowrap>{{ income.payDate|date:"Y-m-d" }}</td>
+            <td nowrap>{{ income.logDate|date:"Y-m-d" }}</td>
+            <td>{{ income.paid|default:0 }}</td>
+
+            <td>{{ income.memo|default:'' }}</td>
+            <td>{%if statistic != '1'%}{%if not income.contractId%}<button onclick="incomeEdit('{{income.id}}')">修改</button>{%endif%}{%endif%}
+                {%if income.contractId%}
+
+
+                  <button onclick="showPic('/go_static/users/{{income.branch}}/reimburse/{{income.contractId}}_y19m.jpg?ver={{millis}}','9')">会员申请</button>
+
+                  <button onclick="showPic('/go_static/users/{{income.branch}}/reimburse/{{income.contractId}}_y19r.jpg?ver={{millis}}','10')">收据</button>
+
+                {%endif%}
+            </td>
+
+            </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot style="background:#eeeeee;">
+     <tr>
+      <th>合计</th>
+<th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+</tr>
+    </tfoot>
+    </table>
+
+</div>
+    </div>
+
+
+    <div class="modal fade" id="picModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <center>
+        <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body" id="info-body">
+
+                      <div>
+                         <span id="attach"></span>
+                      </div>
+
+                      <div>
+                         <span id="attach2"></span>
+                      </div>
+
+                </div>
+
+            </div>
+        </div>
+      </center>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+    //$("#searchDiv").css("height",$("#newIncomeDiv").height()+'px')
+    $('#payDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+
+    $('#searchBegin').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+    $('#searchEnd').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+    function showPic(imgSrc,t){
+      console.log(imgSrc)
+      $("#attach").html('<img src="'+imgSrc+'"/>')
+      var title = ''
+      if(t==9)title='会员申请表'
+      if(t==10)title='会员费收据'
+      $("#myModalLabel").html(title)
+      $("#picModal").modal();
+    }
+
+        function reg() {
+
+          console.log('reg-----------')
+          $("incomeSaveButton").css("disabled","true")
+
+            var regName = $("#regName").val();
+            var payDate = $("#payDate").val();
+            var paid = $("#paid").val();
+            var mobile = $('#mobile').val();
+            var memo = $("#memo").val();
+            var type = $("#type").val();
+            var source = $("#source").val();
+            var sellerId = $("#sellerId").val();
+            console.log('GOT')
+            console.log(type)
+            if (!type||type==''){
+              console.log('type err')
+            	alert("请选择购买类型");
+                return;
+            }
+            console.log(paid)
+            if(isNaN(paid)){
+              alert("金额必须是数字");
+              return;
+            }
+            console.log(sellerId)
+            if (!sellerId||sellerId=='' ) {
+              console.log('no seller!!!')
+                alert("请选择收款人");
+                return;
+            }
+
+            if (!mobile||mobile=='' ) {
+                alert("请输入用户手机号");
+                return;
+            }
+            if (!regName||regName=='' ) {
+                alert("请输入用户注册名");
+                return;
+            }
+            if (!payDate||payDate=='') {
+                alert("请填写付款日期");
+                return;
+            }
+            if (!paid ) {
+                alert("请填写金额");
+                return;
+            }
+
+
+            $.post("{% url 'contract:api_Y19Income' %}", {
+                "csrfmiddlewaretoken": "{{ csrf_token }}",
+                "regName": regName,
+                "payDate":payDate,
+                "paid":paid,
+                "type":type,
+                "memo":memo,
+                "source":source,
+                "sellerId":sellerId,
+                "mobile":mobile
+            }, function (res) {
+                console.log(res);
+                if (res["error"] == 0) {
+                    location.reload(true);
+                    alert("成功")
+
+                } else {
+                    alert("失败:" + res["msg"])
+                }
+            });
+        }
+
+        var dayIns = '';
+
+        function saveToday(){
+          console.log('dayin-------')
+          var i = 0
+          $(".dayIn").each(function(){
+            i++;
+            var v = $(this).attr("id").split('|')[1]+'|'+$(this).val()
+            dayIns = dayIns + '__' + v
+          })
+          console.log('[----------------'+i+'-----------------]')
+          dayIns = dayIns.substring(2,dayIns.length)
+          console.log('['+dayIns+']')
+          var dayRegs = ''
+          $(".dayReg").each(function(){
+            var v = $(this).attr("id").split('|')[1]+'|'+$(this).val()
+            dayRegs = dayRegs + '__' + v
+          })
+          dayRegs = dayRegs.substring(2,dayRegs.length)
+          console.log('['+dayRegs+']')
+          var dayAdds = ''
+          $(".dayAdd").each(function(){
+            var v = $(this).attr("id").split('|')[1]+'|'+$(this).val()
+            dayAdds = dayAdds + '__' + v
+          })
+          dayAdds = dayAdds.substring(2,dayAdds.length)
+          $.post("{% url 'contract:api_Y19dayIn' %}", {
+              "csrfmiddlewaretoken": "{{ csrf_token }}",
+              "dayIns": dayIns,
+              "dayAdds": dayAdds,
+              "dayRegs":dayRegs
+          }, function (res) {
+            console.log(res)
+              if (res["error"] == 0) {
+                  alert("成功")
+                  window.close();
+
+              } else {
+                  alert("失败:" + res["msg"])
+              }
+          });
+        }
+
+        function search(){
+          var beginDate = $("#searchBegin").val()
+          var endDate = $("#searchEnd").val()
+          var url = "{%url 'contract:Y19Incomes' %}?statistic={{statistic}}&beginDate="+beginDate+"&endDate="+endDate
+          document.location.href=url
+        }
+
+        $("#searchBegin").val('{{beginDate}}')
+        $("#searchEnd").val('{{endDate}}')
+
+        function incomeEdit(id){
+          document.location.href='Y19Income1?id='+id
+        }
+
+
+        $(document).ready(function() {
+            $('#datatable').DataTable( {
+              "paging":   false,
+              "ordering":true,
+            	"searching": true,
+            	"info":true,
+              dom: 'Bfrtip',
+      buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ],
+              "language": {
+            "lengthMenu": "每页显示 _MENU_ ",
+            "zeroRecords": "空空如也",
+            "sInfo":"共 _TOTAL_ 单",
+            "infoEmpty": "没有找到哦",
+            "sSearch":"查询",
+            "oPaginate": {
+		        "sFirst":"首页",
+		        "sPrevious": 	"上一页",
+		        "sNext":     	"下一页",
+		        "sLast":     	"末页"
+	        },
+            "infoFiltered": "(从 _MAX_ 中搜索)"
+        },
+              "columns": [
+
+      	            { "orderable": true },
+                    { "orderable": false },
+      	            { "orderable": false },
+                    { "orderable": true },
+      	            { "orderable": true },
+                    { "orderable": true },
+      	            { "orderable": true },
+      	            { "orderable": true },
+                    { "orderable": true },
+      	            { "orderable": true },
+                    { "orderable": true },
+                    { "orderable": true }
+
+                  ],
+              "footerCallback": function( tfoot, data, start, end, display ) {
+                  var api = this.api();
+                  $( api.column( 6 ).footer() ).html(
+                      api.column( 6 ).data().reduce( function ( a, b ) {
+                          var ai = new Number(a)
+                          var bi = new Number(b)
+                          return ai + bi;
+                      }, 0 )
+                  );
+              }
+            });
+
+            $(".changeDone").click(function(){
+              var rid = $(this).attr("rid")
+              var done = '0'
+              if($(this).prop("checked")) done = '1'
+              var t = $(this)
+              $.post("{%url 'contract:api_y19done'%}", {
+                  'id': rid,
+                  'done': done
+              }, function (res) {
+                  if (res.error == 0) {
+                      alert(res.msg);
+                  } else {
+                      t.removeAttr('checked')
+                      alert(res.msg);
+                  }
+              });
+            });
+
+
+            $(".changeFee").click(function(){
+
+              console.log('fee----')
+              var rid = $(this).attr("rid")
+              var done = '0'
+              if($(this).prop("checked")) done = '1'
+              $.post("{%url 'contract:api_y19fee'%}", {
+                  'id': rid,
+                  'done': done
+              }, function (res) {
+                  if (res.error == 0) {
+                      alert(res.msg);
+                  } else {
+                      alert(res.msg);
+                  }
+              });
+            });
+
+
+
+
+        });
+    </script>
+{% endblock %}

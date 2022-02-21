@@ -1,0 +1,37 @@
+<!-- sourceCategory Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加渠道</h4>
+            </div>
+            <div class="modal-body" id="info-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span id="sourceTypeSpan2"></span><span id="sourctCategorySpan"></span>&nbsp;&nbsp;
+
+<select id="sourceCategoryCode2" name="sourceCategoryCode2">
+<option>请选择小类</option>
+{% for sc in sourceCategory %}
+<option value="{{sc.id}}">{{sc.categoryCode}}-{{sc.categoryName}}</option>
+{% endfor %}
+</select>
+                    </div>
+                    <div class="panel-body">
+                        <p><span>渠道名：</span><input type="text" id="sourceName">
+                        <p><span>代码：</span><input type="text" id="sourceCode">
+                        <p><span>联系人：</span><input type="text" id="contact">
+                        <p><span>手机号：</span><input type="text" id="mobile">
+                        <p><span>微信openId：</span><input type="text" id="weixin">
+                        {%if login_teacher.branchType == '1'%}<p><span>删除：</span><input type="text" id="deleted">{%endif%}
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="save_source" type="button" class="btn btn-danger" data-dismiss="modal">保存</button>
+            </div>
+        </div>
+    </div>
+</div>

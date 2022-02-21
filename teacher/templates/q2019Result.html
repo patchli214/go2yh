@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+	<style>
+	body{font-family:微软雅黑,Arial;max-width:100%;margin:0 auto}
+	td{padding:4px;}
+	th{padding:4px;}
+	h3{margin-top:5px;margin-bottom:5px;}
+	h5{font-weight: bold;}
+	div{padding:5px 0px 0px 5px;}
+	#submitBtn{padding:10px 40px 10px 40px;font-size:16px;}
+    label.valid {
+	  width: 24px;
+	  height: 24px;
+	  background: url(assets/img/valid.png) center center no-repeat;
+	  display: inline-block;
+	  text-indent: -9999px;
+    }
+    label.error {
+	  font-weight: bold;
+	  color: red;
+	  padding: 2px 8px;
+	  margin-top: 2px;
+    }
+	</style>
+
+<center><h4>{{q.title}}</h4></center>
+<div style="width:100%;margin:0 auto;text-align:center;">
+<select id="assessCode" style="font-size:18px;">
+<option value="201908">201908</option>
+
+</select>
+
+{%if login_teacher.branchType != '0'%}
+<select id="branchId">
+	<option value="">全部校区</option>
+	{%for b in branches%}
+	<option value='{{b.id}}'>{{b.branchName}}</option>
+	{%endfor%}
+</select>
+{%else%}
+<input type="hidden" id="branchId" name="branchId" value="{{branchId}}"
+{%endif%}
+<button id="searchButton" style="font-size:18px;">查询</button>
+
+</div>
+
+
+{%if teacherResults%}
+<div style="padding:10px;">
+<table id="datatable" border="1">
+	<thead>
+	  <tr>
+			<th>校区</th>
+			<th width="50">提交时间</th>
+			{%for qq in quest%}
+			<th>{{qq.q}}</th>
+			{%endfor%}
+		</tr>
+	</thead>
+	<tbody>
+	{%for an in teacherResults%}
+	  <tr>
+			<td>{{an.branchName}}</td>
+			<td>{{an.assessDate|date:"m-d"}}</td>
+			{%for k in keys%}
+			  {%for key,value in an.answers.items%}
+					{%if k == key%}
+			      <td>{{value}}</td>
+					{%endif%}
+				{%endfor%}
+		  {%endfor%}
+	</tr>
+	{%endfor%}
+</tbody>
+</table>
+</div>
+{%endif%}
+{% endblock %}
+{% block scripts %}
+<script>
+$("#branchId").val('{{branchId}}')
+$("#searchButton").click(function(){
+	var url = "{%url 'teacher:q2019Result'%}?assessCode="+$("#assessCode").val()+"&branchId="+$("#branchId").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+})
+
+
+$(document).ready(function() {
+	$("title").html('{{branch.branchName}}')
+    $('#datatable').DataTable({
+    	  "paging":   false,
+       	"searching": false,
+    	  "info":false,
+        "order": [[ 0, "desc" ]],
+				dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ]
+	});
+})
+</script>
+{% endblock %}

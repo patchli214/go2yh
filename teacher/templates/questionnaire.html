@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block content %}
+	<style>
+	body{font-family:微软雅黑,Arial;max-width:800px;margin:0 auto}
+	h3{margin-top:5px;margin-bottom:5px;}
+	h5{font-weight: bold;}
+	div{padding:5px 0px 0px 5px;}
+	#submitBtn{padding:10px 40px 10px 40px;font-size:16px;}
+    label.valid {
+	  width: 24px;
+	  height: 24px;
+	  background: url(assets/img/valid.png) center center no-repeat;
+	  display: inline-block;
+	  text-indent: -9999px;
+    }
+    label.error {
+	  font-weight: bold;
+	  color: red;
+	  padding: 2px 8px;
+	  margin-top: 2px;
+    }
+	</style>
+
+
+<div style="width:100%;margin:0 auto;padding:0;">
+<form id="qform" action="api_questionnaire" method="post" class="form-inline">
+<input type="hidden" name="questCount" value="{{q.questCount}}" />
+{%if branch%}
+<input type="hidden" name="branchId" value="{{branch.id}}" />
+{%endif%}
+<input type="hidden" name="assessorId" value="{{assessor.id|default:''}}" />
+<div style="float:left;width:40%">
+<img src="/go_static/img/title.png" width="100%"></img>
+</div>
+<div style="float:right;width:40%;text-align:right;line-height:30px;">{{branch.branchName}}校区</div>
+<div style="clear:both;text-align:center;padding:20px 0 16px 0;">
+<h3>{{q.title}}</h3>
+</div>
+
+
+<div style="font-size:16px;margin-bottom:20px;">
+  {{q.prelude}}
+</div>
+
+<div style="width:100%;margin:0 auto;padding:0 0 20px 0;">
+
+{%if not branch%}
+	<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+	<select class="form-control" id="branchId" name="branchId" onchange="gotBranch()"/>
+	<option value=''>选择校区</option>
+	{%for b in branches%}
+	<option value="{{b.branchCode}}" >{{b.branchName}}校区</option>
+	{%endfor%}
+	</select>
+	</div>
+{%endif%}
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+
+<input type="text" class="form-control" id="assessorName" name="assessorName" placeholder="孩子姓名" value="{{assessor.name|default:''}}"/>
+</div>
+
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<select class="form-control" id="assessObjectId" name="assessObjectId"/>
+<option value=''>选择任课老师</option>
+{%for t in teachers%}
+<option value="{{t.id}}" {%if t.id|stringformat:'s' == assessObjectId%}selected=selected{%endif%}>{%if t.name2%}{{t.name2}}{%else%}{{t.name}}{%endif%}老师</option>
+{%endfor%}
+</select>
+</div>
+
+<div><center><h5>共{{q.questCount}}个问题</h5></center></div>
+{%for q in qs%}
+<div>
+  <h5>{{q.sn}}.{{q.q}}</h5>
+  {%if q.fill == 1%}
+    <input type="text" id="{{q.sn}}" name="{{q.sn}}" style="width:100%"/>
+	{%elif q.list == 1%}
+	  <select id="{{q.sn}}" name="{{q.sn}}">
+			<option value="">请选择</option>
+			{%for an in q.ans%}
+			<option value="{{an.code}}">{{an.text}}</option>
+			{%endfor%}
+		</select>
+  {%else%}
+    {%for an in q.ans%}
+      <div class="radio"><label>
+      <input type="{%if q.multi == 1%}checkbox{%else%}radio{%endif%}" id="{{q.sn}}" name="{{q.sn}}" value="{{an.code}}" />{{an.code}}.{{an.text}}
+      </label></div>
+    {%endfor%}
+	{%endif%}
+</div>
+{%endfor%}
+<div style="padding:30px 0 10px 0;">
+<center><input type="submit" value="提交" class="btn btn-success" style="width:90%"></submit></center>
+</div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+$("title").html('真朴围棋调查问卷')
+
+$('#qform').validate({
+    rules: {
+			{%for q in qs%}
+			  {%if q.fill != 1%}
+        {{q.sn}}: {
+            required: true
+        },
+				{%endif%}
+			{%endfor%}
+			{%if not branch%}
+			branchId:{
+					required: true
+			},
+			{%endif%}
+				assessObjectId:{
+		        required: true
+		    },
+	    	assessorName: {
+		        required: true
+		    }
+    }
+});
+function gotBranch(){
+	var branchId = $("#branchId").val()
+	var url = 'q?tag=201808_'+branchId
+	location.href=url
+}
+</script>
+{% endblock %}

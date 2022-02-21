@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+
+<div style="width:90%;padding:5px 25px 5px 5px;margin-bottom:5px;border:solid 1px grey;text-align:center;">
+  <div style="font-size:16px;font-weight:bold;">{{login_teacher.city}}校区假期设置</div>
+  <div style="padding-top:5px;">添加新假期：<input id="beginDate" placeholder="开始日期" style="width:90px;">&nbsp;<input id="endDate" type="text" placeholder="结束日期" style="width:90px">&nbsp;&nbsp;<button id="sus">保存</button></div>
+
+  <div style="text-align:left;padding:5px 0 5px 15px;">
+  {%for s in vocations%}
+      <li>{{s.beginDate|date:"Y-m-d"}}&nbsp; 到&nbsp;{{s.endDate|date:"Y-m-d"}}<i onclick="removeSuspension('{{s.id}}')" class="glyphicon glyphicon-trash" title="删除" style="padding-left:12px;color:#337ab8;cursor:pointer;"></i></li>
+  {%endfor%}
+</div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$("#sus").click(function(){
+	if(confirm("确定保存假期？")){
+	    var url = "{% url 'branch:api_vocation' %}";
+        $.post(url, {
+            "beginDate":$("#beginDate").val(),
+            "endDate":$("#endDate").val()
+        }, function (res) {
+            alert(res["msg"]);
+            location.reload(true);
+        });
+    }
+});
+function removeSuspension(id){
+  if(confirm("确定删除假期？")){
+	    var url = "{% url 'branch:api_delVocation' %}";
+        $.post(url, {
+            "id": id
+        }, function (res) {
+            alert(res["msg"]);
+            location.reload(true);
+        });
+    }
+}
+</script>
+{%endblock%}

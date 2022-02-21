@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{% url 'teacher:markStep' %}"><返回</a>
+</div>
+<style>
+.column{
+  float:left;border-right: 0px solid; width:280px;text-align: center;
+}
+
+td{padding: 6px;white-space: nowrap;text-align: center;border:1px solid;}
+table{margin: 10px 0 20px 0;}
+input[type=text]{width:60px;margin:0 10px 0 10px;}
+select{font-size:24px;}
+button{margin:8px 0 6px 0;}
+</style>
+
+<hr>
+  <center>
+  成长档案
+  <table>
+    <tr><td colspan="15">2018-2019年度</td></tr>
+    <tr>
+      <td></td>
+      <td colspan="2">棋力</td>
+      <td colspan="3">课程</td>
+      <td colspan="3">分享</td>
+      <td colspan="3">服务</td>
+      <td colspan="2">参与</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>棋力月赛</td>
+      <td>对弈</td>
+      <td>教材讲解</td>
+      <td>成交练习</td>
+      <td>学生在线做题</td>
+      <td>读后感、文章</td>
+
+      <td>家长分享</td>
+      <td>朋友圈</td>
+      <td>学生成长档案</td>
+      <td>班级群</td>
+      <td>家长课堂</td>
+      <td>集体活动</td>
+      <td>主任分</td>
+      <td>总分</td>
+    </tr>
+    {%for s in steps%}
+    <tr>
+      <td>{{s.name}}</td>
+      <td>{{s.s1|default:''}}</td>
+      <td>{{s.s2|default:''}}</td>
+      <td>{{s.s3|default:''}}</td>
+      <td>{{s.s4|default:''}}</td>
+      <td>{{s.s5|default:''}}</td>
+      <td>{{s.s6|default:''}}</td>
+
+      <td>{{s.s8|default:''}}</td>
+      <td>{{s.s7|default:''}}</td>
+      <td>{{s.s10|default:''}}</td>
+      <td>{{s.s11|default:''}}</td>
+      <td>{{s.s12|default:''}}</td>
+      <td>{{s.s13|default:''}}</td>
+      <td>{{s.s14|default:''}}</td>
+      <td>{{s.all|default:''}}</td>
+    </tr>
+    {%endfor%}
+  </table>
+</center>
+
+{% endblock %}
+{% block scripts %}
+<script>
+{%for step in searchWeekSteps%}
+  {%if step.valid%}
+    $("#{{step.teacherId}}-{{step.item}}").prop('checked', true);
+  {%endif%}
+{%endfor%}
+
+{%for step in searchMonthSteps%}
+  {%if step.item == '棋力月赛'%}
+  $("#{{step.teacherId}}-{{step.item}}").val('{{step.value}}')
+  {%endif%}
+  {%if step.item == '对弈' and step.valid%}
+  $("#{{step.teacherId}}-{{step.item}}").prop('checked', true);
+  {%endif%}
+  {%if step.item == '朋友圈' and step.valid%}
+  $("#{{step.teacherId}}-{{step.item}}").prop('checked', true);
+  {%endif%}
+{%endfor%}
+
+{%for step in month3Steps%}
+  $("#{{step.teacherId}}-{{step.item}}").val('{{step.value}}')
+{%endfor%}
+
+{%for step in yearSteps%}
+  $("#{{step.teacherId}}-{{step.item}}").val('{{step.value}}')
+{%endfor%}
+
+$("button").click(function(){
+  var items = ''
+    var dateType = $(this).attr("id")
+    $("."+dateType+"Input").each(function(){
+      var tags = $(this).attr("id").split("-")
+      items = items + tags[0] + '-' + tags[1]
+      var value = ''
+      var valid = ''
+      var score = 0
+      if($(this).attr("type")=='checkbox'){
+        if($(this).prop("checked"))
+          valid = 'true'
+      }
+      else if($(this).attr("type")=='text'){
+        value = $(this).val()
+      }
+      else{
+        value = $(this).val()
+      }
+
+      items = items + '-' + value + '-' + valid + '-' + score + '|'
+    })
+    console.log(items)
+    items = items.substring(0,items.length-1)
+    var beginDate = $("#"+dateType+"-beginDate").val()
+    //return
+		$.post("{% url 'teacher:api_markStep' %}", {
+      "csrfmiddlewaretoken": "{{ csrf_token }}",
+        	"branchId":'{{login_teacher.branch}}',
+          "beginDateStr":beginDate,
+          "dateType":dateType,
+          "itemStr":items
+        }, function (res) {
+
+          alert(res.msg)
+          location.reload();
+        });
+
+});
+$("#week-beginDate").change(function(){
+  var week = $(this).val()
+  var url = "{% url 'teacher:markStep' %}?week="+week+"&month={{searchMonthBegin|date:"Y-m"}}";
+  window.location.href=url;
+})
+
+$("#month-beginDate").change(function(){
+  var month = $(this).val()
+  var url = "{% url 'teacher:markStep' %}?month="+month+"&week={{searchWeekBegin|date:"Y-m-d"}}";
+  window.location.href=url;
+})
+{%if searchWeekBegin%}
+$("#week-beginDate").val('{{searchWeekBegin|date:"Y-m-d"}}')
+{%endif%}
+
+{%if searchMonthBegin%}
+$("#month-beginDate").val('{{searchMonthBegin|date:"Y-m"}}')
+{%endif%}
+
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+
+function saveTarget(){
+  console.log('{{user.id}}')
+
+  var userId = '{{user.id}}'
+  var beginLevel = $("#beginLevel").val()
+  var beginDate = $("#beginDate").val()
+  var endDate = $("#endDate").val()
+  var quarterTarget = $("#quarterTarget").val()
+  var halfyearTarget = $("#halfyearTarget").val()
+  var yearTarget = $("#yearTarget").val()
+  if(beginLevel==''){
+    alert('请选择初始级别')
+    return
+  }
+  if(quarterTarget==''){
+    alert('请选择三个月目标')
+    return
+  }
+  if(halfyearTarget==''){
+    alert('请选择半年目标')
+    return
+  }
+  if(yearTarget==''){
+    alert('请选择一年目标')
+    return
+  }
+  if(!beginDate){
+    alert('请选择开始日期')
+    return
+  }
+  $.post("{% url 'teacher:api_editTarget' %}", {
+      "beginLevel":beginLevel,
+      "beginDate": beginDate,
+      "quarterTarget": quarterTarget,
+      "halfyearTarget": halfyearTarget,
+      "yearTarget": yearTarget,
+      {%if target%}"tid":'{{target.id}}',{%endif%}
+      "userId": userId
+  }, function (res) {
+      if (res["error"] == 0) {
+          alert("成功")
+          window.location.reload();
+      } else {
+          alert("失败:" + res["msg"])
+      }
+  });
+}
+
+</script>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a>
+</div>
+<div>
+<div style="margin-left:20px;"><center><b>主任评分</b>
+<select id="city">
+  {%for c in cities%}
+    <option value="{{c.id}}" {%if city == c.id|stringformat:'s'%} selected="selected" {%endif%}>{{c.cityName}}</option>
+  {%endfor%}
+</select>
+<select id="assessCode">
+  {%for key,value in ASSESS_CODE.items%}
+    <option value="{{key}}">{{key}}</option>
+  {%endfor%}
+</select>
+<button id="searchButton">查询</button>
+</center>
+</div>
+<center>
+<div id="table-container" style="width:100%;padding-bottom:40px;">
+<div style="float:left;width:20%">
+  {%if assesses%}
+  评分回收数
+  <table border="1" id="datatable">
+    <thead>
+    <tr>
+      <th>校区</th><th>回收数</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%for key,value in bcounts.items%}
+    <tr><td>{{key}}</td><td>{{value}}</td></tr>
+    {%endfor%}
+  </tbody>
+  </table>
+  {%endif%}
+</div>
+<div style="float:right;width:80%">
+    <table id="datatable" border="1">
+    <thead>
+        <tr style="background:#eeeeee;">
+
+        <th style="padding:3px 10px 3px 10px;width:74px;">校区</th>
+        <th style="padding:3px 10px 3px 10px;width:80px;">主任</th>
+        <th style="padding:3px 10px 3px 10px;width:60px;" align="center">评分</th>
+        <th style="padding:3px 10px 3px 10px;width:500px;" align="center">评语</th>
+        <th style="padding:3px 10px 3px 10px;width:60px;" align="center">平均分</th>
+
+        </tr>
+</thead>
+<tbody>
+{%for a in assesses%}
+<tr>
+
+<td style="padding:0 0 0 10px;">{{a.branchName}}</td>
+<td style="padding:0 0 0 10px;">{{a.assessObjectName}}</td>
+<td style="padding:0 0 0 10px;">{{a.score}}</td>
+<td style="padding:0 0 0 10px;">{{a.memo}}</td>
+<td style="padding:0 0 0 10px;">{{a.averageScore}}</td>
+</tr>
+{%endfor%}
+</tbody>
+</table>
+</div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+    $("#searchButton").click(function(){
+    	if($("#assessCode").val()==''){
+    	    alert("请选择考评代号")
+    	    return
+        }
+        if($("#city").val()==''){
+        	alert("请选择城市")
+        	return
+        }
+    	var url = "{%url 'teacher:headmasterAssesses'%}?assessCode="+$("#assessCode").val()+"&city="+$("#city").val();
+    	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+    	window.location.href=url;
+    })
+
+
+    $(document).ready(function() {
+        $('#datatable').DataTable({
+        	    	"paging":   false,
+           	"searching": false,
+        	    "info":false,
+
+            "order": [[ 1, "desc" ]],
+            buttons: [
+                { extend: 'copy', text: '复制' },
+                { extend: 'csv', text: '保存' },
+                { extend: 'print', text: '打印' }
+            ]
+    	});
+
+    });
+    </script>
+{% endblock %}

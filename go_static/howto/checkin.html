@@ -1,0 +1,51 @@
+<html>
+<head>
+    <title>CRM帮助－课程签到</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+.block{cursor:pointer;padding-left:6px;padding-right:16px;padding-top:6px;float:left;height:114px;}
+</style>
+</head>
+<body >
+<div style="margin:10px;">
+  <a href="/go_static/howto/index.html"><返回帮助主页</a>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<center><h4>如何课程签到</h4></center>
+<div style="margin:20px;">
+方法一：在班级页面，找到要签到的班级，点击签到小按钮
+<div class="demopicDiv"><img src="/go_static/img/howto/classes.png" style="width:90%;"></div>
+方法二：在日程页面，找到要签到的课程蓝条，点击蓝条
+<div class="demopicDiv"><img src="/go_static/img/howto/checkin01.png" style="width:60%;"></div>
+出现课程浮出窗口，点“签到”按钮
+<div class="demopicDiv"><img src="/go_static/img/howto/checkin02.png" style="width:70%;"></div>
+以上两种方法，都可以进入班级签到列表页面：
+<div class="demopicDiv"><img src="/go_static/img/howto/checkin03.png" style="width:80%;"></div>
+点“内容和签到”按钮，进入签到页，填写各项需要修改的信息
+<div class="demopicDiv"><img src="/go_static/img/howto/checkin04.png" style="width:80%;"></div>
+
+
+</div>
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>

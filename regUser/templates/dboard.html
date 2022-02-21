@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<h4>登录CRM系统中...</h4>
+{% endblock %}
+{% block scripts %}
+    <script>
+    console.log('login-----------------------{{login}}')
+    {% if login_teacher.branch != login_teacher.cityHeadquarter %}
+        window.location.href="{%url 'regUser:dboard1'%}";
+    {%endif%}
+    {%if login_teacher.branch == login_teacher.cityHeadquarter and login_teacher.role < login_teacher.RoleFin %}
+     {%if login_teacher.branch == NET_BRANCH%}
+      {%if login == '1'%}
+        if(mobileCheck()){
+    	    window.location.href="{%url 'regUser:netReg'%}";
+        }else{
+    	    window.location.href="{%url 'web:regList'%}";
+        }
+      {%else%}
+          window.location.href="{%url 'web:regList'%}";
+      {%endif%}
+     {%else%}
+          window.location.href="{%url 'regUser:dboard1'%}";
+     {%endif%}
+    {%endif%}
+
+    {%if login_teacher.role == login_teacher.RoleAdm%}
+        {%if login_teacher.cityFA == login_teacher.id%}
+            window.location.href="{%url 'workflow:refundWaitingList'%}";
+        {%else%}
+            window.location.href="{%url 'statistic:indexStat'%}";
+        {%endif%}
+    {%elif login_teacher.cityFR == login_teacher.id%}
+        window.location.href="{%url 'workflow:refundApprovedList'%}";
+    {%elif login_teacher.cityRT == login_teacher.id%}
+            window.location.href="{%url 'workflow:receiptRequire'%}";
+    {%elif login_teacher.cityRB == login_teacher.id%}
+            window.location.href="{%url 'workflow:receiptRequire'%}";
+    {%elif login_teacher.cityRB2 == login_teacher.id%}
+            window.location.href="{%url 'workflow:receiptRequire'%}";
+    {%elif login_teacher.role == 8%}
+        window.location.href="{%url 'contract:contract_list'%}";
+    {% endif %}
+    </script>
+{% endblock %}

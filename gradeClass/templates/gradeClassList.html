@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load filter %}
+{% load filter_regUser %}
+{% block content %}
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+    <link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+    <div class="text-right" style="margin-right: 20px;margin-bottom: 10px;">
+        <button class="btn btn-default" style="display: inline-block" onclick="add_gradeClass()">开班</button>
+        <button class="btn btn-default" style="display: inline-block" onclick="schedule_list()">查日程</button>
+        <button class="btn btn-default" style="display: inline-block" onclick="delete_list()">查看已删除班级</button>
+    </div>
+    <table id="datatable" class="table table-bordered">
+        <thead>
+        <tr>
+
+            <th width="140">名称</th>
+            <th width="70">开班日</th>
+            <th width="60">上课时间</th>
+            <th width="30">教室</th>
+            <th width="40">老师</th>
+
+            <th nowrap>年龄</th>
+            <th>学生</th>
+            <th width="110"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for gradeClass in gradeClasses %}
+            <tr>
+
+                <td>{{ gradeClass.name }}</td>
+                <td>{{ gradeClass.start_date|date:"Y-m-d" }}</td>
+                <td>周{%if gradeClass.school_day == 7%}日{%else%}{{ gradeClass.school_day }}{%endif%} {{ gradeClass.school_time }}</td>
+                <td>{{ gradeClass.classroom|default:'' }}教室</td>
+                <td>{{ gradeClass.teacher.name }}</td>
+
+                <td nowrap>{{ gradeClass.young }}-{{gradeClass.old}}</td>
+                <td>{% for s in gradeClass.students %}
+                    <a href="/go2/regUser/studentInfo/{{s.id}}" style="color:{%if s.gender == '女'%}#e65652{%else%}blue{%endif%};"
+                       >{{ s.name }}</a>
+                {% endfor %}</td>
+                <td>
+                    <a href="{% url 'gradeClass:edit_gradeClass' gradeClass.gradeClass_type gradeClass.id %}"
+                       ><i
+                            class="glyphicon glyphicon-pencil" title="修改"></i></a>
+                            &nbsp;&nbsp;
+                        <a href="javascript:lessons('{{gradeClass.id}}')" title="签到"><i class="glyphicon glyphicon-check"></i></a>
+                    &nbsp;&nbsp;
+                    <a href="javascript:extraLesson('{{gradeClass.id}}')">
+                    <i class="glyphicon glyphicon-plus" title="补课"></i></a>
+                    &nbsp;&nbsp;
+                    <a href="javascript:removeClass('{{gradeClass.id}}')">
+                    <i class="glyphicon glyphicon-trash" title="删除"></i></a></td>
+
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}
+{% block scripts %}
+    <script>
+    $(document).ready(function() {
+      $("#nav2").css("color","red");
+      $("#nav2").css("font-weight","bold");
+    	$('#datatable').DataTable({
+    	    stateSave: false,
+          "ordering":true,
+          "order": [[ 2, "asc" ]],
+    	    "language": {
+                "lengthMenu": "每页显示 _MENU_ 班级",
+                "zeroRecords": "空空如也",
+                "sInfo":"从 _START_ 到 _END_， 共 _TOTAL_ 班级",
+                "infoEmpty": "没有找到哦",
+                "sSearch":"查询",
+                "oPaginate": {
+    		        "sFirst":"首页",
+    		        "sPrevious": 	"上一页",
+    		        "sNext":     	"下一页",
+    		        "sLast":     	"末页"
+    	        },
+                "infoFiltered": "(从 _MAX_ 班级中搜索)"
+            }
+    	});
+      $('#datatable').DataTable().page.len(50).draw();
+    });
+
+        function add_gradeClass() {
+            var url = "{% url 'gradeClass:edit_gradeClass' '99999' '' %}";
+            url = url.replace('99999', GradeClassType.normal);
+            window.location.href=url;
+        }
+        function extraLesson(id) {
+            var url = "{% url 'gradeClass:extraLesson'%}?id="+id;
+            window.location.href=url;
+        }
+        function clickPage(page) {
+            var url = getRequestUrl("{% url 'gradeClass:gradeClass_list' %}", "page", page);
+            window.location.href = url;
+        }
+
+        function schedule_list() {
+            var url = "{% url 'gradeClass:schedule' %}";
+            window.location.href=url;
+        }
+        function delete_list() {
+            var url = "{% url 'gradeClass:deletedClass_list' %}";
+            window.location.href=url;
+        }
+        function removeClass(classId){
+        	if(confirm("确定删除班级吗？")){
+        	    var url = "{% url 'gradeClass:api_remove_gradeClass' %}"
+        	    $.post(url, {
+                    "gradeClass_oid": classId
+                }, function (res) {
+                	if(res.error==1)alert(res.msg);
+                	else{
+                	    location.reload(true);
+                	    //document.location.href=url;
+                	    //window.location.assign(url);
+                	}
+                });
+        	}
+        }
+        function lessons(id){
+        	document.location.href="{% url 'gradeClass:lessons' %}?type=1&id="+id;
+        }
+
+    </script>
+{% endblock %}

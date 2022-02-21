@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+
+    <div class="text-right" style="margin-right: 20px;margin-bottom: 10px;">
+      {%if login_teacher.role == 7 or login_teacher.role == 9 %}
+        <button class="btn btn-default" onclick="add_teacher()">添加老师</button>
+        &nbsp;&nbsp;<button class="btn btn-default" onclick="teacherStep()">老师成长档案</button>
+        {%endif%}
+        &nbsp;&nbsp;<button class="btn btn-default" onclick="q2019()">2019问卷</button>
+    </div>
+
+
+    <table class="table  table-hover">
+        <tbody>
+        <tr style="background:#eeeeee;">
+        <td>姓名</td>
+        <td>职位</td>
+        <td>登录名</td>
+        <td>别名</td>
+        <td>手机</td>
+        <td>邮箱</td>
+        <td>接力棒微信号ID</td>
+        <td>入职日期</td>
+        <td>成长档案</td>
+        <td></td>
+        <td>操作</td>
+        </tr>
+        {% for teacher in teachers %}
+            <tr {%if teacher.status == -1%}style="color:#aaaaaa;"{%endif%}>
+                <td>
+                {{ teacher.name }}</td>
+
+                <td>{% for role in roles %}
+                {%if teacher.role == role.code%}
+                {{ role.roleName }}
+                {% endif %}
+                {% endfor %}
+                </td>
+                <td>{{ teacher.username }}</td>
+                <td>{{ teacher.name2|default:"" }}</td>
+                <td>{{ teacher.mobile|default:"" }}</td>
+                <td>{{ teacher.email|default:"" }}</td>
+                <td>{{ teacher.openId|default:"" }}</td>
+                <td>{{ teacher.checkinDate|date:"Y-m-d"|default:"" }}</td>
+                <td>{%if teacher.inReview%}<input type="checkbox" checked onclick="return false;"{%endif%}</td>
+                <td>{%if teacher.status == -1%}离职{%endif%}</td>
+                <td>
+                  {%if login_teacher.branchType == '0'%}
+                  <button onclick="trainings('{{teacher.id}}')">练功房</button>&nbsp;
+                  {%endif%}
+                  {%if teacher.role == 7 and login_teacher.role < 7 and teacher.status != -1%}
+                    <button onclick="assess('{{teacher.id}}')">评分</button>
+
+                  {%endif%}
+
+                      {% if login_teacher.id|stringformat:"s" == teacher.id|stringformat:"s" or login_teacher.role >= teacher.role and login_teacher.role >= 7 %}
+                      <button id="modifyBtn" onclick="edit_teacher('{{teacher.id}}')" class="btn btn-success">修改</button>
+                      {% endif %}
+
+                      <button onclick="qrcode('{{teacher.id}}')">二维码</button>
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <nav style="text-align: center">
+        <ul class="pagination">
+            {% for page in pages %}
+                {% if teachers.number == page %}
+                    <li class="active" onclick="clickPage({{ page }})"><a>{{ page }}</a></li>
+                {% else %}
+                    <li onclick="clickPage({{ page }})"><a>{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+        </ul>
+    </nav>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        function add_teacher() {
+        	//var url = '/go2/teacher/reg?isAdd=1';
+        	var url = "{% url 'teacher:reg' %}";
+        	url = url + "?isAdd=1";
+            window.location.href=url;
+        }
+        function edit_teacher(id) {
+        	//var url = '/go2/teacher/reg?teacher_oid='+id;
+        	var url = "{% url 'teacher:reg' %}";
+        	url = url + "?teacher_oid="+id;
+        	window.location.href=url;
+        }
+
+        function clickPage(page){
+        	var url = '{% url 'teacher:teacher_list' %}'
+        	url = url+'?page='+page;
+        	window.location.href = url;
+        	//window.location.href = '/go?page='+page;
+        }
+        function trainings(teacher_oid) {
+        	var url = "{% url 'teacher:trainings' '111111111111111111111111'%}";
+        	url = url.replace("111111111111111111111111", teacher_oid);
+            window.location.href=url;
+        }
+        function assess(id) {
+        	var url = "{% url 'teacher:headmasterAssess' %}?mid="+id;
+          window.open(url);
+        }
+        function qrcode(id) {
+        	var url = "{% url 'teacher:wxqrcodePic' %}?tid="+id;
+          window.location.href = url
+        }
+
+        function teacherStep() {
+          //var url = '/go2/teacher/reg?isAdd=1';
+          var url = "{% url 'teacher:markStep' %}";
+            window.location.href=url;
+        }
+        function q2019() {
+          //var url = '/go2/teacher/reg?isAdd=1';
+          var url = "{% url 'teacher:q2019' %}";
+            window.open(url);
+        }
+        $("#nav4").css("color","red");
+        $("#nav4").css("font-weight","bold");
+    </script>
+{% endblock %}

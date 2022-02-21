@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <style>
+    </style>
+{% endblock %}
+{% block content %}
+<a href="javascript:goback('{{mainurl}}')"><返回</a>&nbsp;&nbsp;<span id="tip">
+<div class="row">
+<div class="col-sm-6">
+        <table >
+            <tr>
+                <td colspan="2">
+                    <h4><font style="background:#eeeeee;font-size:13px;">孩子</font>&nbsp;{{student.name|default:""}}&nbsp;{{student.name2|default:""}}  <font style="background:#eeeeee;font-size:13px;">家长</font>{{student.prt1}} {{student.prt1mobile}}</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>下次跟进事项</td>
+                <td>
+                    <input class="form-control0" type="text" id="remind_txt" style="width:200px;display: inline-block"
+                           value="{{ teacherRemind.remind_txt|default:'' }}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>下次跟进日期</td>
+                <td>
+                    <input id="remindTime" class="form-control0" type="text" style="width:100px"
+                           value="{{ teacherRemind.remindTime|date:"Y-m-d" }}">
+                    <input id="isDone" type="checkbox" onclick="done('{{teacherRemind.id}}','{{teacherRemind.remind_txt}}')" {% if teacherRemind.isDone == 1%}checked="checked" {%endif%}/>已完成
+                           <button type="button" class="btn btn-danger" 
+            onclick="clickSaveBtn()">保存 </button>
+                </td>
+            </tr>
+            
+        </table>
+<hr>
+    </div>
+
+   
+   <div class="col-sm-6">
+   <div class="raw">
+   
+   <table>
+            <tr>
+                <td width="20%;">联络记录</td>
+                <td><textarea style="width:100%;" id="track_txt"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>联络时间</td>
+                <td>
+                    <input id="trackTime" type="text">&nbsp;
+                    <button onclick="saveTrack()" id="addTrackBtn" type="button" class="btn btn-success">保存联络记录
+                </button>
+                </td>
+            </tr>
+            
+        </table>
+   
+   </div>
+     <div class="raw">    
+<table class="table">
+        <tbody>
+        <th>联络时间</th>
+        <th>联络记录</th>
+        <th>联络人</th>
+
+        </tbody>
+        {% for record in tracks %}
+            <tr>
+                <td title='录入时间{{record.recordTime|date:"Y-m-d H:i"|default:""}}'>{{ record.trackTime|date:"Y-m-d H:i"|default:"" }}</td>
+                <td>{{ record.track_txt|default:"" }}</td>
+                <td nowrap>{%if record.teacher and record.teacher.name%}{{ record.teacher.name|default:"" }}{%endif%}</td>
+                <td>
+                {% if record.recordTime|date:"Y-m-d" == datenow|date:"Y-m-d" %}
+                    <a href="javascript:removeTrack('{{record.id}}','{{record.track_txt}}')">
+                    {% if login_teacher.branch|stringformat:"s" == record.teacher.branch.id|stringformat:"s" and login_teacher.role > 5 %}
+                                                               删除
+                    {% elif login_teacher.id|stringformat:"s" == record.teacher.id|stringformat:"s" %}
+                                                               删除
+                    {%endif%}
+                    </a>
+                {%endif%}
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+      </div>
+    </div>
+    </div>
+    </div>
+    
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            //时间
+            $('#remindTime').datetimepicker({
+                format: 'Y-m-d',
+                timepicker: false,
+            });
+        });
+        
+        function clickSaveBtn() {
+            var teacherRemindId = '{{teacherRemind.id}}|default:""';
+            var remindTime = $("#remindTime").val();
+            var remindTeacherIds = '{{login_teacher.id}}';
+            var remind_txt = $("#remind_txt").val();
+            var isAdd = Request["isAdd"];
+            if (!remindTime ) {
+                alert("请补全信息");
+                return;
+            }
+
+            $.post("{%url 'regUser:save_user_remind'%}", {
+                'student_oid': '{{student.id}}',
+                'remindTime': remindTime,
+                'remindTeacherIds': remindTeacherIds,
+                'teacherRemindId': teacherRemindId,
+                'isAdd': isAdd,
+                'backurl':"{%url 'regUser:student_track'%}",
+                'remind_txt': remind_txt
+            }, function (res) {
+                if (res.error == 0) {
+                    alert("成功");
+                    var url ="{% url 'regUser:student_info' student.id %}"
+                    if(res.backurl)
+                    	url = res.backurl
+                    location.href = url; 
+                } else {
+                    alert("失败:"+res.error);
+                }
+            });
+        }
+        
+        function done(id,txt){
+        	var isDone = document.getElementById("isDone").checked;
+        	var prompt = "未完成";
+        	if(isDone) prompt = "已完成";
+        	if(confirm('确定提醒事项【'+txt+'】'+prompt+'?')){
+        	  var url = "{% url 'regUser:done' %}"+"?student_oid={{student.id}}"+"&oid="+id+"&backurl="+"{%url 'regUser:student_track'%}";
+        	  window.location.href = url;
+        	}
+        }
+        
+        $("#nav1").css("color","red");
+        $("#nav1").css("font-weight","bold");
+        function goback(url){
+        	$("#tip").html("<font style='color:red;'>返回查询结果页，请稍候...</font>")
+        	window.location.href=url
+        }
+        
+        
+        var fmt = "yyyy-MM-dd hh:mm";
+    	var date = new Date();
+    	var datestring = date.Format(fmt);
+        $(document).ready(function () {
+                $('#trackTime').datetimepicker({
+                    format: 'Y-m-d H:i',
+                    step:5,
+                    timepicker: true,
+                    maxDate:datestring
+                });
+            });
+
+
+            function saveTrack() {
+                var track_txt = $("#track_txt").val();
+                var trackTime = $("#trackTime").val();
+
+                $.post("{%url 'regUser:save_user_track' %}", {
+                    'student_oid': '{{student.id}}',
+                    'track_txt': track_txt,
+                    'trackTime': trackTime,
+                    'isAdd': '1',
+                    'backurl':"{%url 'regUser:student_track'%}",
+                    'teacher_oid': '{{login_teacher.id}}'
+
+                }, function (res) {
+                    if (res.error == 0) {
+                        alert("成功");
+                        var url ="{% url 'regUser:student_info' student.id %}" 
+                        if(res.backurl)
+                          	url = res.backurl
+                        location.href = url; 
+                        
+                    } else {
+                        alert("失败");
+                    }
+                });
+            }
+
+            var fmt = "yyyy-MM-dd hh:mm:ss";
+        	var date = new Date();
+        	var datestring = date.Format(fmt);
+        	$("#trackTime").val(datestring);
+        
+        	function removeTrack(oid,msg) {
+        		if(confirm('确定删除联络记录【'+msg+'】吗？')){
+        	      $.post("{% url 'regUser:removeTrack'%}", {
+        	    	  'oid':oid
+        	      }, function (res) {
+        	        if (res.error == 0) {
+        	            alert("成功");
+        	            location.reload(true);
+        	        } else {
+        	            alert(res.msg);
+        	        }
+        	      });
+        		}
+        	}
+    </script>
+{% endblock %}

@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>CRM帮助－如何查看日程</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+.block{cursor:pointer;padding-left:6px;padding-right:16px;padding-top:6px;float:left;height:114px;}
+</style>
+</head>
+<body >
+<div style="margin:10px;">
+  <a href="/go_static/howto/index.html"><返回帮助主页</a>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<center><h4>如何查看日程</h4>
+<b>日程包括校区一周内全部课程安排，方便老师排课时查看哪些时间段哪些教室还有空余</b></center>
+<div style="margin:20px;">
+
+点主菜单“日程”按钮进入日程页面，日程中的颜色条代表不同课程类型，<b style="color:red">红色</b>：试听课未上，<b style="color:green">绿色</b>：试听课已上，<b style="color:blue">蓝色</b>：正课，<b style="color:purple">紫色</b>：补课
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/schedule.png" style="max-width:600px;width:100%;"></div>
+如果想查看某个具体课程信息，可以点那个颜色条，会弹出课程信息框。点孩子名可以转到孩子详情页面，点“修改”按钮进入试听课修改页面
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/schedule2.png" style="max-width:800px;width:100%;"></div>
+</div>
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>

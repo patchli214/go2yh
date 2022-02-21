@@ -1,0 +1,832 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+h4{margin:4px;}
+
+.my-error-class {
+    color:#FF0000;  /* red */
+}
+</style>
+
+<div style="padding-top:10px;padding-bottom:3;float:left;">
+<a href="javascript:history.go(-1)"><返回</a>
+</div>
+<div style="width:100%;text-align:center;font-size:20px;padding-top:6px;">{% if student %}孩子信息修改{% else %}孩子登记{% endif %}</div>
+
+<div style="width:100%;margin:0 auto;padding:0;">
+<form id="qform" name="qform" class="form-inline" action="apiReg" method="post">
+  {% csrf_token %}
+{%if student and student.id%}<input type="hidden" name="student_oid" value="{{student.id}}" />{%endif%}
+<div class="bg-success" style="padding:3px 0px 3px 15px;margin:0;">来源</div>
+<div style="width:100%;margin:0 auto;padding:0 0 20px 0;">
+    <div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+        <select id="regBranch" name="regBranch" class="" {%if login_teacher.role < 7 and student and student.regBranch.id|stringformat:"s" != login_teacher.branch|stringformat:"s"%} onfocus="this.defOpt=this.selectedIndex" onchange="this.selectedIndex=this.defOpt;"{%endif%}>
+        {%if student.regBranch%}
+            <option value="{{student.regBranch.id}}" selected="selected">{{student.regBranch.branchName}}</option>
+            {%if login_teacher.role > 6 and login_teacher.branchType != '1'%}
+                {%if student.regBranch.id == nb.id%}
+                    <option value="{{login_teacher.branch}}">{{login_teacher.branchName}}</option>
+                {%else%}
+                    <option value="{{nb.id}}">{{nb.branchName}}</option>
+                {%endif%}
+            {%elif login_teacher.role > 6 and login_teacher.branchType == '1'%}
+                {% for b in branchs %}
+                    {%if b.sn > 0 and b.sn < 999%}
+             <option value="{{b.id}}">{{b.branchName}}</option>
+                    {%endif%}
+                {%endfor%}
+            {%endif%}
+        {%elif login_teacher.branchType == '1'%}
+             <option value="{{login_teacher.branch}}" selected="selected">{{login_teacher.branchName}}</option>
+        {%else%}
+             <option value="{{login_teacher.branch}}" selected="selected">{{login_teacher.branchName}}</option>
+             <option value="{{nb.id}}">{{nb.branchName}}</option>
+        {%endif%}
+        </select>
+</div>
+
+<!--招生老师，可以选择其他校区老师，保存后只有主任能修改-->
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+
+  <!--校区老师不能修改其他校区来源老师-->
+  {% if login_teacher.branchType != '1' and login_teacher.role != 7 and student and student.regTeacher and student.regTeacher.id|stringformat:"s" != login_teacher.id|stringformat:"s"%}
+        拜访老师:
+    {{student.regTeacherName}}
+    <input type="hidden" id="regTeacher" name="regTeacher" value="{{student.regTeacher.id|default:''}}" />
+
+  <!--网络部只选自己部门老师即可-->
+  {% elif login_teacher.branchType == '1' %}
+  <select id="regTeacher" name="regTeacher" class="">
+      <option value="">
+        -请选择接单老师-
+      </option>
+  {% for t in teachers %}
+    <option value="{{t.id}}"
+      {% if student %}
+        {% if t.username == student.regTeacher.username %}
+          selected="selected"
+        {%  endif  %}
+      {% else %}
+        {% if t.username == login_teacher.username %}
+          selected="selected"
+        {%  endif  %}
+      {%  endif  %}
+    >{{t.name}}</option>
+  {% endfor %}
+  </select>
+
+  <!--校区老师可选其他校区老师-->
+  {%else%}
+  <input type="hidden" id="regTeacher" name="regTeacher" value="{%if student%}{{student.regTeacher.id|default:''}}{%else%}{{login_teacher.id}}{%endif%}" />
+  <input type="text" id="regTeacherName" name="regTeacherName" value="{%if student%}{{student.regTeacher.name|default:''}}{%else%}{{login_teacher.teacherName}}{%endif%}" readonly="readonly" />
+  <button id="searchRegTeacher" type="button" class="btn btn-default" aria-label="search">
+                         <span class="glyphicon glyphicon-search" aria-hidden="false"></span>选择其他老师
+                      </button>
+  {% endif %}
+</div>
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+  {%if student and student.callInTime and login_teacher.role < 7 and login_teacher.branchType != '1'%}
+  {{student.callInTime|date:"Y-m-d H:i"}}
+  <input type="hidden" id="callInTime" name="callInTime" value='{{student.callInTime|date:"Y-m-d H:i"}}' />
+  {% else %}
+  <input value='{%if student%}{{student.callInTime|date:"Y-m-d H:i"}}{%else%}{{timeNow|date:"Y-m-d H:i"}}{%endif%}' type="text" class="" id="callInTime" name="callInTime"  placeholder="{% if login_teacher.branchType == '1'%}来电时间{% else %}拜访时间{% endif %}"/>
+  {% endif %}
+</div>
+{%if login_teacher.branchType == '1' %}
+<div class="form-group text-right">
+编号<input type="text" id="code" name="code" value='{{student.code|default:""}}' />
+</div>
+{%endif%}
+
+<div>
+
+{%if student and student.regBranch.id|stringformat:"s" != login_teacher.branch|stringformat:"s"%}
+<div style="padding:15px;">{%if student.sourceType == 'A'%}网络{%elif student.sourceType == 'B'%}拜访{%elif student.sourceType == 'C'%}转介{%elif student.sourceType == 'D'%}社会{%endif%}-{{student.sourceCategory.categoryName}}-{{student.source.sourceName}}</div>
+{%else%}
+<div class="form-group text-right0" style="float:left;margin:5px;padding:0 10px 0 10px;">
+
+<select id="sourceType" name="sourceType" class="0" >
+                    <option value="">--请选择渠道类别--</option>
+                    {% for sourceType in sourceTypes %}
+                      <option value="{{sourceType.typeCode}}"
+                        {%if student and sourceType.typeCode == student.sourceType%}
+                            selected="selected"
+                        {%endif%}
+
+
+
+                      >{{sourceType.typeName}}</option>
+                    {% endfor %}
+                    </select>
+</div>
+
+<div style="padding-right:10px;float:left;display:{%if student and student.sourceType == 'A' %}block{%else%}none{%endif%};" id="sourceTd1" class="form-group text-right0" style="margin:5px;padding:0 10px 0 10px;">
+<select id="sourceCategory" name="sourceCategory" class="0"><option value="">-请选择小类-</option>
+{% for sc in sourceCategory %}
+  {%if sc.typeCode == student.sourceType%}
+    {%if sc.branch|stringformat:"s" == student.regTeacher.branch|stringformat:"s"%}
+                      <option value="{{sc.id}}"
+                      {%if student%}
+                        {%if sc.id|stringformat:"s" == student.sourceCategory.id|stringformat:"s"%}
+                            selected="selected"
+                        {%endif%}
+                      {%endif%}
+                      >{{sc.categoryName}}</option>
+                      {%endif%}
+                      {%endif%}
+{% endfor %}
+</select>
+                    <button id="addCategory" type="button" class="btn btn-default" aria-label="add">
+                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="false"></span> 添加小类
+                    </button>
+                    </div>
+<div style="display:{%if student.sourceType == 'A' or student.sourceType == 'B' %}block{%else%}none{%endif%};" id="sourceTd2" class="form-group text-right0" style="margin:5px;padding:0 10px 0 10px;">
+<select id="source" name="source" class="0">
+<option value="">-请选择渠道-</option>
+{% for s in sources%}
+{% if s.typeCode == student.sourceType %}
+<option value="{{s.id}}"
+  {% if student and student.source and student.source.id|stringformat:"s" == s.id|stringformat:"s"%}
+      selected = "selected"
+  {% endif %}
+>{{s.sourceName}}</option>
+{%endif%}
+{% endfor %}
+</select>
+                    <button id="addSource" type="button" class="btn btn-default" aria-label="add">
+                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="false"></span> 添加渠道
+                    </button>
+                    拜访时间：<select id="Bsub" name="Bsub">
+                      <option value="早"  {%if student.Bsub == '早'%}selected="selected" {%endif%}>早</option>
+                      <option value="" {%if student.Bsub != '早'%}selected="selected" {%endif%}>正常</option>
+                      <option value="晚" {%if student.Bsub == '晚'%}selected="selected" {%endif%}>晚</option></select>
+                    </div>
+<div style="display:{%if student and student.sourceType == 'C'%}block{%else%}none{%endif%};" id="sourceTd3" class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+                     <input id="referrerName" name="referrerName" style="width:160px" placeholder="转介人" {%if student.referrerName %}value="{{student.referrerName}}"{%endif%}>
+                     <input id="referrer" name="referrer" type="hidden" {%if student.referrer %}value="{{student.referrer}}"{%endif%}>
+                     <button id="searchReferKid" type="button" class="btn btn-default" aria-label="search">
+                         <span class="glyphicon glyphicon-search" aria-hidden="false"></span>查询孩子
+                      </button>
+
+                    </div>
+<div style="display:{%if student and student.sourceType == 'B'%}block{%else%}none{%endif%};" id="sourceTd4" class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+                      协作老师<input  id="co_teacher" name="co_teacher" class="" type="text" readonly="readonly"
+                      {% if student and student.co_teacher %}
+                      value="{% for t in student.co_teacher %}{{t.name}},{% endfor %}"
+                      {% endif %}
+                       placeholder="协作老师">
+                    <button id="searchTeacher" type="button" class="btn btn-default" aria-label="search">
+                         <span class="glyphicon glyphicon-search" aria-hidden="false"></span> 查询
+                      </button>
+                    </div>
+{%endif%}
+
+</div>
+<div style="clear:left;"></div>
+<div class="bg-success" style="padding:3px 0px 3px 15px;margin:0;">意向</div>
+
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<select id="branch" name="branch" class="">
+ {%if student%}
+  {%if student.branch.id|stringformat:"s" != login_teacher.branch|stringformat:"s" or login_teacher.branchType != '1'%}
+  非本校区孩子或权限不够，不可修改校区
+  <option value=''>意向校区</option>
+  {%else%}
+  <option value=''>意向校区</option>
+  {%endif%}
+ {%else%}
+ <option value=''>意向校区</option>
+ {%endif%}
+  {% for b in branchs %}
+  {%if b.branchType != '1'%}
+    {%if student.branch%}
+
+      {%if student.branch.id|stringformat:"s" == b.id|stringformat:"s"%}
+        <option selected="selected" value="{{b.id}}">{{b.branchName}}</option>
+      {%elif student.branch.id|stringformat:"s" == login_teacher.branch|stringformat:"s" and login_teacher.role > 0%}
+
+        <option value="{{b.id}}">{{b.branchName}}</option>
+      {% elif login_teacher.branchType == '1' %}
+        <option value="{{b.id}}">{{b.branchName}}</option>
+      {%endif%}
+    {%elif student %}
+      <option value="{{b.id}}">{{b.branchName}}</option>
+    {%else%}
+
+      {%if b.id|stringformat:"s" == login_teacher.branch|stringformat:"s"%}
+          <option selected="selected" value="{{b.id}}">{{b.branchName}}</option>
+      {%else%}
+        <option value="{{b.id}}">{{b.branchName}}</option>
+      {%endif%}
+
+    {%endif%}
+  {%endif%}
+  {% endfor %}
+  </select>
+  {%if login_teacher.branch|stringformat:"s" == nb.id|stringformat:"s"%}
+  <select id="branch2" name="branch2" class="">
+  <option value=''>意向校区2</option>
+  {% for b in branchs %}
+  {%if b.branchType != '1'%}
+    {%if student.branch2%}
+      {%if student and student.branch2|stringformat:"s" == b.id|stringformat:"s"%}
+        <option selected="selected" value="{{b.id}}">{{b.branchName}}</option>
+      {%else%}
+        <option value="{{b.id}}">{{b.branchName}}校区</option>
+      {%endif%}
+    {%elif student|stringformat:"s" != 'None' %}
+      {%if b.id == login_teacher.branch%}
+          <option selected="selected" value="{{b.id}}">{{b.branchName}}</option>
+      {%else%}
+        <option value="{{b.id}}">{{b.branchName}}</option>
+      {%endif%}
+    {%else%}
+      <option value="{{b.id}}">{{b.branchName}}</option>
+    {%endif%}
+  {%endif%}
+  {% endfor %}
+  </select>
+  <select id="branch3" name="branch3" class="">
+  <option value=''>意向校区3</option>
+  {% for b in branchs %}
+  {%if b.branchType != '1'%}
+    {%if student.branch3%}
+      {%if student and student.branch3|stringformat:"s" == b.id|stringformat:"s"%}
+        <option selected="selected" value="{{b.id}}">{{b.branchName}}</option>
+      {%else%}
+        <option value="{{b.id}}">{{b.branchName}}</option>
+      {%endif%}
+    {%elif student|stringformat:"s" != 'None' %}
+      {%if b.id == login_teacher.branch%}
+          <option selected="selected" value="{{b.id}}">{{b.branchName}}</option>
+      {%else%}
+        <option value="{{b.id}}">{{b.branchName}}</option>
+      {%endif%}
+    {%else%}
+      <option value="{{b.id}}">{{b.branchName}}</option>
+    {%endif%}
+  {%endif%}
+  {% endfor %}
+  </select>
+  <select id="branch4" name="branch4" class="">
+  <option value=''>意向校区4</option>
+  {% for b in branchs %}
+  {%if b.branchType != '1'%}
+    {%if student.branch4%}
+      {%if student and student.branch4|stringformat:"s" == b.id|stringformat:"s"%}
+        <option selected="selected" value="{{b.id}}">{{b.branchName}}</option>
+      {%else%}
+        <option value="{{b.id}}">{{b.branchName}}</option>
+      {%endif%}
+    {%elif student|stringformat:"s" != 'None' %}
+      {%if b.id == login_teacher.branch%}
+          <option selected="selected" value="{{b.id}}">{{b.branchName}}</option>
+      {%else%}
+        <option value="{{b.id}}">{{b.branchName}}</option>
+      {%endif%}
+    {%else%}
+      <option value="{{b.id}}">{{b.branchName}}</option>
+    {%endif%}
+  {%endif%}
+  {% endfor %}
+  </select>
+  {%endif%}
+</div>
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+
+<select id="wantClass" name="wantClass" class="">
+  {% for b in classTypes %}
+  <option value="{{b.sn}}">{{b.name}}</option>
+
+  {% endfor %}
+  </select>
+
+</div>
+
+<div class="bg-success" style="clear:both;padding:3px 0px 3px 15px;margin:0;">基本信息</div>
+
+<div style="margin:5px;padding:0 10px 0 10px;">
+年龄：
+<select id="ageYear" name="ageYear" class="0">
+<option value=""></option>
+{% for y in year %}
+<option value="{{y}}"
+{% if studentYear and studentYear == y %}
+selected = "selected"
+{% endif %}
+>{{y}}岁</option>
+{% endfor %}
+</select>
+<select id="ageMonth" name="ageMonth" class="0">
+<option value="0"></option>
+{% for m in month %}
+<option value="{{m}}"
+{% if studentMonth and studentMonth == m %}
+selected = "selected"
+{% endif %}
+>{{m}}个月</option>
+{% endfor %}
+
+
+</select>
+&nbsp;&nbsp;
+生日：<input type="text" id="birthday" name="birthday" value='{{student.birthday|date:"Y-m-d"|default:""}}'>
+&nbsp;&nbsp;
+<label class="radio-inline">
+  <input type="radio" name="gender" value="女" id="female"
+  {% if student and student.gender == '女' %}checked{% endif %}
+  />女
+</label>
+<label class="radio-inline">
+  <input type="radio" name="gender" value="男" id="male"
+  {% if student and student.gender == '男' %}checked{% endif %}
+  />男
+</label>
+</div>
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<input type="text" class="" id="name" name="name" placeholder="孩子名字"
+{% if student and student.name %}value='{{student.name}}'{% endif %}
+ />
+</div>
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<input type="text" class="" id="name2" name="name2" placeholder="小名"
+{% if student and student.name2 %}value='{{student.name2}}'{% endif %}
+/>
+</div>
+
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<input type="text" class="" id="siblingName" name="siblingName" placeholder="兄弟姐妹1"
+{% if student and student.siblingName %}value='{{student.siblingName}}'{% endif %} />
+</div>
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<input type="text" class="" id="siblingName2" name="siblingName2" placeholder="兄弟姐妹2"
+{% if student and student.siblingName2 %}value='{{student.siblingName2}}'{% endif %} />
+</div>
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<input type="text" class="" id="siblingName3" name="siblingName3" placeholder="兄弟姐妹3"
+{% if student and student.siblingName3 %}value='{{student.siblingName3}}'{% endif %} />
+</div>
+<br>
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<input type="text" class="" id="prt1" name="prt1"  placeholder="家长称呼"
+{% if student and student.prt1 %}value='{{student.prt1}}'{% endif %}
+/>
+</div>
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<input type="text" class="" id="prt1mobile" name="prt1mobile"  placeholder="手机号码"
+{% if student and student.prt1mobile %}value='{{student.prt1mobile}}'{% endif %}
+/>
+</div>
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<input type="text" class="" id="prt2" name="prt2"  placeholder="家长2"
+{% if student and student.prt2 %}value='{{student.prt2}}'{% endif %}
+/>
+</div>
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<input type="text" class="" id="prt2mobile" name="prt2mobile"  placeholder="电话号码2"
+{% if student and student.prt2mobile %}value='{{student.prt2mobile}}'{% endif %}
+/>
+</div>
+<br>
+<div class="form-group text-left" style="margin:5px;padding:0 10px 0 10px;width:100%">
+<textarea style="width:96%;" id="memo" name="memo" rows="6" placeholder="备注">{% if student and student.memo %}{{student.memo}}{% endif %}</textarea>
+</div>
+
+<div style="margin:5px;padding:0 10px 0 10px;">
+<select id="kindergarten" name="kindergarten" >
+<option value="">选择幼儿园</option>
+{%for s in sources%}
+{%if s.typeCode == 'B'%}
+<option value="{{s.sourceName}}" {%if student.kindergarten == s.sourceName%}selected="selected"{%endif%}>{{s.sourceName}}</option>
+{%endif%}
+{%endfor%}
+</select>
+<select id="school" name="school" >
+<option value="">选择学校</option>
+{%for s in sources%}
+{%if s.typeCode == 'B'%}
+<option value="{{s.sourceName}}" {%if student.school == s.sourceName%}selected="selected"{%endif%}>{{s.sourceName}}</option>
+{%endif%}
+{%endfor%}
+</select>
+<select id="probability" name="probability" class="">
+<option value="">--级别--</option>
+<option value="A" {% if student.probability == 'A' or not student %}selected="selected"{% endif %}>A类</option>
+<option value="B" {% if student.probability == 'B' %}selected="selected"{% endif %}>B类</option>
+<option value="C" {% if student.probability == 'C' %}selected="selected"{% endif %}>C类</option>
+</select>
+
+{%if login_teacher.branchType == '1'%}
+&nbsp;&nbsp;
+<label class="radio-inline">
+  <input type="radio" name="netStatus" value="0" id="good"
+  {% if not student or student and student.netStatus != -1 %}checked{% endif %}
+  />有效咨询
+</label>
+<label class="radio-inline">
+  <input type="radio" name="netStatus" value="-1" id="bad"
+  {% if student and student.netStatus == -1 %}checked{% endif %}
+  />无效咨询
+</label>
+{%endif%}
+</div>
+
+<div style="margin:10px;"></div>
+
+<div style="margin-top:20px;width:100%;">
+<center><input id="submitButton" type="submit" style="font-size:20px;" value="保存"/></center>
+</div>
+</div>
+</form>
+{% include 'referrerModel.html' %}
+{% include 'referTeacherModel.html' %}
+{% include 'sourceCategoryModel.html' %}
+{% include 'sourceModel.html' %}
+{% include 'searchModel.html' %}
+{% include 'searchTeacherModel.html' %}
+
+{% endblock %}
+{% block scripts %}
+    <script>
+//function antiReplica(){
+  //$("#qform").submit()
+
+  //alert($("#submitButton").attr("disabled"))
+//}
+    var fmt = "yyyy-MM-dd hh:mm";
+	var date = new Date();
+	var datestring = date.Format(fmt);
+    {%if student and not student.regBranch%}
+    $("#regBranch").val('{{login_teacher.branch}}');
+    {%endif%}
+    $("#scheduleSearch").click(function(){window.open("/go2/gradeClass/schedule?branch="+$("#branch").val())});
+    $('#callInTime').datetimepicker({
+        timepicker: true,
+        format: 'Y-m-d H:i',
+        step: 30,
+        maxDate:datestring
+    });
+    $('#demoTime').datetimepicker({
+        timepicker: true,
+        format: 'Y-m-d H:i',
+        step: 30
+    });
+    dateNow = new Date();
+    var t = dateNow.getTime()-126144000000;
+    var initDate = dateNow.setTime(t);
+    $('#birthday').datetimepicker({
+        timepicker: false,
+        language: "zh-CN",
+        format: 'Y-m-d',
+        defaultDate:initDate
+    });
+    $("#sourceType").change(function(){
+        //if($("#sourceType").val()=='A')
+          //  $("#regBranch").val('{{nb.id}}')
+        //else{
+          //$("#regBranch").val('{{login_teacher.branch}}')
+        //}
+        	$("#source").html("<option>-请选择渠道-</option>");
+        	$("#sourceCategory").html("<option>-请选择小类-</option>");
+        	var sourceTypeName = "";
+        	{% for sourceType in sourceTypes %}
+        	    if($("#sourceType").val() == '{{sourceType.typeCode}}')sourceTypeName = '{{sourceType.typeName}}';
+        	{% endfor %}
+
+        	if($(this).val() == 'B') {
+        		$("#sourceTd1").css("display","none");
+        		$("#sourceTd2").css("display","block");
+        		$("#sourceTd2").css("margin-top","10px");
+        		$("#sourceTd3").css("display","none");
+        		$("#sourceCategorySpan").css("display","none");
+        		{% for sc in sources %}
+        		      if ($("#sourceType").val()=='{{sc.typeCode}}')
+        		          $("#source").append("<option value='{{sc.id}}'>{{sc.sourceName}}</option>");
+        		{% endfor %}
+        		if($(this).val() == 'B'||$(this).val()=='E'){
+        			$("#sourceTd4").css("display","block");
+        		    $("#sourceTd4").css("margin-top","10px");
+        		}
+        		else
+        			$("#sourceTd4").css("display","none");
+        	}
+        	if($(this).val() == 'A') {
+        		$("#sourceTd1").css("display","block");
+        		$("#sourceTd1").css("margin-top","10px");
+        		$("#sourceTd2").css("display","block");
+        		$("#sourceTd2").css("margin-top","10px");
+        		$("#sourceTd3").css("display","none");
+        		$("#sourceTd4").css("display","none");
+        		$("#sourceCategorySpan").css("display","block");
+        		$("#sourceCategorySpan").css("margin-top","10px");
+        		$("#sourceCategory").html();
+        		{% for c in sourceCategory %}
+        		$("#sourceCategory").append("<option value='{{c.id}}'>{{c.categoryName}}</option>");
+        		{% endfor %}
+        	}
+        	if($(this).val() == 'C') {
+        		$("#sourceTd1").css("display","none");
+        		$("#sourceTd2").css("display","none");
+        		$("#sourceTd3").css("display","block");
+        		$("#sourceTd4").css("display","none");
+        		$("#referTeachers").html('')
+            {% for t in teachers %}
+               $("#referTeachers").append("<option value='{{t.id}}'>{{t.name}}</option>");
+            {% endfor %}
+        	}
+        	if($(this).val() == 'D') {
+        		$("#sourceTd1").css("display","none");
+        		$("#sourceTd2").css("display","none");
+        		$("#sourceTd3").css("display","none");
+        		$("#sourceTd4").css("display","none");
+        	}
+        	$("#sourceTypeSpan").html("渠道类别："+sourceTypeName);
+        	$("#sourceTypeSpan2").html("渠道类别："+sourceTypeName);
+
+    });
+        $("#source").change(function(){
+        	$("#kindergarten").val($("#source option:selected").text());
+        });
+        $("#sourceCategory").change(function(){
+        	console.log('[selected sourceCategory]'+$("#sourceCategory").val());
+        	$("#source").html("<option>-请选择-</option>");
+        	var cat = '';
+        	{%for ca in sourceCategory%}
+        	   	if($("#sourceCategory").val()=='{{ca.id}}')
+        	    	cat = '{{ca.id}}';
+        	{%endfor%}
+        	{% for sc in sources %}
+        	  console.log('[source]{{sc.categoryCode}}')
+		      if (cat=='{{sc.categoryCode}}'){
+		    	  if($("#source").val()=='{{sc.id}}')
+		              $("#source").append("<option selected='selected' value='{{sc.id}}'>{{sc.sourceName}}</option>");
+		          else
+		    	      $("#source").append("<option value='{{sc.id}}'>{{sc.sourceName}}</option>");
+		      }
+		    {% endfor %}
+
+        });
+
+        $("#searchReferKid").click(function(){$("#referrerModal").modal();});
+        $("#searchRegTeacher").click(function(){
+            $("#searchName").val('')
+            $("#referTeachers").html('')
+            {% for t in teachers %}
+               $("#referTeachers").append("<option value='{{t.id}}'>{{t.name}}</option>");
+            {% endfor %}
+            $("#referTeacherModal").modal();});
+        $("#addSource").click(function(){$("#infoModal").modal();});
+        $("#addCategory").click(function(){$("#categoryModal").modal();});
+        $("#addSource2").click(function(){$("#infoModal").modal();});
+        $("#searchUser").click(function(){$("#searchModal").modal();});
+        $("#searchTeacher").click(function(){
+        	$("#searchTeacherModal").modal();
+        	$("#co_teachers").html("");
+        	{% for t in teachers %}
+        	$("#co_teachers").append("<option value='{{t.name}}'>{{t.name}}</option>");
+        	{% endfor %}
+        	});
+        $("#save_category").click(function(){
+        	$.post("{% url 'regUser:addSourceCategory' %}", {
+            "csrfmiddlewaretoken": "{{ csrf_token }}",
+                "sourceCategoryCode": $("#sourceCategoryCode").val(),
+                "sourceCategoryName": $("#sourceCategoryName").val(),
+                "sourceType": $("#sourceType").val(),
+                "branch": '{{login_teacher.branch}}'
+            }, function (res) {
+                if (res["error"] == 0) {
+                    alert("ok");
+                    window.location.reload();
+                } else {
+                    alert("err:" + res["msg"])
+                }
+            });
+        });
+
+        $("#referrers").change(function(){
+           var rname = $("#referrers")[0].options[$("#referrers")[0].selectedIndex].innerHTML
+           //alert(rname)
+           $("#referrerName").val(rname)
+           $("#referrer").val($("#referrers").val())
+           $("#referrerModal").modal("hide")
+           console.log('referrer--'+$("#referrer").val())
+           console.log('referrerName--'+$("#referrerName").val())
+        });
+        $("#referTeachers").change(function(){
+           var rname = $("#referTeachers")[0].options[$("#referTeachers")[0].selectedIndex].innerHTML
+           //alert(rname)
+           $("#regTeacherName").val(rname)
+           $("#regTeacher").val($("#referTeachers").val())
+           $("#referTeacherModal").modal("hide")
+           console.log('referTeacher--'+$("#regTeacher").val())
+           console.log('referTeacherName--'+$("#regTeacherName").val())
+        });
+        $("#doSearchKid").click(function(){
+            $.post("{% url 'regUser:searchKid' %}", {
+              "csrfmiddlewaretoken": "{{ csrf_token }}",
+                "searchKid": $("#searchKid").val()
+            }, function (res) {
+                if (res["error"] == 0) {
+                    var students = res["students"]
+                    $("#referrers").html('')
+                    for(var i = 0;i<students.length;i++){
+                    	    $("#referrers").append("<option value='"+students[i]["id"]+"'>"+students[i]["name"]+"</option>");
+                    	}
+                } else {
+                    alert(res["msg"])
+                }
+            });
+        });
+        $("#doSearchReferTeacher").click(function(){
+            $.post("{% url 'regUser:searchReferTeacher' %}", {
+              "csrfmiddlewaretoken": "{{ csrf_token }}",
+                "searchName": $("#searchName").val()
+            }, function (res) {
+                if (res["error"] == 0) {
+                    var teachers = res["teachers"]
+                    $("#referTeachers").html('')
+                    for(var i = 0;i<teachers.length;i++){
+                    	    $("#referTeachers").append("<option value='"+teachers[i]["id"]+"'>"+teachers[i]["name"]+"</option>");
+                    	}
+                } else {
+                    alert(res["msg"])
+                }
+            });
+        });
+
+        $("#save_co_teacher").click(function(){
+        	$("#co_teacher").val($("#co_teachers").val());
+        	alert($("#co_teacher").val());
+        });
+
+        $("#save_source").click(function(){
+        	//alert($("#sourceCategoryCode").val());
+        	if(confirm('确认添加渠道吗?'))
+        	$.post("{% url 'regUser:addSource' %}", {
+            "csrfmiddlewaretoken": "{{ csrf_token }}",
+                "sourceCategoryCode": $("#sourceCategoryCode2").val(),
+                "sourceName": $("#sourceName").val(),
+                "sourceType": $("#sourceType").val(),
+                "contact": $("#contact").val(),
+                "mobile": $("#mobile").val(),
+                "weixin": $("#weixin").val(),
+                "sourceCode": $("#sourceCode").val(),
+                "deleted":$("#deleted").val(),
+                "branch": '{{login_teacher.branch}}'
+            }, function (res) {
+                if (res["error"] == 0) {
+                    alert("ok");
+                    window.location.reload();
+                } else {
+                    alert("err:" + res["msg"])
+                }
+            });
+        });
+        $('#qform').validate({
+            rules: {
+        	    prt1mobile: {
+        	        minlength: 7,
+        	        required: true
+        	    },
+                sourceType: {
+                	minlength: 1,
+        	        required: true
+        	    }{%if login_teacher.branchType != '1'%},
+        	    branch:{
+        	    	minlength: 1,
+        	        required: true
+        	    }
+        	    {%endif%}
+            },
+            messages : {
+
+              prt1mobile : {
+                required : "手机号必填"
+              },
+              sourceType : {
+                required : "请选择渠道"
+              }
+            },
+            errorClass: "my-error-class",
+
+            submitHandler: function(form) {
+               $("#submitButton").attr("disabled","disabled")
+               $(form).ajaxSubmit();
+            }
+        });
+        $("#memo").focus(function(){
+        	if($("#memo").val()==''&&$("#regBranch").val()=='{{nb.id}}'){
+        		var prt1 = "";
+        		if($("#prt1").val()){
+        			prt1 = ' '+$("#prt1").val();
+        		}
+        		var code = '';
+        		if($("#code").val())code = ' '+$("#code").val();
+        		var y='',m='',age='';
+        		if($("#ageYear").val()||($("#ageMonth").val()&&$("#ageMonth").val()!='0')){
+        			if($("#ageYear").val())y=$("#ageYear").val()+'岁';
+            		if($("#ageMonth").val()&&$("#ageMonth").val()!='0')m=$("#ageMonth").val()+'个月';
+            		age = ' '+y+m;
+        		}
+        		var gender = '';
+        		if($("#male").prop("checked"))gender = ' 男';
+        		if($("#female").prop("checked"))gender = ' 女';
+        		var kid = '';
+        		if($("#name").val()||$("#name2").val()){
+        			kid = ' 孩子';
+        			if($("#name").val())kid = kid+$("#name").val();
+        			if($("#name2").val())kid = kid+' 小名'+$("#name2").val();
+        		}
+        		var branch = $( "#branch option:selected" ).text();
+        		if($("#branch").val()=='')branch="";
+        		$("#memo").val(branch+' '+$("#code").val());
+        		if($("#code").val().indexOf("55")==0){
+        		    $("#memo").val($("#memo").val()+' #大众点评已团购，请确认试听后要验证码#')
+        		}
+        		if($("#code").val().indexOf("14")==0){
+        		    $("#memo").val($("#memo").val()+' #百度糯米已团购，请确认试听后要验证码#')
+        		}
+        		if($("#code").val().indexOf("53")==0){
+        		    $("#memo").val($("#memo").val()+' #来自360儿童卫士9.9元团购，不需要验证码#')
+        		}
+        		if($("#code").val().indexOf("99")==0){
+        		    $("#memo").val($("#memo").val()+' #来自周末去那儿9.9元团购，不需要验证码#')
+        		}
+            if($("#code").val().indexOf("97")==0){
+        		    $("#memo").val($("#memo").val()+' #来自亲子幼教网#')
+        		}
+            if($("#code").val().indexOf("72")==0){
+        		    $("#memo").val($("#memo").val()+' #来自鱼乐贝贝合作，在鱼乐贝贝APP上兑换的1.5小时的亲子正课#')
+        		}
+            if($("#code").val().indexOf("78")==0){
+        		    $("#memo").val($("#memo").val()+' #来自望京网合作的团购，需体验两次，每次60分钟的正课，确认试听后请向家长要二维码，平台暂时还不支持验证码，请让家长截屏或您拍照#')
+        		}
+            if($("#code").val().indexOf("88")==0){
+        		    $("#memo").val($("#memo").val()+' #亲子周末已团购，确认试听后请要验证码#')
+        		}
+            if($("#code").val().indexOf("96")==0){
+        		    $("#memo").val($("#memo").val()+' #来自彩贝壳，两小节可一次上完（1小时），也可分两次来上（每次半小时）#')
+        		}
+
+
+
+
+        		$("#memo").val($("#memo").val()+prt1+kid+gender+age+' '+$("#prt1mobile").val());
+            if($("#prt2mobile").val()!='')
+                $("#memo").val($("#memo").val()+ '; '+$("#prt2mobile").val());
+            //$("#memo").val(memo);
+
+        	}
+        });
+        function doSth(value){
+            var code = $("#code").val().trim();
+            var categoryId = ''
+            if(code.length>0){
+                var found = false
+                code = code.substring(0,2)
+                {%for source in sources%}
+                if(code=='{{source.sourceCode}}'){
+                    found = true
+                    categoryId = '{{source.categoryCode}}'
+                    $("#sourceCategory").val('{{source.categoryCode}}')
+                    console.log('source:'+$("#source").val())
+                    console.log('sourceid:{{source.id}}')
+                    if($("#source").val()!='{{source.id}}'){
+                        $("#source").html('')
+                        $("#source").append("<option selected='selected' value='{{source.id}}'>{{source.sourceName}}</option>");
+                    }
+
+                }
+                {%endfor%}
+                if(!found){
+                    alert('没有这个渠道编号：'+code)
+                }
+
+            }
+            return
+        }
+        $("#code").blur(function(){
+        doSth('go')
+        })
+
+$(document).ready(function () {
+
+  {%if login_teacher.branch == login_teacher.cityHeadquarter and login_teacher.role < login_teacher.RoleFin and not student %}
+      if(mobileCheck()){
+        window.location.href="{%url 'regUser:netReg'%}";
+      }
+  {%endif%}
+
+    {%if not student and login_teacher.branchType == '1'%}
+    $("#sourceType").val('A');
+    $("#sourceType").trigger('change');
+    {%endif%}
+
+    $("#referTeachers").html('')
+    {% for t in teachers %}
+         $("#referTeachers").append("<option value='{{t.id}}'>{{t.name}}</option>");
+    {% endfor %}
+})
+    </script>
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee}
+tr{padding:0;height:10px;}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a><span id='tip' style="color:red;"></span>
+</div>
+
+<div>
+
+
+<center><h4>{{login_teacher.branchName}}客户未联系统计</h4>
+
+<div style="width:100%;margin:0 auto;text-align:center;">
+<select id="city"><option value="{{city}}">{{cityName}}</option></select>
+
+<button id="searchButton">统计</button>
+</center>
+</div>
+
+<br>
+<div id="table-container">
+<center>
+    <table width="700" id="datatable" border="1">
+    <thead>
+        <tr style="background:#eeeeee;">
+
+        <th style="width:80px;" align="center">部门</th>
+        {%for d in days%}
+        <th style="width:100px;"  align="center">
+          {%if d == 't'%}今天
+          {%elif d == 'b'%}以前
+          {%elif d == '1'%}下周一
+          {%elif d == '2'%}周二
+          {%elif d == '3'%}周三
+          {%elif d == '4'%}周四
+          {%elif d == '5'%}周五
+          {%elif d == '6'%}周六
+          {%elif d == '7'%}周日
+          {%endif%}
+        </th>
+        {%endfor%}
+
+
+        </tr>
+</thead>
+<tbody>
+
+{%for stat in res%}
+<tr style="padding:0 0 0 6px;height:10px;">
+
+{%for d in stat%}
+<td style="padding:0 0 0 6px;height:10px;">{%if d > 0%}{{d}}{%endif%}</td>
+{%endfor%}
+</tr>
+{%endfor%}
+</tbody>
+<tfoot><th>合计</th>
+{%for d in days%}
+  <th></th>
+{%endfor%}
+
+</tfoot>
+</table>
+<br>
+<table width="700" id="datatable" border="1">
+  <tr>
+
+  {%for d in netstat%}
+  <td align="center" style="width:100px;padding:0 0 0 6px;height:10px;">{%if d > 0%}{{d}}{%endif%}</td>
+  {%endfor%}
+  </tr>
+</table>
+</center>
+</div>
+
+<div style="padding-top:100px;" id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#searchButton").click(function(){
+  var city = $("#city").val()
+	var url = "{%url 'statistic:netBranchRemindStat'%}?cityId="+city;
+	$("#searchButton").html("<font style='color:grey;'>查询时间较长，请耐心等待...</font>")
+	$("#tip").html("查询时间较长，请耐心等待...");
+	window.location.href=url;
+})
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+
+$(document).ready(function() {
+    $('#datatable').DataTable( {
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+      "order": [[ 2, "desc" ]],
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ],
+        "footerCallback": function( tfoot, data, start, end, display ) {
+          var api = this.api();
+          {%for i in index%}
+          $( api.column( {{i}} ).footer() ).html(
+              api.column( {{i}} ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          {%endfor%}
+
+  }
+    });
+});
+</script>
+{% endblock %}

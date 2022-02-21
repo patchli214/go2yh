@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee}
+th{width:60px;}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a>
+</div>
+
+<div>
+<div style="margin-left:20px;"><center><b>校区漏斗数据表</b>
+<select id="city">
+<option value="{{city}}" selected="selected">{{cityName}}</option>
+</select>
+<input id="beginDate" type="text" placeholder="起始日期">
+<input id="endDate" type="text" placeholder="截至日期">
+<button id="searchButton">查询</button>
+</center>
+</div>
+
+<br>
+<div id="table-container">
+<center>
+    <table id="datatable" border="1">
+    <thead>
+        <tr style="background:#eeeeee;">
+        <th></th>
+        <th  align="center" style="width:76px;">校区客户</th>
+        <th  align="center" style="width:76px;">其中拜访</th>
+        <th  align="center">校区预约</th>
+
+        <th width="80" align="center">校区到场(包括社会)</th>
+        <th width="80" align="center">校区到场(排除社会)</th>
+        <th  align="center">校区成交</th>
+        <th  align="center">成交率</th>
+        <th  align="center">{{login_teacher.cityHeadquarterName}}客户</th>
+        <th  align="center">{{login_teacher.cityHeadquarterName}}预约</th>
+        <th  align="center">{{login_teacher.cityHeadquarterName}}到场</th>
+        <th  align="center">{{login_teacher.cityHeadquarterName}}成交</th>
+        <th  align="center">成交率</th>
+        <th  align="center">总客户</th>
+        <th  align="center">总预约</th>
+        <th  align="center">总到场</th>
+        <th  align="center">总成交</th>
+        <th  align="center">总成交率</th>
+        <th  align="center" style="width:40px;">退费</th>
+        <th  align="center">最终成交</th>
+        </tr>
+</thead>
+<tbody>
+{%for stat in res%}
+<tr>
+<td>{{stat.title}}</td>
+<td>{%if stat.reg > 0%}{{stat.reg}}{%endif%}</td>
+<td>{%if stat.regB > 0%}{{stat.regB}}{%endif%}</td>
+<td>{%if stat.reservation > 0%}{{stat.reservation}}{%endif%}</td>
+<td>{%if stat.show > 0%}{{stat.show}}{%endif%}</td>
+<td>{%if stat.showB > 0%}{{stat.showB}}{%endif%}</td>
+<td>{%if stat.newdeal > 0%}{{stat.newdeal}}{%endif%}</td>
+<td>{%if stat.dealRatio > 0%}{{stat.dealRatio}}%{%endif%}</td>
+<td>{%if stat.regNet > 0%}{{stat.regNet}}{%endif%}</td>
+<td>{%if stat.reservationNet > 0%}{{stat.reservationNet}}{%endif%}</td>
+<td>{%if stat.showNet > 0%}{{stat.showNet}}{%endif%}</td>
+<td>{%if stat.newdealNet > 0%}{{stat.newdealNet}}{%endif%}</td>
+<td>{%if stat.dealNetRatio > 0%}{{stat.dealNetRatio}}%{%endif%}</td>
+<td>{%if stat.regAll > 0%}{{stat.regAll}}{%endif%}</td>
+<td>{%if stat.reservationAll > 0%}{{stat.reservationAll}}{%endif%}</td>
+<td>{%if stat.showAll > 0%}{{stat.showAll}}{%endif%}</td>
+<td>{% if stat.newdealAll > 0%}{{stat.newdealAll}}{%endif%}</td>
+<td>{%if stat.dealAllRatio > 0%}{{stat.dealAllRatio}}%{%endif%}</td>
+
+<td>{%if stat.refund > 0%}{{stat.refund}}{%endif%}</td>
+<td>{%if stat.dealPure > 0%}{{stat.dealPure}}{%endif%}</td>
+</tr>
+{%endfor%}
+{%if all%}
+<tr style="background:#dddddd">
+<td>合计</td>
+<td>{%if all.reg > 0%}{{all.reg}}{%endif%}</td>
+<td>{%if all.regB > 0%}{{all.regB}}{%endif%}</td>
+<td>{%if all.reservation > 0%}{{all.reservation}}{%endif%}</td>
+<td>{%if all.show > 0%}{{all.show}}{%endif%}</td>
+<td>{%if all.showB > 0%}{{all.showB}}{%endif%}</td>
+<td>{%if all.newdeal > 0%}{{all.newdeal}}{%endif%}</td>
+<td>{%if all.dealRatio > 0%}{{all.dealRatio}}%{%endif%}</td>
+<td>{%if all.regNet > 0%}{{all.regNet}}{%endif%}</td>
+<td>{%if all.reservationNet > 0%}{{all.reservationNet}}{%endif%}</td>
+<td>{%if all.showNet > 0%}{{all.showNet}}{%endif%}</td>
+<td>{%if all.newdealNet > 0%}{{all.newdealNet}}{%endif%}</td>
+<td>{%if all.dealNetRatio > 0%}{{all.dealNetRatio}}%{%endif%}</td>
+<td>{%if all.regAll > 0%}{{all.regAll}}{%endif%}</td>
+<td>{%if all.reservationAll > 0%}{{all.reservationAll}}{%endif%}</td>
+<td>{%if all.showAll > 0%}{{all.showAll}}{%endif%}</td>
+<td>{%if all.newdealAll > 0%}{{all.newdealAll}}{%endif%}</td>
+<td>{%if all.dealAllRatio > 0%}{{all.dealAllRatio}}%{%endif%}</td>
+
+
+<td>{%if all.refund > 0%}{{all.refund}}{%endif%}</td>
+<td>{%if all.dealPure > 0%}{{all.dealPure}}{%endif%}</td>
+</tr>
+{%endif%}
+</tbody>
+</table>
+<font color="red">*</font>括号内为拜访数
+</center>
+</div>
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#searchButton").click(function(){
+	if($("#beginDate").val()==''){
+	    alert("请填起始日期")
+	    return
+    }
+    if($("#endDate").val()==''){
+    	alert("请填截至日期")
+    	return
+    }
+	var url = "{%url 'statistic:allRemainBranch'%}?beginDate="+$("#beginDate").val()+"&endDate="+$("#endDate").val()+"&city="+$("#city").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+})
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+$("#city").val('{{city}}')
+$("#city").css("color","red")
+
+$(document).ready(function() {
+    $('#datatable').DataTable( {
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ]
+    });
+
+});
+</script>
+{% endblock %}

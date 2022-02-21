@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+老师：{{teacher.name}}<br>
+新密码:<input id="password" type="text" />
+<button id="saveButton">保存</button>
+{% endblock %}
+{% block scripts %}
+<script>
+$("#saveButton").click(function(){
+	var pw = $("#password").val();
+	if(pw.length>5){
+		$.post("{% url 'teacher:changePw' %}", {
+        	"oid":'{{teacher.id}}',
+            "password":pw
+        }, function (res) {
+        	
+            if (res["error"] == 0) {
+                alert("密码修改成功:"+pw);
+            } else {
+                alert("密码修改失败:" + res["msg"])
+            }
+            var url = "{% url 'teacher:teacher_list' %}";
+            window.location.href=url;
+        });
+	}else{
+		alert('密码至少6位');
+	}
+});
+</script>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+
+
+    <div class="text-center"><h3>校区</h3></div>
+    <div class="text-right" style="margin-right: 20px;margin-bottom: 10px;">
+    {% if login_teacher.role == 9 %}
+
+      {% if login_teacher.username == 'admin' %}
+       <button class="btn btn-default" onclick="add_city()">管理城市</button>&nbsp;&nbsp;&nbsp;&nbsp;
+      {%endif%}
+       <button class="btn btn-default" onclick="add_branch()">增加校区</button>&nbsp;
+       <button class="btn btn-default" onclick="vocations()">假期设置</button>
+    {%elif login_teacher.role < 9 and login_teacher.role > 3%}
+    <button class="btn btn-default" onclick="sources()">部门渠道管理</button>
+
+    {%endif%}
+    &nbsp;&nbsp;<!--a href="/go_static/map/poi.html" target="_blank">地图查询</a-->
+    </div>
+    <table class="table table-hover">
+        <tbody>
+        <tr style="background:#eeeeee;">
+        <td>城市</td>
+        <td>顺序号</td>
+        <td>校区</td>
+        <td>代码</td>
+        <td>主任</td>
+        <td>教室</td>
+        <td>电话</td>
+        <td>地址</td>
+        <td></td>
+</tr>
+        {% for branch in branchs %}
+
+            <tr  style="{%if branch.type == 1%}background:#eeeeee;{%elif branch.type == 2%}background:#cccccc;{%endif%}{%if branch.deleted%}color:#cccccc;{%endif%}">
+                <td>{{ branch.city.cityName }}</td>
+                <td>{{ branch.sn }}</td>
+                <td>{{ branch.branchName }}</td>
+                <td>{{ branch.branchCode }}</td>
+                <td>{%for m in branch.masters%}{{m.name}}({{m.username}}){%endfor%}</td>
+                <td>{{ branch.branchRooms|default:"" }}</td>
+                <td>{{ branch.branchTel }}</td>
+                <td>{{ branch.branchAddr }}</td>
+                <td>
+                {% if login_teacher.role == 9 %}
+                <button onclick="edit('{{branch.id}}')">修改</button>&nbsp;
+                {%if login_teacher.username == 'admin' and branch.type != 1 and not branch.deleted%}
+                <button id="{{branch.branchCode}}_excel" {%if branch.excel %}class='btn-success'{%endif%} onclick="excelUser('{{branch.id}}','{{branch.branchCode}}')">学籍导入</button>
+                &nbsp;
+                <button onclick="netUser('{{branch.id}}','{{branch.branchCode}}','0')">网络部导入</button>
+                <button onclick="netUser('{{branch.id}}','{{branch.branchCode}}','1')">网络部更新</button>
+                {%endif%}
+                {%endif%}
+
+                </td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+<div style="text-align:center;padding:20px;">
+<a href="#top"><button>返回顶部</button></a>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        $("#nav5").css("color","red");
+        $("#nav5").css("font-weight","bold");
+        function cityContract(){
+            var url = "{% url 'branch:cityContract' %}?city={{login_teacher.cityId}}";
+            window.location.href=url;
+        }
+        function add_branch() {
+            var url = '{% url 'branch:reg' %}';
+            window.open(url);
+        }
+        function add_city() {
+            var url = '{% url 'branch:city' %}';
+            window.open(url);
+        }
+        function edit(id){
+        	var url = "{% url 'branch:reg' %}";
+        	url = url + "?branchId=" + id;
+        	window.location.href=url;
+        }
+        function sources(){
+        	var url = "{% url 'branch:sources' %}";
+        	window.open(url);
+        }
+        function vocations() {
+            var url = '{% url 'branch:vocations' %}';
+            window.location.href=url;
+        }
+
+        function excelUser(bid,bcode){
+            $("#"+bcode+"_excel").html("导入中......")
+           	$.post("{% url 'regUser:excelUser' %}", {
+                "bid":bid,
+            	"filepath": bcode+'.xls'
+            }, function (res) {
+                if (res["error"] == 0) {
+                    $("#"+bcode+"_excel").html("导入完成")
+                } else {
+                    $("#"+bcode+"_excel").html("导入失败")
+                }
+            });
+        }
+        function netUser(bid,bcode,notAdd){
+           	$.post("{% url 'branch:netUser' %}", {
+                "bid":bid,
+                "notAdd":notAdd,
+            	"filepath": 'net_'+bcode+'.xlsx'
+            }, function (res) {
+                if (res.error == 0) {
+                    alert(res.msg);
+                } else {
+                    alert("失败:" + res.msg)
+                }
+            });
+        }
+        function jointDate(bid){
+           	$.post("{% url 'branch:jointDate' %}", {
+                "branch":bid
+            }, function (res) {
+                if (res.error == 0) {
+                    alert(res.msg);
+                } else {
+                    alert("失败:" + res.msg)
+                }
+            });
+        }
+    </script>
+{% endblock %}

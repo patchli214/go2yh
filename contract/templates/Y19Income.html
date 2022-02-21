@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+#editTable td{
+  padding:10px 0 0 5px;
+  text-align:right;
+}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="Y19Incomes"><返回</a>&nbsp;&nbsp;<span id="tip"></span>
+</div>
+    <div><center style="font-weight:bold;">元十九收入修改</center>
+    <form method="POST">{% csrf_token %}
+      <input type="hidden" id="id" value="{{income.id}}">
+      <div style="float:left;" id="newIncomeDiv">
+        <table id="editTable" style="border:1px solid black;">
+          <tr><td>收款人</td>
+            <td style="text-align:left"><select id="sellerId">
+              {%for t in teachers%}
+              <option value="{{t.id}}" {%if t.id|stringformat:"s" == income.sellerId%}selected="selected"{%endif%}>{{t.name}}</option>
+              {%endfor%}
+            </select>
+          </td>
+          <td align="right" width="160px">来源</td>
+          <td style="text-align:left">
+              <input type="text" id="source" value="{{income.source|default:''}}" />
+          </td>
+        </tr>
+            <tr>
+                <td width="100">
+                     用户注册名
+                </td>
+                <td>
+                    <input style="width:100px;" type="text" id="regName"  value="{{income.regName|default:''}}">注册手机<input type="text" id="mobile"  value="{{income.mobile|default:''}}"/>
+                </td>
+                <td style="padding: 10px 0 0 20px;">
+                     付款日期
+                </td>
+                <td  style="padding:10px 10px 0 10px">
+                    <input type="text" id="payDate" value="{{income.payDate|date:'Y-m-d'}}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    类别
+                </td>
+                <td style="text-align:left">
+                    <select id="type">
+                      <option value="">请选择</option>
+                      <option value="月卡" {%if income.type == '月卡'%}selected="selected"{%endif%}>月卡</option>
+                      <option value="年卡" {%if income.type == '年卡'%}selected="selected"{%endif%}>年卡</option>
+                      <option value="两年卡" {%if income.type == '两年卡'%}selected="selected"{%endif%}>两年卡</option>
+                      <option value="终身卡" {%if income.type == '终身卡'%}selected="selected"{%endif%}>终身卡</option>
+                      <option value="员工卡" {%if income.type == '员工卡'%}selected="selected"{%endif%}>员工卡</option>
+                      <option value="续费" {%if income.type == '续费'%}selected="selected"{%endif%}>续费</option>
+
+                    </select>
+                </td>
+                <td style="padding: 10px 0 0 20px;">
+                    金额
+                </td>
+                <td  style="padding:10px 10px 0 10px;">
+                    <input type="text" id="paid"  value="{{income.paid|default:''}}">
+                </td>
+            </tr>
+
+            <tr>
+                            <td>
+                                备注
+                            </td>
+                            <td style="text-align:left;">
+                                <input type="text" id="memo" value="{{income.memo|default:''}}">
+                            </td>
+        <td></td>
+                <td style="text-align:right;">
+                    <div class="btn btn-success" style="margin:0 10px 10px 0;" onclick="reg()">保存</div>
+                </td>
+            </tr>
+
+        </table>
+
+
+        </form>
+</div>
+
+    </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $('#payDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+    function reg() {
+      console.log('reg-----------')
+        var regName = $("#regName").val();
+        var payDate = $("#payDate").val();
+        var paid = $("#paid").val();
+        var mobile = $('#mobile').val();
+        var memo = $("#memo").val();
+        var type = $("#type").val();
+        var source = $("#source").val();
+        var sellerId = $("#sellerId").val();
+        console.log('GOT')
+        console.log(type)
+        if (!type||type==''){
+          console.log('type err')
+          alert("请选择购买类型");
+            return;
+        }
+        console.log(paid)
+        if(isNaN(paid)){
+          alert("金额必须是数字");
+          return;
+        }
+        console.log(sellerId)
+        if (!sellerId||sellerId=='' ) {
+          console.log('no seller!!!')
+            alert("请选择收款人");
+            return;
+        }
+
+        if (!mobile||mobile=='' ) {
+            alert("请输入用户手机号");
+            return;
+        }
+        if (!regName||regName=='' ) {
+            alert("请输入用户注册名");
+            return;
+        }
+        if (!payDate||payDate=='') {
+            alert("请填写付款日期");
+            return;
+        }
+        if (!paid ) {
+            alert("请填写金额");
+            return;
+        }
+
+        console.log('get id:{{income.id}}')
+        $.post("{% url 'contract:api_Y19Income' %}", {
+          "csrfmiddlewaretoken": "{{ csrf_token }}",
+          "id":"{{income.id}}",
+            "regName": regName,
+            "payDate":payDate,
+            "paid":paid,
+            "type":type,
+            "memo":memo,
+            "source":source,
+            "sellerId":sellerId,
+            "mobile":mobile
+        }, function (res) {
+            console.log('[res]'+res['error']);
+            if (res["error"] == 0) {
+                alert("成功")
+
+
+            } else {
+                alert("失败:" + res["msg"])
+            }
+        });
+    }
+
+</script>
+{% endblock %}

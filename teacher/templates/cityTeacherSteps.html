@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{% url 'statistic:indexStat' %}"><返回</a>
+</div>
+<style>
+.column{
+  float:left;border-right: 0px solid; width:280px;text-align: center;
+}
+
+td{padding: 6px;white-space: nowrap;text-align: center;border:1px solid;}
+table{margin: 10px 0 20px 0;}
+input[type=text]{width:60px;margin:0 10px 0 10px;}
+select{font-size:24px;}
+button{margin:8px 0 6px 0;}
+</style>
+
+<div style="clear:both;">
+<hr>
+  <center>
+  <h3>{{yearBegin|date:"Y"}}-{{yearEnd|date:"Y"}}年度 老师成长档案</h3>
+  <table id="datatable">
+    <thead>
+    <tr>
+      <th>校区</th>
+      <th>老师</th>
+      <th>棋力月赛</th>
+      <th>对弈</th>
+      <th>教材讲解</th>
+      <th>成交练习</th>
+      <th>学生在线做题</th>
+      <th>读后感</th>
+      <th>文章</th>
+      <th>家长分享</th>
+      <th>朋友圈</th>
+      <th>学生成长档案</th>
+      <th>班级群</th>
+      <th>家长课堂</th>
+      <th>集体活动</th>
+      <th>主任分</th>
+      <th>总分</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%for s in steps%}
+    <tr>
+      <td>{{s.branch}}</td>
+      <td>{{s.name}}</td>
+      <td>{{s.s1|default:''}}</td>
+      <td>{{s.s2|default:''}}</td>
+      <td>{{s.s3|default:''}}</td>
+      <td>{{s.s4|default:''}}</td>
+      <td>{{s.s5|default:''}}</td>
+      <td>{{s.s6|default:''}}</td>
+      <td>{{s.s7|default:''}}</td>
+      <td>{{s.s8|default:''}}</td>
+      <td>{{s.s9|default:''}}</td>
+      <td>{{s.s10|default:''}}</td>
+      <td>{{s.s11|default:''}}</td>
+      <td>{{s.s12|default:''}}</td>
+      <td>{{s.s13|default:''}}</td>
+      <td>{{s.s14|default:''}}</td>
+      <td>{{s.all|default:''}}</td>
+    </tr>
+    {%endfor%}
+  </tbody>
+  </table>
+</center>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+$('#datatable').DataTable({
+  "paging":   false,
+  "searching": false,
+  "info":true,
+  "language": {
+        "lengthMenu": "每页显示 _MENU_ ",
+        "zeroRecords": "空空如也",
+        "sInfo":"从 _START_ 到 _END_， 共 _TOTAL_ 老师",
+        "infoEmpty": "没有找到哦",
+        "sSearch":"查询"
+      }
+})
+</script>
+{% endblock %}

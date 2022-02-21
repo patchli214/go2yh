@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+    <div>
+    <center style="font-weight:bold;"><h3>
+        {% if not teacher %}增加老师{% endif %}
+        {% if teacher %}修改老师信息{% endif %}
+    </h3></center>
+        <table class="table">
+            <tr>
+                <td align="right">
+                    校区
+                </td>
+
+                <td><select class="form-control" id="branch">
+                <option value="-1">--选择校区--</option>
+
+                {% for branch in branchs %}
+
+                    {% if teacher.branch.id == branch.id  %}
+                        <option selected="selected"
+                                value="{{ branch.id }}">{{branch.city.cityName}}-{{ branch.branchName }}</option>
+                    {%elif not teacher and login_teacher.branch == branch.id|stringformat:"s"%}
+                    <option selected="selected"
+                            value="{{ branch.id }}">{{branch.city.cityName}}-{{ branch.branchName }}</option>
+                    {% else %}
+                        <option value="{{ branch.id }}">{{branch.city.cityName}}-{{ branch.branchName }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select></td>
+            </tr>
+            <tr>
+                <td align="right">
+                    角色
+                </td>
+                <td><select class="form-control" id="role"
+                {%if login_teacher.role == teacher.role|stringformat:'s'%}
+                  onfocus="this.defOpt=this.selectedIndex" onchange="this.selectedIndex=this.defOpt;"
+                {%endif%}>
+                <option value="-1">--选择角色--</option>
+                {% for role in roles %}
+                    {% if teacher.role == role.code %}
+                        <option selected="selected"
+                                value="{{ role.code }}">{{ role.roleName }}</option>
+                    {% else %}
+                        <option value="{{ role.code }}">{{ role.roleName }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select></td>
+            </tr>
+            <tr>
+                <td align="right">
+                     登录名
+                </td>
+                <td>
+                    <input type="text" id="username" value="{{teacher.username|default:''}}">
+                     密码<input disabled="true" type="password" id="password" value="{% if isAdd == '1' %}123456{%else%}******{% endif %}">
+                     {% if isAdd != '1' %}
+{% if login_teacher.id|stringformat:"s" == teacher.id|stringformat:"s" or login_teacher.role >= teacher.role and login_teacher.role >= 7 %}
+                     <button id="modifyPw">修改密码</button>
+{%endif%}
+                     {%endif%}
+                </td>
+            </tr>
+
+<tr>
+                <td align="right">
+                     姓名
+                </td>
+                <td>
+                    <input type="text" id="name" value="{{teacher.name|default:''}}">
+                                            别名    <input type="text" id="name2" value="{{teacher.name2|default:''}}">
+                </td>
+
+                <td>
+
+                </td>
+            </tr>
+<tr>
+                <td align="right">
+                     手机
+                </td>
+                <td>
+                    <input type="text" id="mobile" value="{{teacher.mobile|default:''}}">
+                    Email<input type="text" id="email" value="{{teacher.email|default:''}}">
+                </td>
+            </tr>
+                        <tr>
+                <td align="right">
+                     微信openId
+                </td>
+                <td>
+                    <input type="text" size="30" id="openId" value="{{teacher.openId|default:''}}">
+
+                     pushId
+
+                    <input type="text" size="30" id="pushId" value="{{teacher.pushId|default:''}}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                     入职日期
+                </td>
+                <td>
+                    <input type="text" id="checkinDate" value="{{teacher.checkinDate|date:"Y-m-d"|default:""}}">
+                列表显示行数   <input type="text" id="page" value="{{teacher.page|default:''}}">
+                </td>
+            </tr>
+        <tr>
+                <td align="right">
+                      在线围棋登录账号
+                </td>
+                <td>
+                    <input type="text" id="go_login" value="{{teacher.go_login|default:''}}">
+                    密码<input type="password" id="go_password" value="{{teacher.go_password|default:''}}">
+                </td>
+            </tr>
+            <tr>
+                <td align="right">课时工资系数</td>
+                <td><input type="text" id="payRatio" value="{{teacher.payRatio|default:20}}">%</td>
+        <tr>
+            <td align="right">
+                状态:
+            </td>
+            <td>
+                <input type="checkbox" id="status"
+                       {% if teacher.status == -1 %}checked{% endif %}>离职
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="inReview"
+       {% if teacher.inReview %}checked{% endif %} {%if login_teacher.role|stringformat:"s" != '7'%} onclick="return false;"{%endif%}>记录老师成长档案
+       &nbsp;&nbsp;<input type="checkbox" id="isY19"
+              {% if teacher.isY19 %}checked{% endif %} />元十九推广人
+
+
+
+
+
+            </td>
+        </tr>
+            <tr>
+                <td colspan="2"  align="center">
+                  {% if login_teacher.id|stringformat:"s" == teacher.id|stringformat:"s" or login_teacher.role >= teacher.role and login_teacher.role >= 7 %}
+                    <button class="btn btn-default" onclick="reg()">保存</button>
+                  {%endif%}
+                </td>
+            </tr>
+
+        </table>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $("#modifyPw").click(function(){
+    	var url = "{% url 'teacher:pwForm' %}?oid={{teacher.id}}";
+    	window.location.href=url;
+    });
+    $('#checkinDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+
+        function reg() {
+        	var isAdd = 1;
+        	var id = '';
+        	{% if teacher.username %}
+        	isAdd = 0;
+        	id = '{{teacher.id}}';
+        	{% endif %}
+
+        	var username = $("#username").val();
+        	var password = $("#password").val();
+            var name = $("#name").val();
+            var name2 = $("#name2").val();
+            var branch = $("#branch").val();
+            var mobile = $("#mobile").val();
+            var email = $("#email").val();
+            var openId = $("#openId").val();
+            var pushId = $("#pushId").val();
+
+            var role = $("#role").val();
+            var page = $("#page").val();
+            var go_login = $("#go_login").val();
+            var go_password = $("#go_password").val();
+            var checkinDate = $("#checkinDate").val();
+            var status = 0;
+            var payRatio = $("#payRatio").val();
+            if($("#status:checked").val()=='on')
+                status = -1;
+            var inReview = 0
+            if($("#inReview").prop('checked'))
+                inReview = 1;
+            var isY19 = 0
+            if($("#isY19").prop('checked'))
+                isY19 = 1;
+            if (!username ) {
+                alert("登录名不能空");
+                return;
+            }
+            if (!name ) {
+                alert("姓名不能空");
+                return;
+            }
+            if (branch=="-1" ) {
+                alert("校区不能空");
+                return;
+            }
+            if (role=="-1" ) {
+                alert("角色不能空");
+                return;
+            }
+
+            $.post("{% url 'teacher:api_reg' %}", {
+              "csrfmiddlewaretoken": "{{ csrf_token }}",
+            	"isAdd":isAdd,
+            	"id":id,
+                "username": username,
+                "name": name,
+                "name2": name2,
+                "branch": branch,
+                "role":role,
+                "page":page,
+                "mobile":mobile,
+                "email":email,
+                "openId":openId,
+                "pushId":pushId,
+                "status":status,
+                "go_login":go_login,
+                "go_password":go_password,
+                "checkinDate":checkinDate,
+                "payRatio":payRatio,
+                "password":password,
+                "inReview":inReview,
+                "isY19":isY19
+            }, function (res) {
+                if (res["error"] == 0) {
+                    alert("成功")
+                } else {
+                    alert("失败:" + res["msg"])
+                }
+                var url = "{% url 'teacher:teacher_list' %}";
+                window.location.href=url;
+            });
+        }
+    </script>
+{% endblock %}

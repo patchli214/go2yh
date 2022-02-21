@@ -1,0 +1,31 @@
+2020-03-12 08:28:02.898413
+2020-03-10 00:00:00
+2020-03-17 00:00:00
+status
+status
+status
+status
+status
+niu
+status
+can't compare datetime.datetime to NoneType
+status
+status
+status
+20200310--DONE:123
+[DONE WEEK]
+2020-03-01 00:00:00
+2020-04-01 00:00:00
+status
+status
+status
+status
+status
+niu
+status
+can't compare datetime.datetime to NoneType
+status
+status
+status
+20200301--DONE:123
+[DONE MONTH]

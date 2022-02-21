@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+
+    <link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+            <style>
+
+        .inactiveNam{background:#555555;color:white;}
+
+        .showMemo{cursor:pointer;}
+        .showMemo2{cursor:pointer;}
+        td{padding:1px;}
+        </style>
+    {% include 'subNav.html' %}
+    <div style="float:left;padding:10px;">
+    <select id="searchBranch" name="searchBranch">
+      <option value="">全部校区</option>
+      {%for b in branches%}
+      <option value="{{b.id}}">{{b.city.cityName}}-{{b.branchName}}</option>
+      {%endfor%}
+    </select>
+    <button id="searchButton" onclick="search()">搜索</button>
+    </div>
+    <div style="float:right;padding:10px"><button id="doneButton" onclick="done()">批量报销</button></div>
+<div style="clear:both;">
+    <table  id="datatable"  class="table table-hover">
+      <thead>
+        <tr style="background:#eeeeee;">
+          <th nowrap>部门</th>
+          <th nowrap>申请人</th>
+          <th nowrap>申请人部门</th>
+          <th nowrap>类型</th>
+          <th nowrap>预算内</th>
+          <th nowrap>发票</th>
+
+          <th nowrap>金额</th>
+
+
+          <th nowrap>申请日期</th>
+          <th nowrap>摘要</th>
+
+
+          <th style="text-align:center;width:60px;"></th>
+          <th></th>
+
+</tr>
+</thead>
+<tbody>
+        {% for s in reimburses %}
+
+            <tr {%if not s.status or s.status == 0%}style="cursor:pointer;"{%endif%}
+                style="background:"
+            >
+                <td>{{s.payBranch.branchName}}</td>
+                <td >{{s.applicantName}}</td>
+                <td>{{s.branch.branchName}}</td>
+                <td >{%if s.isBorrow and not s.borrowId%}请款{%elif s.isBorrow and s.borrowId%}清借款{%endif%}</td>
+                <td >{%if s.budget%}是{%endif%}</td>
+                <td >{%if s.hasReceipt%}有{%else%}无{%endif%}</td>
+                <td >{{s.sum }}</td>
+
+
+                <td >{{s.appDate|date:"Y-m-d"}}</td>
+                <td>{{s.appmemo}}</td>
+
+
+                <td align="center" style="">
+                  <button onclick="go('{{s.id}}')">处理</button></td>
+                  <td><input type="checkbox" value="{{s.id}}"></td>
+            </tr>
+            {%endfor%}
+
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="picModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="info-body">
+
+                  <div>
+                     <span id="attach"></span>
+                  </div>
+
+            </div>
+
+        </div>
+    </div>
+  </center>
+</div>
+
+<div class="modal fade" id="reimburseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+
+                <button id="approve" onclick="deal('2')" class="btn btn-success" data-dismiss="modal">报销</button>
+                <button id="approve" onclick="deal('3')" class="btn btn-danger" data-dismiss="modal">驳回</button>
+
+
+            </div>
+            <div class="modal-body" id="info-body">
+                <div style="padding:10px">
+                    <span id="branchName"></span>
+                    <span id="typeName"></span>
+                    <span id="applicantName"></span>
+                    <span id="sum"></span>
+                    <span id="appDate"></span>
+                    <span id="appmemo"></span>
+                    <input id="id" type="hidden" />
+
+                  </div>
+                  <div style="padding:10px">
+                    审批意见：<input id="finmemo" name="finmemo" style="width:400px;" placeholder="驳回时须填写"/>
+                  </div>
+                  <div>
+                    报销单<br>
+                     <span id="file"></span>
+                    <br>票据<br>
+                     <span id="file2"></span>
+
+                  </div>
+
+
+            </div>
+
+        </div>
+    </div>
+  </center>
+</div>
+
+
+<div class="modal fade" id="batchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <input type="hidden" id="doneIds" />
+            <div id="infos" style="padding:20px;">
+
+
+            </div>
+            <div style="padding:20px;">
+              <input id="paidDate" placeholder="报销日期" value="{{dateNow|date:'Y-m-d'}}"/>
+              <button id="approve" onclick="doneAll()" class="btn btn-success" data-dismiss="modal">全部报销</button></div>
+
+
+        </div>
+    </div>
+  </center>
+</div>
+
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+{%if hasReceipt == '1'%}
+$("#subNav25").attr("class","activeNav");
+{%else%}
+$("#subNav26").attr("class","activeNav");
+{%endif%}
+
+{% include 'subNavJs.html' %}
+
+
+//选中的报销单id临时存储数组
+var ids = new Array();
+
+//进入报销单添加页面
+function add(){
+  document.location.href="{% url 'branch:reimburse' %}"
+}
+
+//进入某个报销单修改页面
+function go(id){
+  document.location.href="{% url 'branch:reimburseShow' %}?id="+id
+}
+
+
+//查询报销单
+function search(){
+
+  var searchBranch = $("#searchBranch").val();
+  //alert(searchTeacher)
+  search = ''
+  {%if hasReceipt == '1'%}
+    search = '?hasReceipt=1'
+  {%else%}
+    search = '?hasReceipt=0'
+  {%endif%}
+  if(searchBranch.length>0){
+     search = search + '&searchBranch='+searchBranch;
+  }else{
+     search = search
+  }
+
+  var url = "{% url 'workflow:reimburseApps' %}"+search
+  window.location.href=url;
+}
+
+
+//选中某个报销单checkbox
+$("input[type=checkbox]").click(function(){
+  var has = false;
+  var id = $(this).attr('id');
+  for(var i=0;i<ids.length;i++){
+    if(ids[i]==id){
+      has = true;
+      break;
+    }
+  }
+  if($(this).prop('checked')&!has){
+    ids.push(id)
+  }
+
+  if(!$(this).prop('checked')&has){
+    ids.pop(id)
+  }
+});
+
+
+function done(){
+  var i = 0;
+	var pics = '';
+  var table = ''
+  $('input[type=checkbox]:checked').each(function () {
+		if(i>0)pics = pics+',';
+		pics = pics+($(this).val());
+    var line = $(this).parent().parent().html()
+    line = '<tr>'+line.substring(0,line.indexOf('<td align'))+'</tr>'
+    table = table+line
+		i++;
+	});
+  var th = '<tr><th nowrap>部门</th><th nowrap>申请人</th><th nowrap>申请人部门</th><th nowrap>类型</th><th nowrap>预算内</th><th nowrap>发票</th><th nowrap>金额</th><th nowrap>申请日期</th><th nowrap>摘要</th></tr>'
+  table = '<table border="1">'+th+table+'</table>'
+  if(pics==''){
+    alert('请选择批量报销的项目')
+    return
+  }
+  else{
+    $("#doneIds").val(pics)
+    $("#infos").html(table)
+    $("#batchModal").modal();
+  }
+}
+
+function doneAll(){
+  if(confirm('确定全部报销？')){
+    var ids = $("#doneIds").val()
+    //alert(ids)
+    var paidDate = $("#paidDate").val()
+    //alert(paidDate)
+    $.post("{% url 'workflow:reimburseDealAll_api'%}", {
+        'ids':ids,
+        'paidDate':paidDate
+    }, function (res) {
+        if (res.error == 0) {
+            alert("报销完成");
+            location.href='{{mainurl}}';
+        } else {
+            alert("失败");
+        }
+    });
+  }
+}
+
+//财务报销或驳回
+function deal(status){
+  var title = '报销';
+  if(status=='3'){
+    if($("#finmemo").val().length==0){
+      alert('请填写审批意见');
+      return;
+    }
+    title='驳回';
+  }
+  if(!confirm('确定'+title+'？')){
+    return;
+  }
+  var id=$("#id").val();
+  var finmemo;
+  if(status=='3') finmemo=$("#finmemo").val();
+
+  $.post("{% url 'workflow:reimburseDeal_api'%}", {
+      'id':id,
+      'finmemo':finmemo,
+      'status':status
+
+  }, function (res) {
+      if (res.error == 0) {
+          var openId = res.openId;
+          var first = '报销被驳回';
+          var date = new Date();
+          var keyword4 = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes();
+
+          inform(first,openId,'{{login_teacher.name}}','{{login_teacher.branchTel}}',keyword4,'{{login_teacher.branchName}}');
+          alert("成功{{mainurl}}");
+
+          location.href='{{mainurl}}';
+      } else {
+          alert("失败");
+      }
+  });
+}
+
+{%if searchBranch%}$("#searchBranch").val('{{searchBranch}}'){%endif%}
+
+
+</script>
+{% endblock %}

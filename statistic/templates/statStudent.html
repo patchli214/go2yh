@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a>
+</div>
+<hr style="margin-top:2px;margin-bottom:10px"/>
+
+
+<div id="subNav">
+<span id="subNav1">上周新注册</span>
+<span id="subNav2">本周新注册</span>
+<span id="subNav3">今天新注册</span>
+<span id="subNav4">本月新注册</span>
+</div>
+    <div class="text-right" style="margin-right: 20px;margin-bottom: 10px;">
+        
+    </div>
+
+
+    <table class="table  table-hover">
+        <tbody>
+        <tr style="background:#eeeeee;">
+        <td></td>
+        <td>老师</td>
+        <td>上传照片<div id="albumIcon" class="glyphicon glyphicon-sort-by-attributes-alt sort"></div></td>
+        <td>学生分享页数量<div id="pageNumIcon" class="glyphicon glyphicon-sort-by-attributes-alt sort"></div></td>
+        <td>学生分享页访问量<div id="pageShareIcon" class="glyphicon glyphicon-sort-by-attributes-alt sort"></div></td>
+        
+        <td>校区分享页数量<div id="BranchPagesIcon" class="glyphicon glyphicon-sort-by-attributes-alt sort"></div></td>
+        <td>校区分享页访问量<div id="branchShareIcon" class="glyphicon glyphicon-sort-by-attributes-alt sort"></div></td>
+        
+        <td>注册页访问量<div id="pageRegIcon" class="glyphicon glyphicon-sort-by-attributes-alt sort"></div></td>
+        <td>转介<div id="referIcon" class="glyphicon glyphicon-sort-by-attributes-alt sort"></div></td>
+        <td>拜访<div id="visitIcon" class="glyphicon glyphicon-sort-by-attributes-alt sort"></div></td>
+        <td>网络<div id="onlineIcon" class="glyphicon glyphicon-sort-by-attributes-alt sort"></div></td>
+
+</tr>
+        {% for stat in stats %}
+
+            <tr>
+                <td>{{ stat.branch.branchName }}</td>
+                <td>{{ stat.teacher.name }}</td>
+                <td>{{ stat.album }}</td>
+                <td>{{ stat.pageNum }}</td>
+                <td>{{ stat.pageShare }}</td>
+                <td>{{ stat.branchPages }}</td>
+                <td>{{ stat.branchShare }}</td>
+                <td>{{ stat.pageReg }}</td>
+                <td>{{ stat.refer }}</td>
+                <td>{{ stat.visit }}</td>
+                <td>{{ stat.online }}</td>
+
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+<div style="text-align:center;padding:20px;">
+<a href="#top"><button>返回顶部</button></a>
+</div>
+    
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        $("#nav6").css("color","red");
+        $("#nav6").css("font-weight","bold");
+        $("#{{sort}}Icon").attr("class","glyphicon glyphicon-sort-by-attributes-alt");
+        
+        {%if searchPeriod == 'lastWeek'%}
+            $("#subNav1").attr("class","activeNav");
+        {%elif searchPeriod == 'thisWeek'%}
+            $("#subNav2").attr("class","activeNav");
+        {%elif searchPeriod == 'today'%}
+            $("#subNav3").attr("class","activeNav");
+        {%elif searchPeriod == 'thisMonth'%}
+            $("#subNav4").attr("class","activeNav");
+        {%endif%}
+        $("#subNav span").click(function(){
+        	var nav = $(this).attr("id");
+        	var a = nav.substring(nav.length-1,nav.length);
+        	var url = "{% url 'statistic:statStudent' %}";
+        	if(a=='1')
+        	    url = url+"?searchPeriod=lastWeek";
+        	if(a=='2')
+        	    url = url+"?searchPeriod=thisWeek";
+        	if(a=='3')
+        	    url = url+"?searchPeriod=today";
+        	if(a=='4')
+        	    url = url+"?searchPeriod=thisMonth";
+        	window.location.href=url;
+        });
+        $(".sort").click(function(){
+        	var nav = $(this).attr("id");
+        	var a = nav.substring(0,nav.length-4);
+        	var url = "{% url 'statistic:statStudent' %}";
+       	    url = url+"?searchPeriod={{searchPeriod}}&sort="+a;
+        	window.location.href=url;
+        });
+        
+            </script>
+{% endblock %}

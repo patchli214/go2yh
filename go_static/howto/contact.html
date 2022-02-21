@@ -1,0 +1,51 @@
+<html>
+<head>
+    <title>CRM帮助－联络记录和跟进提醒</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+.block{cursor:pointer;padding-left:6px;padding-right:16px;padding-top:6px;float:left;height:114px;}
+</style>
+</head>
+<body >
+<div style="margin:10px;">
+  <a href="/go_static/howto/index.html"><返回帮助主页</a>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<center><h4>如何添加联络记录和跟进提醒</h4></center>
+<div style="margin:20px;">
+
+针对每个孩子，我们必须提醒老师下次联系跟进的时间和事项，那么就要用到“下次跟进”功能。<br>
+我们日常客户跟踪最常做的事情是联系家长，每次联系以后（或者多次尝试联系不到），需要添加一条联系记录，所有联系记录都会汇总显示在孩子详情页面，可以方便所有相关老师了解这个孩子的跟踪进展。<br>
+下次跟进和联系记录功能都在用户详情页面：
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/contact1.png" style="max-width:1000px;width:100%;"></div>
+
+请对每个未成交的客户填写下次跟进日期事项，
+这样，到了指定提醒日期，工作台上”今日应联系“页面就会出现当天应联系的孩子<br>
+<b style="color:red">联系过以后，除非已成交或已无希望，应再次修改提醒时间，以便下次继续跟踪</b> <br>
+每次联系后要将联系内容记录到“联络记录”里
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/dboard.png" style="max-width:1000px;width:100%;"></div>
+
+</div>
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>

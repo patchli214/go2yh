@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a>
+</div>
+
+<div>
+<div style="margin-left:20px;"><center><b>校区漏斗数据表({{login_teacher.branchName}})</b>
+<select id="city">
+<option value="{{login_teacher.cityId}}">{{login_teacher.city}}</option>
+</select>
+<input id="beginDate" type="text" placeholder="起始日期">
+<input id="endDate" type="text" placeholder="截至日期">
+<button id="searchButton">查询</button>
+</center>
+</div>
+
+<br>
+<div id="table-container">
+<center>
+    <table id="datatable" border="1">
+    <thead>
+        <tr style="background:#eeeeee;">
+        <th></th>
+        <th  align="center">咨询</th>
+        <th  align="center">有效咨询</th>
+        <th  align="center">预约</th>
+        <th  align="center">到场</th>
+        <th  align="center">成交</th>
+        <th  align="center">预约成交率</th>
+        <th  align="center">退费</th>
+        <th  align="center">最终成交</th>
+        </tr>
+</thead>
+<tbody>
+{%for stat in res%}
+<tr>
+<td><a target="_blank" href="{%url 'statistic:branchSourceStat'%}?branchId={{stat.oid}}&beginDate={{beginDate}}&endDate={{endDate}}">{{stat.title}}</a></td>
+<td>{%if stat.regNet > 0%}{{stat.regNet}}{%endif%}</td>
+<td>{%if stat.regValid > 0%}{{stat.regValid}}{%endif%}</td>
+<td>{%if stat.reservationNet > 0%}{{stat.reservationNet}}{%endif%}</td>
+<td>{%if stat.showNet > 0%}{{stat.showNet}}{%endif%}</td>
+<td>{%if stat.newdealNet > 0%}{{stat.newdealNet}}{%endif%}</td>
+<td>{%if stat.dealNetRatio > 0%}{{stat.dealNetRatio}}%{%endif%}</td>
+<td>{%if stat.refundNet > 0%}{{stat.refundNet}}{%endif%}</td>
+<td>{%if stat.newdealNetPure > 0%}{{stat.newdealNetPure}}{%endif%}</td>
+</tr>
+{%endfor%}
+<tr>
+<td>合计</td>
+<td>{%if all.regNet > 0%}{{all.regNet}}{%endif%}</td>
+<td>{%if all.regValid > 0%}{{all.regValid}}{%endif%}</td>
+<td>{%if all.reservationNet > 0%}{{all.reservationNet}}{%endif%}</td>
+<td>{%if all.showNet > 0%}{{all.showNet}}{%endif%}</td>
+<td>{%if all.newdealNet > 0%}{{all.newdealNet}}{%endif%}</td>
+<td>{%if all.dealNetRatio > 0%}{{all.dealNetRatio}}%{%endif%}</td>
+<td>{%if all.refundNet > 0%}{{all.refundNet}}{%endif%}</td>
+<td>{%if all.newdealNetPure > 0%}{{all.newdealNetPure}}{%endif%}</td>
+</tr>
+</tbody>
+</table>
+</center>
+</div>
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#searchButton").click(function(){
+    console.log($("#city").val())
+    if($("#city").val()=='' || $("#city").val()==null){
+	     $("#city").val('{{login_teacher.cityId}}')
+    }
+    if($("#endDate").val()==''){
+    	alert("请填截至日期")
+    	return
+    }
+	var url = "{%url 'statistic:statRemainBranch'%}?net=1&beginDate="+$("#beginDate").val()+"&endDate="+$("#endDate").val()+"&city="+$("#city").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+})
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+$("#city").val('{{city}}')
+$("#city").css("color","red")
+
+$(document).ready(function() {
+    $('#datatable').DataTable( {
+    	"ordering": false,
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ]
+    });
+});
+</script>
+{% endblock %}

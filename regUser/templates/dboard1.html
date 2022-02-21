@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+    <style>
+    #classes td{width:80px;}
+
+    .inactiveNam{background:#555555;color:white;}
+
+    .showMemo{cursor:pointer;}
+    .showMemo2{cursor:pointer;}
+
+    </style>
+{% include 'subNav.html' %}
+<div style="margin-left:20px;float:left;"><h4>今天应联系</h4></div>
+<div style="float:right"><a href="/go2/workflow/todayContact" target="_blank">今日已联系</a></div>
+<div>
+<table class="table table-hover">
+        <tbody>
+        <tr style="background:#eeeeee;">
+        <td></td>
+        <td></td>
+        {%if login_teacher.branchType == '1'%}
+        <td>编号</td>
+        {%endif%}
+        <td></td>
+        <td>孩子</td>
+        <td>年龄</td>
+        <td>电话</td>
+        {%if login_teacher.branchType == '1'%}
+        <td>意向</td>
+        {%else%}
+        <td>拜访老师</td>
+        <td width="100">拜访时间</td>
+        {%endif%}
+
+        <td width="60">提醒老师</td>
+
+
+        <td width="120">提醒事项</td>
+        <td width="400">联络记录</td>
+        <td align="center">操作</td>
+        </tr>
+        {% for student in reminds %}
+
+            {% if student.id %}
+            <tr {% if remind.isDone == 1 %}style="background:#f3fff2"{%endif%}
+            {%if student.probability == 'A'%} class="A" {%endif%}
+             {%if student.probability == 'B'%} class="B" {%endif%}
+             {%if student.probability == 'C'%} class="C" {%endif%}
+            >
+            <td>{{forloop.counter}}</td>
+            <td>{% if student.isDone == 1 %}<span  style="color:green"  class="glyphicon glyphicon-ok-sign"></span>{%endif%}</td>
+                {%if login_teacher.branchType == '1'%}
+                <td>{{student.code}}</td>
+                {%endif%}
+                <td>{{student.probability|default:""}}</td>
+                <td width="70"><a href="{% url 'regUser:student_info' student.id %}" >{%if student.name%}{{student.name}}{%elif student.name2%}{{student.name2}}{%else%}无{%endif%}</a></td>
+                <td width="30">{{student.yearMonth|default:""}}</td>
+
+                <td>{{student.prt1mobile}}</td>
+                {%if login_teacher.branchType == '1'%}
+        <td nowrap>{{student.branchName|default:""}}</td>
+        {%else%}
+        <td  width="80">{{student.regTeacherName|default:""}}</td>
+        <td>{{student.regTime|date:"Y-m-d"|default:""}}</td>
+        {%endif%}
+
+
+
+                <td width="80">
+
+                  {%if student.remindTeacherName != '管理员'%}{%if student.remindTeacherName%}{{student.remindTeacherName}}{%elif student.remindTeacher and student.remindTeacher.name%}{{student.remindTeacher.name}}{%endif%}&nbsp;{%endif%}
+
+                </td>
+
+
+
+                <td width="100">{{student.remind_txt}}</td>
+                <td>
+
+<div onclick="gotrack('{{student.id}}')" class="showMemo" goid="{{student.id}}" style="{%if student.probability == 'A'%}color:black;{%endif%}overflow:hidden;min-height:40px;max-height:100px;text-overflow:ellipsis;width:420px;">
+        {{student.track|default:""}}{{student.memo|default:""}}
+        </div>
+        <div onclick="gotrack('{{student.id}}')"  class="showMemo2" id="{{student.id}}" style="{%if student.probability == 'A'%}color:black;{%endif%}display:none;position:fixed;left:0;top:0;min-height:40px;max-height:700px;width:420px;">
+        {{student.track|default:""}}{{student.memo|default:""}}</div>
+
+</td>
+                <td>
+                    <button style="width:50px;font-size:13px;padding:4px;"
+                            {% if student.isDemo == 1 %}
+                                class="btn btn-success" onclick="click_demo('{{ student.id }}');"
+                            {% elif student.isDemo == -1 %}
+                                class="btn btn-warning"  onclick="click_demo('{{ student.id }}');"
+                            {% elif student.demo%}
+                                class="btn btn-danger" onclick="click_demo('{{ student.id }}');"
+                            {% else %}
+                                class="btn btn-default" onclick = "addDemo('{{ student.id }}');"
+                            {% endif %}
+                                >试听课
+                    </button>
+
+                    <button style="width:50px;font-size:13px;padding:4px;" id="depositButton" onclick="go_deposit('{{student.id}}')"
+                {% if student.deposit and student.deposit > 0 %}
+                class="btn btn-success"
+                {%else%}
+                class="btn btn-default"
+                {%endif%}
+                >定金</button>
+
+                <button  style="font-size:12px;padding:4px;" class=
+                {% if student.status == 1 %}
+                    "btn btn-success"
+                {%  elif student.status == 0 %}
+                    "btn btn-default"
+                {%  elif student.status > 1 %}
+                    "btn btn-warning"
+                {%  endif %}
+                 onclick="click_contract('{{ student.id }}');">合同</button>
+
+                </td>
+
+            </tr>
+            {% endif %}
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div style="text-align:center;padding:20px;">
+<a href="#top"><button>返回顶部</button></a>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+$("#subNav1").attr("class","activeNav");
+
+function addDemo(studentId) {
+	var url = '{% url 'gradeClass:studentDemo' '111111111111111111111111'%}';
+	url = url.replace("111111111111111111111111", studentId);
+    document.location.href=url;
+}
+
+function click_demo(oid) {
+	var url = '{% url 'gradeClass:studentDemo' '111111111111111111111111'%}';
+	url = url.replace("111111111111111111111111", oid);
+    document.location.href=url;
+}
+
+function go_deposit(oid) {
+    var url = "{% url 'regUser:student_deposit' %}";
+    url = url+"?student_oid="+oid;
+    document.location.href=url;
+}
+
+$(".showMemo").hover(function (e) {
+	var x = $(this).offset()
+	var top = x.top
+	top = top - $(window).scrollTop()
+	var left = x.left
+	var div = $("#"+$(this).attr("goid"))
+	div.css("top",top+"px")
+	div.css("left",left+"px")
+	div.css("opacity","1")
+	div.css("background","white")
+	div.css("border","1px solid black")
+	div.css("display","block")
+})
+$(".showMemo2").hover(function(){},function (e) {
+	$(this).css("display","none")
+})
+$(window).scroll(function(){$(".showMemo2").css("display","none")})
+
+$(".showDemo-").hover(function (e) {
+	var x = $(this).offset()
+	var top = x.top
+	top = top - $(window).scrollTop()
+	var left = x.left
+	var div = $("#"+$(this).attr("goid"))
+	div.css("top",top+"px")
+	div.css("left",left+"px")
+	div.css("opacity","1")
+	div.css("background","white")
+	div.css("border","1px solid black")
+	div.css("display","block")
+})
+$(".showDemo2-").hover(function(){},function (e) {
+	$(this).css("display","none")
+})
+$(window).scroll(function(){$(".showDemo2-").css("display","none")})
+
+function gotrack(student_oid){
+	var url = "{%url 'regUser:student_info' '111111111111111111111111'%}"
+	url = url.replace("111111111111111111111111", student_oid);
+	window.location.href=url
+}
+
+function click_contract(oid) {
+	//if(isZB()){
+	if(false){
+		alert("没有权限");
+		return;
+	}
+    var url = "{%url 'contract:studentContracts'%}?student_oid="+oid;
+    document.location.href=url;
+}
+
+{% include 'subNavJs.html' %}
+</script>
+{% endblock %}

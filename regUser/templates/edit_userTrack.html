@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <style>
+    </style>
+{% endblock %}
+{% block content %}
+{% include 'back.html' %}
+<h4>孩子名：{{student.name}} {{student.name2}} , 家长：{{student.prt1}} {{student.prt1mobile}}</h4>
+    <div id="edit-body-info">
+        <table class="table">
+            <tr>
+                <td width="20%;">联络记录</td>
+                <td><textarea style="width:100%;" id="track_txt">{{ record.trackRecordInfo|default:"" }}</textarea>
+                           </td>
+            </tr>
+            <tr>
+                <td>联络时间</td>
+                <td>
+                    <input id="trackTime" type="text">
+                </td>
+            </tr>
+            
+        </table>
+    </div>
+    <button type="button" class="btn btn-danger" data-dismiss="modal"
+            onclick="clickSaveBtn()">保存
+    </button>
+    <p></p>
+{% endblock %}
+{% block scripts %}
+    <script>
+    var fmt = "yyyy-MM-dd hh:mm";
+	var date = new Date();
+	var datestring = date.Format(fmt);
+        var Request = new QueryString();
+        var long_userid = Request['userid'];
+        $(document).ready(function () {
+            $('#trackTime').datetimepicker({
+                format: 'Y-m-d H:i',
+                step:5,
+                timepicker: true,
+                maxDate:datestring
+            });
+        });
+
+
+        function clickSaveBtn() {
+            var track_txt = $("#track_txt").val();
+            var trackTime = $("#trackTime").val();
+
+            $.post("/go2/regUser/saveUserTrack", {
+                'student_oid': '{{student.id}}',
+                'track_txt': track_txt,
+                'trackTime': trackTime,
+                'isAdd': {{isAdd}},
+                'teacher_oid': '{{login_teacher.id}}'
+
+            }, function (res) {
+                if (res.error == 0) {
+                    alert("成功");
+                    var url ="{% url 'regUser:student_info' student.id %}" 
+                    location.href = url+"#track_pos"; 
+                    
+                } else {
+                    alert("失败");
+                }
+            });
+        }
+
+        var fmt = "yyyy-MM-dd hh:mm:ss";
+    	var date = new Date();
+    	var datestring = date.Format(fmt);
+    	$("#trackTime").val(datestring);
+    </script>
+{% endblock %}

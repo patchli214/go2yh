@@ -1,0 +1,59 @@
+<html>
+<head>
+    <title>CRM帮助－如何生成学生相册</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+.block{cursor:pointer;padding-left:6px;padding-right:16px;padding-top:6px;float:left;height:114px;}
+</style>
+</head>
+<body >
+<div style="margin:10px;">
+  <a href="/go_static/howto/index.html"><返回帮助主页</a>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<center><h4>如何生成学生相册</h4></center>
+
+<div style="margin:20px;">
+登录crm系统后，在“孩子”或者“班级”栏目查询到需要生成相册的学生，点进“孩子详情”页面，有“编辑相册”的按钮。点这个按钮进入孩子分享页面管理：
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/album01.png" style="max-width:1000px;width:100%;"></div>
+分享页面管理，是下面这个样子，可以点“上传照片”按钮进入照片上传页：
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/album-upload01.png" style="max-width:1000px;width:100%;"></div>
+现在可以多文件一起上传：
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/album-upload02.png" style="max-width:1000px;width:100%;"></div>
+选好文件后点“上传”按钮：
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/album-upload03.png" style="max-width:1000px;width:300px;"></div>
+然后就回到照片编辑页：
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/album02.png" style="max-width:1000px;width:100%;"></div>
+可以为一个学生制作多个分享页，为每个分享页面制定不同的标题、背景、导语，每个页面可以选择任意张照片
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/album03.png" style="max-width:1000px;width:100%;"></div>
+选中的背景和照片，会以绿边框起来：
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/album04.png" style="max-width:1000px;width:100%;"></div>
+保存以后，页面标题就显示在最上方列表里，点标题就可以打开对应的分享页面（就是可以分享给家长的页面）；点笔形按钮进入编辑页面，可以修改页面标题、背景、导语和图片。
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/album05.png" style="max-width:1000px;width:100%;"></div>
+看一下生成的分享页在手机上显示的最终样式：
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/album06.png" style="max-width:600px;width:400px;"></div>
+
+</div>
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>

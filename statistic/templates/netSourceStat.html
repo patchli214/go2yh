@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a><span id='tip' style="color:red;"></span>
+</div>
+
+<div>
+
+
+<center><h4>{%if city%}【{{city.cityName}}】{%endif%}渠道漏斗数据表({{login_teacher.branchName}})</h4>
+
+<div style="width:100%;margin:0 auto;text-align:center;">
+<input type="hidden" id="cityID" value="{{city.id}}" />
+<input id="beginDate" type="text" placeholder="起始日期">
+<input id="endDate" type="text" placeholder="截至日期">
+<button id="searchButton">统计</button>
+</center>
+</div>
+
+<br>
+<div id="table-container">
+<center>
+    <table  id="datatable" border="1">
+    <thead>
+        <tr style="background:#eeeeee;">
+
+        <th  align="center">渠道</th>
+        <th  align="center">咨询</th>
+        <th  align="center">有效咨询</th>
+        <th  align="center">有效预约</th>
+        <th  align="center">到场</th>
+        <th  align="center">成交</th>
+        <th  align="center">退费</th>
+        <th  align="center">最终成交</th>
+
+        </tr>
+</thead>
+<tbody>
+
+{%for stat in sum%}
+<tr>
+<td><a target="_blank" href="{%url 'statistic:channelBranchStat'%}?beginDate={{beginDate}}&endDate={{endDate}}&channel={{stat.sc}}">{{stat.title}}</a></td>
+<td>{%if stat.reg > 0%}{{stat.reg}}{%endif%}</td>
+<td>{%if stat.regValid > 0%}{{stat.regValid}}{%endif%}</td>
+<td>{%if stat.demo > 0%}{{stat.demo}}{%endif%}</td>
+<td>{%if stat.show > 0%}{{stat.show}}{%endif%}</td>
+<td>{%if stat.deal > 0%}{{stat.deal}}{%endif%}</td>
+<td>{%if stat.refund > 0%}{{stat.refund}}{%endif%}</td>
+
+<td>{%if stat.dealPure > 0%}{{stat.dealPure}}{%endif%}</td>
+</tr>
+{%endfor%}
+<tr style="background:black;max-height:3px;line-height:3px;" height="3"><td style="line-height:3px;"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+
+{%for stat in all%}
+<tr>
+<td>{{stat.title}}</td>
+<td>{%if stat.reg > 0%}{{stat.reg}}{%endif%}</td>
+<td>{%if stat.regValid > 0%}{{stat.regValid}}{%endif%}</td>
+<td>{%if stat.demo > 0%}{{stat.demo}}{%endif%}</td>
+<td>{%if stat.show > 0%}{{stat.show}}{%endif%}</td>
+<td>{%if stat.deal > 0%}{{stat.deal}}{%endif%}</td>
+<td>{%if stat.refund > 0%}{{stat.refund}}{%endif%}</td>
+
+<td>{%if stat.dealPure > 0%}{{stat.dealPure}}{%endif%}</td>
+</tr>
+{%endfor%}
+
+</tbody>
+</table>
+</center>
+</div>
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#searchButton").click(function(){
+    if($("#beginDate").val()==''){
+        alert('请填写起始日期')
+        return
+    }
+    if($("#endDate").val()==''){
+        alert('请填写截至日期')
+        return
+    }
+  var cityID = $("#cityID").val()
+	var url = "{%url 'statistic:netSourceStat'%}?cityID="+cityID+"&beginDate="+$("#beginDate").val()+"&endDate="+$("#endDate").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	$("#tip").html("查询中...");
+	window.location.href=url;
+})
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+
+$(document).ready(function() {
+    $('#datatable').DataTable( {
+    	"ordering": false,
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ]
+    });
+});
+</script>
+{% endblock %}

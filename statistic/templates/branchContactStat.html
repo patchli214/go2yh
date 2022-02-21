@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee}
+tr{padding:0;height:10px;}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a><span id='tip' style="color:red;"></span>
+</div>
+
+<div>
+
+
+<center><h4>老师联系客户统计</h4>
+
+  <div style="width:100%;margin:0 auto;text-align:center;">
+
+  <input id="beginDate" type="text" placeholder="起始日期">
+  <input id="endDate" type="text" placeholder="截至日期">
+  <button id="searchButton">统计</button>
+  </center>
+</div>
+
+<br>
+<div id="table-container">
+<center>
+    <table width="700" id="datatable" border="1">
+    <thead>
+        <tr style="background:#eeeeee;">
+
+        <th style="width:80px;" align="center">老师</th>
+
+        <th style="width:100px;"  align="center">
+          联系数量
+        </th>
+
+
+
+        </tr>
+</thead>
+<tbody>
+
+{%for stat in res%}
+<tr style="padding:0 0 0 6px;height:10px;">
+
+
+<td style="padding:0 0 0 6px;height:10px;">
+  {{stat.teacher}}</td>
+<td>{{stat.cn}}</td>
+</tr>
+{%endfor%}
+</tbody>
+
+
+
+
+</table>
+</center>
+</div>
+
+<div style="padding-top:100px;" id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+
+
+$("#searchButton").click(function(){
+  var beginDate = $("#beginDate").val()
+  var endDate = $("#endDate").val()
+  if($("#beginDate").val()==''){
+      alert('请填写起始日期')
+      return
+  }
+  if($("#endDate").val()==''){
+      alert('请填写截至日期')
+      return
+  }
+	var url = "{%url 'statistic:branchContactStat'%}?beginDate="+beginDate+"&endDate="+endDate;
+	$("#searchButton").html("<font style='color:grey;'>查询时间较长，请耐心等待...</font>")
+	$("#tip").html("查询时间较长，请耐心等待...");
+	window.location.href=url;
+})
+
+
+$(document).ready(function() {
+    $('#datatable').DataTable( {
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+      "order": [[ 1, "desc" ]],
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ],
+        "footerCallback": function( tfoot, data, start, end, display ) {
+          var api = this.api();
+          {%for i in index%}
+          $( api.column( {{i}} ).footer() ).html(
+              api.column( {{i}} ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          {%endfor%}
+
+  }
+    });
+});
+
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+
+</script>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <style>
+    </style>
+{% endblock %}
+{% block content %}
+{% include 'back.html' %}
+
+    <div id="edit-body-info">
+        <table class="table">
+            <tr>
+                <td width="160px">学生</td>
+                <td>
+                    {{ student.name }}
+                </td>
+            </tr>
+            <tr>
+                <td>提醒事项</td>
+                <td>
+                    <input class="form-control" type="text" id="remind_txt" style="width: 200px;display: inline-block"
+                           value="{{ teacherRemind.remind_txt|default:"" }}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>提醒时间</td>
+                <td>
+                    <input id="remindTime" class="form-control" type="text" style="width: 300px"
+                           value="{{ teacherRemind.remindTime|date:"Y-m-d" }}">
+                </td>
+            </tr>
+            <tr>
+                <td>提醒人</td>
+                <td>
+                    {% for teacher in teachers %}
+                        {% if teacher in teacherRemind.remindTeachers %}
+                            <input id=checkbox_{{ teacher.id }} type="checkbox" name="remindTeacherCheckbox"
+                                   value={{ teacher.id }} onclick="clickCheckbox('{{ teacher.userid }}')" checked>
+                            {{ teacher.name }}
+                        {% else %}
+                            <input id=checkbox_{{ teacher.id }} type="checkbox" name="remindTeacherCheckbox"
+                                   value={{ teacher.id }} onclick="clickCheckbox('{{ teacher.id }}')">
+                            {{ teacher.name }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <button type="button" class="btn btn-danger" data-dismiss="modal"
+            onclick="clickSaveBtn()">保存
+    </button>
+{% endblock %}
+{% block scripts %}
+    <script>
+        var Request = new QueryString();
+        var long_userid = Request['userid'];
+        var teacherIds = [];
+        $(document).ready(function () {
+            //时间
+            $('#remindTime').datetimepicker({
+                format: 'Y-m-d',
+                timepicker: false,
+            });
+            var remindTeacherIds = {{ remindTeacherIds_json|safe }};
+            if (remindTeacherIds) {
+                teacherIds = remindTeacherIds;
+            }
+
+
+        });
+        function clickCheckbox(uid) {
+            var checkbox = $("[id='checkbox_" + uid + "']");
+            var isChecked = checkbox.is(":checked");
+            if (isChecked) {
+            	//alert(Object.prototype.toString.call(teacherIds).slice(8, -1));
+                teacherIds.push(uid.toString());
+
+            } else {
+                var indexToRemove = teacherIds.indexOf(uid.toString());
+                console.log(uid.toString(), indexToRemove);
+                console.log(teacherIds);
+                if (indexToRemove > -1) {
+                    teacherIds.splice(indexToRemove, 1);//remove id
+                }
+            }
+            console.log(teacherIds);
+        }
+
+
+        function clickSaveBtn() {
+            var teacherRemindId = Request["teacherRemindId"]
+            var remindTime = $("#remindTime").val();
+            var remindTeacherIds = teacherIds.join(",");
+            var remind_txt = $("#remind_txt").val();
+            var isAdd = Request["isAdd"];
+            if (!remindTime || teacherIds.length == 0) {
+                alert("请补全信息");
+                return;
+            }
+
+            console.log(remindTeacherIds);
+            $.post("/go2/regUser/saveUserRemind", {
+                'student_oid': '{{student.id}}',
+                'remindTime': remindTime,
+                'remindTeacherIds': remindTeacherIds,
+                'teacherRemindId': teacherRemindId,
+                'isAdd': isAdd,
+                'remind_txt': remind_txt
+            }, function (res) {
+                if (res.error == 0) {
+                    alert("成功");
+                    var url ="{% url 'regUser:student_info' student.id %}" 
+                    location.href = url+"#track_pos"; 
+                } else {
+                    alert("失败");
+                }
+            });
+        }
+
+        $("#nav1").css("color","red");
+        $("#nav1").css("font-weight","bold");
+    </script>
+{% endblock %}

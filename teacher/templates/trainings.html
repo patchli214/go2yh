@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{% url 'teacher:teacher_list' %}"><返回</a>
+</div>
+<hr style="margin-top:2px;margin-bottom:10px"/>
+<style>
+.row1{background:#eeeeee;width:100%;text-align:left;}
+.row2{background:#ffffff;width:100%;text-align:left;}
+</style>
+    <div><h4>{{teacher.name}} 的练功房&nbsp;<button class="btn btn-success" onclick="addTraining()">添加练功记录</button></h4></div>
+
+    {% for training in trainings %}
+         <div>
+         <table width="100%">
+         <tr class="{% cycle 'row2' 'row2' %}">
+         <td width='20%'>
+         {{training.training_date|date:"Y-m-d"|default:""}}
+             {% if training.type == 1%}体验课{%endif%}
+             {% if training.type == 4%}体验课演练{%endif%}
+             {% if training.type == 2%}正课及教案{%endif%}
+             {% if training.type == 5%}正课演练{%endif%}
+             {% if training.type == 3%}电话{%endif%}
+             {% if training.type == 6%}电话演练{%endif%}
+             {% if training.type == 8%}教育书籍读后感{%endif%}
+             {% if training.type == 9%}教学相关文章{%endif%}
+             {% if training.type == 10%}家长分享{%endif%}
+             <br>
+             {%if training.review_date%}{{training.review_date|date:"Y-m-d"|default:""}} 研讨{%endif%}
+         </td>
+         <td style="width:80%" onclick="editTraining('{{training.id}}')"><pre style="max-width:800;">{{ training.memo }}</pre></td>
+         </tr>
+         </table>
+         </div>
+    {%endfor%}
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        function addTraining() {
+        	var url = "{% url 'teacher:trainingEditForm' %}";
+        	url = url + "?teacher_oid={{teacher.id}}";
+            window.location.href=url;
+        }
+        function editTraining(id) {
+        	var url = "{% url 'teacher:trainingEditForm' %}";
+        	url = url + "?teacher_oid={{teacher.id}}&training_oid="+id;
+            window.location.href=url;
+        }
+    </script>
+{% endblock %}

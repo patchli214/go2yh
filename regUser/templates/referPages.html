@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.container{padding:0}
+.ad{display: block;width:100%;padding-left: -120px;}
+body {
+	font-family: 微软雅黑, Arial;
+}
+
+div {
+	padding: 10px 30px 10px 30px;text-align:center;
+}
+
+#submitBtn {
+	padding: 10px 40px 10px 40px;
+	font-size: 16px;
+}
+
+label.valid {
+	width: 24px;
+	height: 24px;
+	background: url(assets/img/valid.png) center center no-repeat;
+	display: inline-block;
+	text-indent: -9999px;
+}
+
+label.error {
+	font-weight: bold;
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
+}
+</style>
+
+</head>
+<body>
+	{%if nbqrurl%}
+	<div>
+	  暑期启蒙班: 1680元/10个半天:
+		<a href="javascript:openit('1')">海报</a>
+    <br><a href="{{nburl}}">链接</a>
+  </div>
+	{%endif%}
+	{%if rrqrurl%}
+	<div>
+		转介报名页:<a href="javascript:openit('2')">海报</a>
+		<br><a href="{{rrurl}}">链接</a>
+		</div>
+		<br>
+		<div style="font-size:30px;padding:20px 0 0 0;">
+			{{student.name|default:""}}&nbsp;{{student.name2|default:""}}的专属转介码
+		</div>
+		<div style="padding:0"><img src="{{rrqrurl}}" width="350"/>
+    </div>
+
+
+	{%endif%}
+</body>
+{% endblock %}
+{% block scripts %}
+<script>
+var Request = new QueryString();
+var openit1 = Request['openit'];
+var picwidth = screen.width
+var picheight = 1067/600*picwidth
+//alert(open)
+if(openit1=='1'){
+	$("title").html('真朴围棋暑假启蒙班')
+	$("body").html('<div style="position: relative;line-height:'+picheight+'px;text-align:left;height:'+picheight+'px;width:'+picwidth+'px;background-image: url(/go_static/img/firstLesson3.jpg);background-size:'+picwidth+'px '+picheight+'px;"><img style="position: absolute;left: 50%;top: 90%;transform: translate(-50%, -50%);width:80px;height:80px;" src="{{nbqrurl}}" /></div>')
+}
+
+//alert(open)
+if(openit1=='2'){
+	$("title").html('真朴围棋免费试听课')
+	$("body").html('<div style="position: relative;line-height:'+picheight+'px;text-align:left;height:'+picheight+'px;width:'+picwidth+'px;background-image: url(/go_static/img/firstLesson2.jpg);background-size:'+picwidth+'px '+picheight+'px;"><img style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);width:100px;height:100px;" src="{{rrqrurl}}" /></div>')
+}
+
+function openit(id){
+	var url = "{% url 'regUser:referPages' %}?rid={{rid}}&openit="+id
+
+	window.open(url)
+
+}
+</script>
+{% endblock %}

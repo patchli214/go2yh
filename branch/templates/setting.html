@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+
+    <div class="text-center"><h3>渠道来源</h3></div>
+
+
+
+    <table class="table  table-hover">
+        <tbody>
+        <tr style="background:#eeeeee;">
+        <td>大类</td>
+        <td>小类</td>
+        <td>名称</td>
+        <td>代码</td>
+        <td>联系人</td>
+        <td>作废</td>
+        <td></td>
+</tr>
+        {% for sourceType in sourceTypes %}
+
+            <tr style="background:#bbbbbb;">
+                <td>{{ sourceType.typeName }}</td>
+                <td></td>
+                <td></td>
+                <td>{{ sourceType.typeCode }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            {%if sourceType.typeCode == 'A'%}
+            {%for category in sourceCategories%}
+              {%if category.typeCode == sourceType.typeCode%}
+            <tr style="background:#eeeeee;">
+                <td></td>
+                <td>{{ category.categoryName }}</td>
+                <td></td>
+                <td>{{ category.categoryCode }}</td>
+                <td></td>
+                <td>{%if category.deleted == 1%}作废{%endif%}</td>
+                <td><button onclick="editCategory('{{category.id}}')">修改</button></td>
+            </tr>
+
+                {%for source in sources%}
+                {%if source.categoryCode == category.id|stringformat:"s"%}
+              <tr>
+                <td></td>
+                <td></td>
+                <td>{{ source.sourceName }}</td>
+                <td>{{ source.sourceCode }}</td>
+                <td>{{ source.contact|default:""}}</td>
+                <td>{%if source.deleted == 1%}作废{%endif%}</td>
+                <td><button onclick="editSource('{{source.id}}')">修改</button></td>
+            </tr>
+               {%endif%}
+              {%endfor%}
+              {%endif%}
+            {%endfor%}
+            {%else%}
+            {%for source in sources%}
+            {%if source.typeCode == sourceType.typeCode%}
+              <tr>
+                <td></td>
+                <td></td>
+                <td>{{ source.sourceName }}</td>
+                <td>{{ source.sourceCode }}</td>
+                <td>{{ source.contact|default:""}}</td>
+                <td>{%if source.deleted == 1%}作废{%endif%}</td>
+                <td><button onclick="editSource('{{source.id}}')">修改</button></td>
+            </tr>
+               {%endif%}
+               {%endfor%}
+            {%endif%}
+        {% endfor %}
+
+
+        {%for source in sources%}
+            {%if source.categoryCode == '请选择小类'%}
+              <tr>
+                <td></td>
+                <td></td>
+                <td>{{ source.sourceName }}</td>
+                <td>{{ source.sourceCode }}</td>
+                <td>{{ source.contact|default:""}}</td>
+                <td>{%if source.deleted == 1%}作废{%endif%}</td>
+                <td><button onclick="editSource('{{source.id}}')">修改</button></td>
+            </tr>
+               {%endif%}
+               {%endfor%}
+        </tbody>
+    </table>
+
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+    function editCategory(id){
+    	var url = "{% url 'branch:editCategory' %}?id="+id;
+  	  window.location.href = url;
+    }
+    function editSource(id){
+    	var url = "{% url 'branch:editSource' %}?id="+id;
+  	  window.location.href = url;
+    }
+    function goback(){
+    	var url="{%url 'branch:reg'%}?branchId={{login_teacher.branch}}";
+    	window.location.href=url
+    }
+</script>
+{% endblock %}

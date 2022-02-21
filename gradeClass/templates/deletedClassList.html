@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load filter %}
+{% load filter_regUser %}
+{% block content %}
+
+    <link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+    <div style="padding-top:10px;padding-bottom:3;">
+    <a href="/go2/gradeClass/gradeClassList"><返回</a>
+    </div>
+
+    <div style="width:100%;margin:0 auto;">
+      <center><h4>已删除班级</h4></center>
+    </div>
+    <table id="datatable" class="table table-bordered">
+        <thead>
+        <tr>
+
+            <th width="140">名称</th>
+            <th width="70">开班日 </th>
+            <th width="60">上课时间</th>
+            <th  width="30">教室</th>
+            <th width="40">老师</th>
+            <th>学生</th>
+            <th width="110"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for gradeClass in gradeClasses %}
+            <tr>
+
+                <td>{{ gradeClass.name }}</td>
+                <td>{{ gradeClass.start_date|date:"Y-m-d" }}</td>
+                <td>周{%if gradeClass.school_day == 7%}日{%else%}{{ gradeClass.school_day }}{%endif%} {{ gradeClass.school_time }}</td>
+                <td>{{ gradeClass.classroom|default:'' }}教室</td>
+                <td>{{ gradeClass.teacher.name }}</td>
+                <td>{% for s in gradeClass.students %}
+                    <a href="/go2/regUser/studentInfo/{{s.id}}"
+                       >{{ s.name }}</a>
+                {% endfor %}</td>
+                <td>
+                    <a href="javascript:restore('{{gradeClass.id}}')">还原</a>
+                            </td>
+
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}
+{% block scripts %}
+    <script>
+    $(document).ready(function() {
+      $("#nav2").css("color","red");
+      $("#nav2").css("font-weight","bold");
+    	$('#datatable').DataTable({
+    	    stateSave: true,
+          "order": [[ 3, "asc" ]],
+    	    "language": {
+                "lengthMenu": "每页显示 _MENU_ 班级",
+                "zeroRecords": "空空如也",
+                "sInfo":"从 _START_ 到 _END_， 共 _TOTAL_ 班级",
+                "infoEmpty": "没有找到哦",
+                "sSearch":"查询",
+                "oPaginate": {
+    		        "sFirst":"首页",
+    		        "sPrevious": 	"上一页",
+    		        "sNext":     	"下一页",
+    		        "sLast":     	"末页"
+    	        },
+                "infoFiltered": "(从 _MAX_ 班级中搜索)"
+            },
+            "columns": [
+    	            { "orderable": true },
+    	            { "orderable": true },
+    	            { "orderable": true },
+    	            { "orderable": true },
+                  { "orderable": true },
+    	            { "orderable": false },
+                  { "orderable": false }
+    	            ]
+    	});
+      $('#datatable').DataTable().page.len(50).draw();
+    });
+
+
+
+        function restore(gcId){
+        	if(confirm("确定恢复班级吗？")){
+        	    var url = "{% url 'gradeClass:api_restore_gradeClass' %}"
+        	    $.post(url, {
+                    "gradeClass_oid": gcId
+                }, function (res) {
+                	if(res.error==1)alert(res.msg);
+                	else{
+                    alert(res.msg);
+                	  location.reload(true);
+                	}
+                });
+        	}
+        }
+
+        function lessons(id){
+        	document.location.href="{% url 'gradeClass:lessons' %}?type=1&id="+id;
+        }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,41 @@
+from django import forms
+
+class PicForm(forms.Form):
+    branch_oid = forms.CharField(widget=forms.HiddenInput())
+    picFile = forms.ImageField()
+    
+class ReimburseForm(forms.Form):
+    oid = forms.CharField(widget=forms.HiddenInput())
+    borrowId = forms.CharField(widget=forms.HiddenInput())
+    payBranch = forms.CharField(widget=forms.Select)
+    #proof =  forms.ImageField(required=False)
+    proof =  forms.FileField(required=False)
+    applicant = forms.CharField(widget=forms.HiddenInput())
+    hasReceipt = forms.BooleanField(widget=forms.CheckboxInput,required=False)
+    budget = forms.BooleanField(widget=forms.CheckboxInput,required=False)
+    isBorrow = forms.BooleanField(widget=forms.CheckboxInput,required=False)
+    appDate = forms.DateTimeField(required=False)
+    sum = forms.CharField()
+    appmemo = forms.CharField(required=False)
+    type1 = forms.CharField(widget=forms.Select)
+    type2 = forms.CharField(widget=forms.Select,required=False)
+    type3 = forms.CharField(widget=forms.Select,required=False)
+    type4 = forms.CharField(widget=forms.Select,required=False)
+    type5 = forms.CharField(widget=forms.Select,required=False)
+    amount1 = forms.CharField()
+    amount2 = forms.CharField(required=False)
+    amount3 = forms.CharField(required=False)
+    amount4 = forms.CharField(required=False)
+    amount5 = forms.CharField(required=False)
+    item1 = forms.CharField(required=False)
+    item2 = forms.CharField(required=False)
+    item3 = forms.CharField(required=False)
+    item4 = forms.CharField(required=False)
+    item5 = forms.CharField(required=False)
+    count1 = forms.CharField(required=False)
+    count2 = forms.CharField(required=False)
+    count3 = forms.CharField(required=False)
+    count4 = forms.CharField(required=False)
+    count5 = forms.CharField(required=False)
+    
+    

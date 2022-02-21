@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+
+<span >
+{%if login_teacher.branchType != '0'%}
+  {%if login_teacher.role < login_teacher.RoleFin and login_teacher.id != login_teacher.cityFA and login_teacher.branchType != '3'%}
+<p class="textTitle"><a href="{%url 'statistic:statDayDemoBranch'%}">一周试听课到场成交明细({{login_teacher.branchName}})</a></p>
+<p class="textTitle"><a href="{%url 'statistic:statRemainBranch'%}">各校区漏斗数据表({{login_teacher.branchName}})</a></p>
+<p class="textTitle"><a href="{%url 'statistic:netSourceStat'%}">各渠道漏斗数据表({{login_teacher.branchName}})</a></p>
+<p class="textTitle"><a href="{%url 'statistic:statRatioBranch'%}">总数据转化率表({{login_teacher.branchName}})</a></p>
+<p class="textTitle"><a href="{%url 'statistic:netBranchRemindStat'%}">{{login_teacher.branchName}}客户跟踪情况统计</a></p>
+
+  {%elif login_teacher.role == login_teacher.RoleAdm or login_teacher.branchType == '3'%}
+<p class="textTitle"><a href="{%url 'statistic:statTeacherSales'%}">校区老师招生</a></p>
+<p class="textTitle"><a href="{%url 'statistic:statTReg'%}">校区老师拜访到场</a></p>
+<p class="textTitle"><a href="{%url 'branch:statistics'%}">校区客户注册来源</a></p>
+<p class="textTitle"><a href="{%url 'statistic:statDemoBranch'%}">校区一周试听课到场成交</a></p>
+<p class="textTitle"><a href="{%url 'statistic:allRemainBranch'%}">校区成交漏斗数据表</a></p>
+<p class="textTitle"><a href="{%url 'statistic:allBranchRevenue'%}">校区营收</a></p>
+<p class="textTitle"><a href="{%url 'statistic:allBranchRemindStat'%}">校区客户跟踪情况</a></p>
+<p class="textTitle"><a href="{%url 'statistic:cityQuests'%}">满意度调查</a></p>
+<p class="textTitle"><a href="{%url 'statistic:cityNewRedeal'%}">新生续费率</a></p>
+{%elif login_teacher.role == login_teacher.RoleFin or login_teacher.id == login_teacher.cityFA%}
+<p class="textTitle"><a href="{%url 'statistic:allBranchRevenue'%}">校区营收</a></p>
+
+<p class="textTitle"><a href="{%url 'statistic:branchIncome'%}">老师月度课时消费</a></p>
+
+  {%endif%}
+{%elif login_teacher.role > login_teacher.RoleTea%}
+<p class="textTitle"><a href="{%url 'statistic:statDayBranch'%}?doSearch=1&searchWeekBegin=0">一周试听课到场成交数</a></p>
+<p class="textTitle"><a href="{%url 'statistic:statTeacher'%}">老师工作成绩统计</a></p>
+<p class="textTitle"><a href="{%url 'statistic:branchIncome'%}">老师月度课时消费</a></p>
+<p class="textTitle"><a href="{%url 'statistic:branchRemindStat'%}">老师跟踪客户情况统计</a></p>
+<p class="textTitle"><a href="{%url 'statistic:branchSourceStat'%}">渠道统计</a></p>
+<p class="textTitle"><a href="{%url 'statistic:branchQuests'%}">满意度调查统计</a></p>
+{%else%}
+<p class="textTitle"><a href="{%url 'statistic:branchIncome'%}">老师月度课时消费</a></p>
+{%endif%}
+</span>
+{% endblock %}
+{% block scripts %}
+<script>
+    $("#nav7").css("color","red");
+    $("#nav7").css("font-weight","bold");
+</script>
+{% endblock %}

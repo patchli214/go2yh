@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <style>
+    </style>
+{% endblock %}
+{% block content %}
+{% include 'back.html' %}
+<center><h4>缴纳定金</h4></center>
+    <div id="edit-body-info">
+        <table class="table">
+            <tr>
+                <td width="160px">学生</td>
+                <td>
+                    {{ student.name }}
+                </td>
+            </tr>
+            <tr>
+                <td>定金</td>
+                <td>
+                    <input class="form-control" type="text" id="deposit" style="width: 200px;display: inline-block"
+                           value="{{ student.deposit|default:"" }}"/>元
+                </td>
+            </tr>
+            <tr>
+                <td>缴纳时间</td>
+                <td>
+                    <input id="depositDate" class="form-control" type="text" style="width: 300px"
+                           value='{{ student.depositDate|date:"Y-m-d"|default:"" }}'>
+                </td>
+            </tr>
+            <tr>
+                <td>缴纳方式</td>
+                <td>
+                  <select id="depositWay">
+                    {%for key,value in paymethods.items%}
+                    <option value="{{key}}" {%if key == student.depositWay%}selected="selected"{%endif%}>
+                      {{value}}
+                    </option>
+                    {%endfor%}
+                  </select>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>是否已存入公帐？</td>
+                <td>
+                  <label class="radio-inline">
+                    <input type="radio" name="depositCompany" value="1" id="saved"
+                    {% if student and student.depositCompany == 1 %}checked{% endif %}/>
+                    已存
+                  </label>
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                  <label class="radio-inline">
+                    <input type="radio" name="depositCompany" value="0" id="notSaved"
+                    {% if student and student.depositCompany == 0 %}checked
+                    {%elif not student.depositCompany%}checked{% endif %}
+                     />
+                    未存
+                  </label>
+
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>收款人</td>
+                <td>
+                <select id="depositTeacher">
+                    {% for teacher in teachers %}
+                    <option value="{{teacher.id}}"
+                        {% if teacher.id == student.depositCollecter.id %}
+                            selected="selected"
+                        {% endif %}
+                        >{{teacher.name}}</option>
+                    {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            {% if student.deposit and student.deposit > 0 %}
+            <tr>
+              <td>定金处理</td>
+              <td>
+              <select id="depositReturn">
+                <option value="0"></option>
+                <option value="1" {%if student.depositStatus == 1%}selected="selected"{%endif%}>已转合同</option>
+                <option value="2" {%if student.depositStatus == 2%}selected="selected"{%endif%}>已退款</option>
+              </select>
+              </td>
+            {% endif %}
+        </table>
+    </div>
+    <button type="button" class="btn btn-danger" data-dismiss="modal"
+            onclick="clickSaveBtn()">保存
+    </button>
+{% endblock %}
+{% block scripts %}
+    <script>
+        var Request = new QueryString();
+        var long_userid = Request['userid'];
+        var teacherIds = [];
+        $(document).ready(function () {
+            //时间
+            $('#depositDate').datetimepicker({
+                format: 'Y-m-d',
+                timepicker: false,
+            });
+
+        });
+
+
+        function clickSaveBtn() {
+            var depositTeacher = $("#depositTeacher").val();
+            var depositDate = $("#depositDate").val();
+            var deposit = $("#deposit").val();
+            var depositReturn = $("#depositReturn").val();
+            var depositWay = $("#depositWay").val();
+
+            var depositCompany = $("input[name='depositCompany']:checked").val()
+
+            if (!deposit || !depositDate) {
+                alert("请补全信息");
+                return;
+            }
+            var url = "{% url 'regUser:student_save_deposit' %}";
+            $.post(url, {
+                'student_oid': '{{student.id}}',
+                'depositDate': depositDate,
+                'depositTeacher': depositTeacher,
+                'depositWay': depositWay,
+                'depositReturn': depositReturn,
+                'depositCompany': depositCompany,
+                'deposit': deposit
+            }, function (res) {
+                if (res.error == 0) {
+                    alert("成功");
+                    var url ="{% url 'regUser:student_info' student.id %}"
+                    location.href = url;
+                } else {
+                    alert("失败");
+                }
+            });
+        }
+
+        $("#nav1").css("color","red");
+        $("#nav1").css("font-weight","bold");
+    </script>
+{% endblock %}

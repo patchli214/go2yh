@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.active{background:#ffffff;color:black}
+.unactive{background:black;color:white}
+#qform .has-error .control-label,
+#qform .has-error .help-block,
+#qform .has-error .form-control-feedback {
+    color: #f39c12;
+}
+</style>
+<title>报销申请</title>
+<div style="float:left;cursor:pointer" onclick="goback()" ><返回</div>
+<hr style="margin-top:2px;margin-bottom:10px"/>
+    <div>
+    <center style="font-weight:bold;">报销（请款）申请{%if reimburse.status == 3%}(财务驳回){%endif%}<br>
+    {%if reimburse.finmemo%}<font color="red">理由：{{reimburse.finmemo|default:''}}</font>{%endif%}</center>
+<form id="qform" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+        <table class="table">
+
+            <td align="right">
+                部门：
+            </td>
+            <td width="70%">
+              <select id="payBranch" name="payBranch">
+              {%for b in branches%}
+              <option value="{{b.id}}" {%if reimburse.payBranch.id|stringformat:'s' == b.id|stringformat:'s'%}selected="selected"{%elif login_teacher.branch|stringformat:'s' == b.id|stringformat:'s'%}selected="selected"{%endif%}>{{b.city.cityName}}{{b.branchName}}</option>
+              {%endfor%}
+            </select>
+            &nbsp;
+              申请人：<b>{%if reimburse.applicantName%}{{reimburse.applicantName}}{%else%}{{login_teacher.teacherName}}{%endif%}</b>（{{login_teacher.branchName}}）
+              <input type="hidden" id="applicant" name="applicant" value="{%if reimburse.applicant%}{{reimburse.applicant}}{%else%}{{login_teacher.id|stringformat:'s'}}{%endif%}">
+
+              &nbsp;
+              <input type="checkbox" id="isBorrow" name="isBorrow"
+              {%if reimburse.isBorrow%}checked="checked"{%endif%}
+              {%if borrowId or reimburse.borrowId%}onclick="return false;"{%endif%}>
+              {%if borrowId  or reimburse.borrowId%}清借款{%else%}请款{%endif%}
+            &nbsp;
+            <input type="checkbox" id="hasReceipt" name="hasReceipt" {%if reimburse.hasReceipt%}checked="checked"{%endif%}>有发票
+            &nbsp;
+            <input type="checkbox" id="budget" name="budget" {%if reimburse.budget or not reimburse%}checked="checked"{%endif%}>预算内
+            &nbsp;&nbsp;&nbsp;&nbsp;申请日期：<input id="appDate" name="appDate" style="width:120px;" value="{{adate|date:'Y-m-d'}}"/>
+          </td>
+          </tr>
+          <tr>
+            <td align="right">项目：</td>
+            <td><select id="type1" name="type1">
+              {% for key, value in types.items %}
+                {%if login_teacher.role == 3 and key == 'X'%}
+              <option value="{{key}}" {%if i1.type == key%}selected='selected'{%endif%}>{{value}}</option>
+                {%elif login_teacher.role > 3%}
+              <option value="{{key}}" {%if i1.type == key%}selected='selected'{%endif%}>{{value}}</option>
+                {%endif%}
+              {%endfor%}
+            </select>
+            &nbsp;商品或服务：<input type="text" id="item1" name="item1" {%if i1%}value="{{i1.itemName|default:''}}"{%endif%}>&nbsp;数量：<input type="text" id="count1" name="count1" {%if i1%}value="{{i1.count|default:''}}"{%endif%} style="width:30px;">
+            &nbsp;金额：<input type="text" class="amount" id="amount1" name="amount1" {%if i1%}value="{{i1.amount}}"{%endif%}>
+            <br>
+            <select id="type2" name="type2">
+              {% for key, value in types.items %}
+              {%if login_teacher.role == 3 and key == 'X'%}
+            <option value="{{key}}" {%if i1.type == key%}selected='selected'{%endif%}>{{value}}</option>
+              {%elif login_teacher.role > 3%}
+            <option value="{{key}}" {%if i1.type == key%}selected='selected'{%endif%}>{{value}}</option>
+              {%endif%}
+              {%endfor%}
+            </select>
+            &nbsp;商品或服务：<input type="text" id="item2" name="item2" {%if i2%}value="{{i2.itemName|default:''}}"{%endif%}>&nbsp;数量：<input type="text" id="count2" name="count2" {%if i2%}value="{{i2.count|default:''}}"{%endif%} style="width:30px;">
+            &nbsp;金额：<input class="amount" type="text" id="amount2" name="amount2" {%if i2%}value="{{i2.amount}}"{%endif%}>
+            <br>
+            <select id="type3" name="type3">
+              {% for key, value in types.items %}
+              {%if login_teacher.role == 3 and key == 'X'%}
+            <option value="{{key}}" {%if i1.type == key%}selected='selected'{%endif%}>{{value}}</option>
+              {%elif login_teacher.role > 3%}
+            <option value="{{key}}" {%if i1.type == key%}selected='selected'{%endif%}>{{value}}</option>
+              {%endif%}
+              {%endfor%}
+            </select>
+            &nbsp;商品或服务：<input type="text" id="item3" name="item3" {%if i3%}value="{{i3.itemName|default:''}}"{%endif%}>&nbsp;数量：<input type="text" id="count3" name="count3" {%if i3%}value="{{i3.count|default:''}}"{%endif%} style="width:30px;">
+            &nbsp;金额：<input type="text" class="amount" id="amount3" name="amount3" {%if i3%}value="{{i3.amount}}"{%endif%}>
+            <br>
+            <select id="type4" name="type4">
+              {% for key, value in types.items %}
+              {%if login_teacher.role == 3 and key == 'X'%}
+            <option value="{{key}}" {%if i1.type == key%}selected='selected'{%endif%}>{{value}}</option>
+              {%elif login_teacher.role > 3%}
+            <option value="{{key}}" {%if i1.type == key%}selected='selected'{%endif%}>{{value}}</option>
+              {%endif%}
+              {%endfor%}
+            </select>
+            &nbsp;商品或服务：<input type="text" id="item4" name="item4" {%if i4%}value="{{i4.itemName|default:''}}"{%endif%}>&nbsp;数量：<input type="text" id="count4" name="count4" {%if i4%}value="{{i4.count|default:''}}"{%endif%} style="width:30px;">
+            &nbsp;金额：<input type="text" class="amount" id="amount4" name="amount4" {%if i4%}value="{{i4.amount}}"{%endif%}>
+            <br>
+            <select id="type5" name="type5">
+              {% for key, value in types.items %}
+              {%if login_teacher.role == 3 and key == 'X'%}
+            <option value="{{key}}" {%if i1.type == key%}selected='selected'{%endif%}>{{value}}</option>
+              {%elif login_teacher.role > 3%}
+            <option value="{{key}}" {%if i1.type == key%}selected='selected'{%endif%}>{{value}}</option>
+              {%endif%}
+              {%endfor%}
+            </select>
+            &nbsp;商品或服务：<input type="text" id="item5" name="item5" {%if i5%}value="{{i5.itemName|default:''}}"{%endif%}>&nbsp;数量：<input type="text"  id="count5" name="count5" {%if i5%}value="{{i5.count|default:''}}"{%endif%} style="width:30px;">
+            &nbsp;金额：<input type="text" class="amount" id="amount5" name="amount5" {%if i5%}value="{{i5.amount}}"{%endif%}>
+
+           </td>
+          </tr>
+          <tr>
+            <td align="right">总金额：</td>
+            <td>
+              <table><tr><td>
+                <input id="sum" name="sum" value="{{reimburse.sum|default:''}}" readonly="readonly">
+                </td>
+                {%if reimburse and reimburse.borrowId%}
+                <td style="padding-left:20px;">请款额：{{borrow}}, 余额：<input id='remain' readonly="readonly" value="{{remain}}"></td>
+                {%endif%}
+              </tr></table>
+            </td>
+          </tr>
+
+
+          <tr>
+            <td align="right">单据凭证照片：<br>（所有单据拍在一张照片里上传）</td>
+            <td>{%if reimburse.proof%}
+              <span style="cursor:pointer;">
+                {%if reimburse.proofType == 1 %}
+                <a href="/go_media/{{reimburse.proof}}" target="_blank">查看附件</a>
+                {%else%}
+              <img src="/go_static/users/{{login_teacher.branch}}/reimburse/{{reimburse.proof}}?tag={{millisecond}}" height="120"  onclick="showImg()"/>
+              {%endif%}
+            </span>{%endif%}
+              <input type="file" id="proof" name="proof">{%if reimburse.proof%}另选一张照片保存后可以替换原照片{%endif%}
+            </td>
+          </tr>
+          <tr>
+            <td align="right">附加信息：</td>
+            <td><input type="text" id="appmemo" name="appmemo" style="width:500px;" value="{{reimburse.appmemo|default:''}}"/></td>
+          <tr>
+            <td align="right"></td>
+            <input type="hidden" id="oid" name="oid" value="{{id}}">
+
+              <input type="hidden" id="borrowId" name="borrowId"
+
+               value="{%if borrowId%}{{borrowId}}{%elif reimburse.borrowId%}{{reimburse.borrowId}}{%else%}None{%endif%}">
+
+            <td style="line-height:40px;"><input type="submit" value="保存"  class="btn btn-default"/></form>
+              {%if reimburse%}&nbsp;&nbsp;&nbsp;&nbsp;提交本部门审批人功能移到报销列表页，请点左上角“返回”
+              <!--input type="hidden" name="toLeader" id="toLeader">
+              <a href="javascript:submit()"><span class="btn btn-default">提交给部门审批人</span></a-->{%endif%}</td>
+          </tr>
+
+        </table>
+
+    </div>
+
+    <div class="modal fade" id="picModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <center>
+        <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body" id="info-body">
+
+                      <div>
+                         <img src="/go_static/users/{{login_teacher.branch}}/reimburse/{{reimburse.proof}}" weight="100%" />
+                      </div>
+
+                </div>
+
+            </div>
+        </div>
+      </center>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+    {%if saveDone%}alert('保存成功'){%endif%}
+    var sum = 0.0;
+    $(".amount").change(function(){
+      sum = 0.0;
+      $(".amount").each(function(){
+        var am = Number($(this).val());
+        if(am==NaN)
+            alert(am);
+        else
+          sum = sum + am;
+          sum = Math.round(sum*100)/100
+        });
+      $("#sum").val(sum);
+      {%if reimburse.sum > 0%}
+        var rem = Math.round(({{reimburse.sum}} - sum)*100)/100
+        $("#remain").val(rem);
+      {%endif%}
+    });
+    $('#qform').validate({
+              rules: {
+            	    sum: {required: true},
+                  amount1: {required: true}
+                  {%if not id%},
+                  proof:{required:true}{%endif%}
+              },
+              messages : {
+                sum : {required : "总金额必填"},
+                amount1 : {required : "第一个项目金额必填"}
+                {%if not id%},
+                proof:{required:"请选择凭证照片文件"}{%endif%}
+              },
+              errorClass: "my-error-class"
+            });
+        function goback(){
+          document.location.href="{% url 'branch:reimburses' %}"
+        }
+        function goSource(){
+        	var url = "{%url 'branch:sources'%}";
+        	window.location.href=url;
+        }
+        function goPics(){
+        	var url = "{%url 'web:pages'%}?type=3";
+        	window.location.href=url;
+        }
+
+    function submit(){
+
+      $.post("{% url 'branch:api_submitReimburse' %}", {
+          "status":4,
+          "id":'{{id}}'
+
+      }, function (res) {
+          console.log('[res]'+res['error']);
+          location.reload(true);
+          if (res.error == 0) {
+            var openId = res.openId;
+            var first= '报销申请';
+            var date = new Date();
+            var keyword4= date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes();
+            console.log(openId)
+            console.log(res.tel)
+            console.log('{{login_teacher.teacherName}}')
+            console.log('{{login_teacher.branchName}}')
+            inform(first,openId,'{{login_teacher.teacherName}}',res.tel,keyword4,'{{login_teacher.branchName}}');
+
+              alert("成功");
+              var url = "{%url 'branch:reimburses'%}";
+
+            	window.location.href=url;
+          } else {
+              alert("失败:" + res["msg"])
+          }
+      });
+    }
+
+    function showImg(){
+      $("#picModal").modal();
+    }
+        //$("#hs").click(function(){
+          //if($(this).prop('checked'))
+        //})
+  console.log('{{res}}')
+  {%if res%}
+  alert('上传图片失败，请选择jpg格式的图片上传')
+  {%endif%}
+
+
+  $('#appDate').datetimepicker({
+      minDate:'{{earliestDate|date:"Y-m-d"}}',//yesterday is minimum date(for today use 0 or -1970/01/01)
+      maxDate:'{{latestDate|date:"Y-m-d"}}',
+      timepicker: false,
+      format: 'Y-m-d'
+  });
+    </script>
+{% endblock %}

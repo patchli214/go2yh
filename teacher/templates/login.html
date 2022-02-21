@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+<div style="cursor:pointer;color:#999999">
+  <h3>
+    <img src="/go_static/img/yhLogo.jpg" width="30" />
+    <b>弈海CRM</b>
+  </h3>
+</div>
+<center>
+    {% if uf.errors %}
+        <div class="alert alert-danger">
+            <p>
+                <strong>{{ uf.errors }}</strong>
+            </p>
+        </div>
+    {% endif %}
+    {% if  msg %}
+        <div class="alert alert-danger">
+            <p>
+                <strong>{{ msg }}</strong>
+            </p>
+        </div>
+    {% endif %}
+    <form name="form1" id="form1" style="max-width:300px;" method="post" enctype="multipart/form-data" role="form">
+        {% csrf_token %}
+        {{ uf.as_p }}
+        <input type="hidden" id="openId" name="openId" />
+        <button type="submit" class="btn btn-primary" id="submit">登录</button>
+    </form>
+</center>
+{% endblock %}
+{% block scripts %}
+    <script>
+    var Request = new QueryString();
+    var openId = Request['openId'];
+    $("#openId").val(openId);
+        $(function () {
+            $('form').submit(function () {
+                $('#submit').button('loading');
+            })
+        });
+
+    </script>
+{% endblock %}

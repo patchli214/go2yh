@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+
+</style>
+
+    <div>
+      <center style="font-weight:bold;">元十九个人统计</center>
+开始日期<input id="searchBegin" /> 截止日期<input id="searchEnd" /> <button onclick="search()">查询</button>
+    <table id="datatable" border="1">
+      <thead>
+      <tr style="background:#fff">
+        <th>校区</th>
+        <th>老师</th>
+
+        <th>月卡</th>
+        <th>年卡</th>
+        <th>双年卡</th>
+        <th>终身卡</th>
+        <th>续费</th>
+
+        <th>全部</th>
+        <th>营收</th>
+        <th>老师收入</th>
+      </tr>
+    </thead>
+      <tbody>
+    {% for key, map in stat.items %}
+            <tr>
+            <td>{{map.branchName}}</td>
+            <td>{{ map.teacher }}</td>
+
+            <td>{{ map.monthCard|default:'' }}</td>
+            <td>{{ map.yearCard }}</td>
+            <td>{{map.biyearCard}}</td>
+            <td>{{map.lifeCard}}</td>
+            <td>{{map.reCard}}</td>
+            <td>{{ map.allCard}}</td>
+            <td>{{ map.allCardIncome}}</td>
+            <td>{{ map.get|default:''}}</td>
+            </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot style="background:#eeeeee;">
+     <tr>
+      <th>合计</th>
+<th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+</tr>
+    </tfoot>
+    <tr style="background:#fff">
+      <th>校区</th>
+      <th>老师</th>
+
+      <th>月卡</th>
+      <th>年卡</th>
+      <th>双年卡</th>
+      <th>终身卡</th>
+      <th>续费</th>
+      <th>全部</th>
+      <th>营收</th>
+      <th>老师收入</th>
+    </tr>
+    </table>
+
+
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+
+    $('#searchBegin').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+    $('#searchEnd').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+        function search(){
+          var beginDate = $("#searchBegin").val()
+          var endDate = $("#searchEnd").val()
+          var url = "{%url 'contract:Y19statTeacher' %}?beginDate="+beginDate+"&endDate="+endDate
+          document.location.href=url
+        }
+
+        $("#searchBegin").val('{{beginDate}}')
+        $("#searchEnd").val('{{endDate}}')
+
+        $(document).ready(function() {
+            $('#datatable').DataTable( {
+              "paging":   false,
+              "ordering":true,
+            	"searching": false,
+            	"info":false,
+              dom: 'Bfrtip',
+      buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ],
+        "order": [[ 6, "desc" ]],
+              "language": {
+            "lengthMenu": "每页显示 _MENU_ ",
+            "zeroRecords": "空空如也",
+            "sInfo":"共 _TOTAL_ 单",
+            "infoEmpty": "没有找到哦",
+            "sSearch":"查询",
+            "oPaginate": {
+		        "sFirst":"首页",
+		        "sPrevious": 	"上一页",
+		        "sNext":     	"下一页",
+		        "sLast":     	"末页"
+	        },
+            "infoFiltered": "(从 _MAX_ 中搜索)"
+        },
+
+              "footerCallback": function( tfoot, data, start, end, display ) {
+                  var api = this.api();
+
+                  $( api.column( 2 ).footer() ).html(
+                      api.column( 2 ).data().reduce( function ( a, b ) {
+                          var ai = new Number(a)
+                          var bi = new Number(b)
+                          return ai + bi;
+                      }, 0 )
+                  );
+                  $( api.column( 3 ).footer() ).html(
+                      api.column( 3 ).data().reduce( function ( a, b ) {
+                          var ai = new Number(a)
+                          var bi = new Number(b)
+                          return ai + bi;
+                      }, 0 )
+                  );
+                  $( api.column( 4 ).footer() ).html(
+                      api.column( 4 ).data().reduce( function ( a, b ) {
+                          var ai = new Number(a)
+                          var bi = new Number(b)
+                          return ai + bi;
+                      }, 0 )
+                  );
+                  $( api.column( 5 ).footer() ).html(
+                      api.column( 5 ).data().reduce( function ( a, b ) {
+                          var ai = new Number(a)
+                          var bi = new Number(b)
+                          return ai + bi;
+                      }, 0 )
+                  );
+                  $( api.column( 6 ).footer() ).html(
+                      api.column( 6 ).data().reduce( function ( a, b ) {
+                          var ai = new Number(a)
+                          var bi = new Number(b)
+                          return ai + bi;
+                      }, 0 )
+                  );
+                  $( api.column( 7 ).footer() ).html(
+                      api.column( 7 ).data().reduce( function ( a, b ) {
+                          var ai = new Number(a)
+                          var bi = new Number(b)
+                          return ai + bi;
+                      }, 0 )
+                  );
+                  $( api.column( 8 ).footer() ).html(
+                      api.column( 8 ).data().reduce( function ( a, b ) {
+                          var ai = new Number(a)
+                          var bi = new Number(b)
+                          return ai + bi;
+                      }, 0 )
+                  );
+                  $( api.column( 9 ).footer() ).html(
+                      api.column( 9 ).data().reduce( function ( a, b ) {
+                          var ai = new Number(a)
+                          var bi = new Number(b)
+                          return ai + bi;
+                      }, 0 )
+                  );
+
+              }
+            });
+
+        });
+    </script>
+{% endblock %}

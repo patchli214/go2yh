@@ -1,0 +1,52 @@
+<div style="">
+<!-- footer -->
+<div style="background:#ffffff;text-align:center;border:1px solid #888888;border-radius:8px;box-shadow: 1px 1px 1px #888888;margin:20px;padding:20px;">
+<h5 style="font-weight:600;color:rgb(255, 104, 39);">真朴儿童围棋教室</h5>
+<div style="width:60%;margin:0 auto;padding-bottom:20px;">
+
+</div>
+<div class="footer_text">自然成长，自由发展；</div>
+<div class="footer_text">成长围棋的倡导者和实践者。</div>
+<div class="footer_text" style="padding:6px 0 0 0">学围棋的小朋友，</div>
+<div class="footer_text">抗挫能力更强，</div>
+<div class="footer_text">逻辑思维更严密</div>
+<div class="footer_text">更自主、更自信、更专注</div>
+<div class="footer_text" style="padding:6px 0 0 0">如果您的小朋友四岁了，想学围棋，</div>
+<div class="footer_text">可直接点下面电话按钮拨打电话咨询:</div>
+<div class="footer_text" style="padding:6px 0 16px 0;font-weight:600;"><a href="tel:{{page.branch.branchTel}}"><button  class="btn btn-success">{%if to and to.mobile%}{{to.mobile}}{%elif page.branch.branchTel%}{{page.branch.branchTel}}{%elif student.branch.branchTel%}{{student.branch.branchTel}}{%endif%}</button></a></div>
+<div class="footer_text">或者填写孩子信息和您的联系方式：</div>
+<form id="form1" method="post" action="{%url 'regUser:rer'%}">
+<input type="hidden" name="branch" value="{{page.branch.id}}">
+<input type="hidden" name="regBranch" value="{{student.branch.id}}">
+<input type="hidden" name="referrer" value="{{student.id}}">
+<input type="hidden" name="regTeacher" value="{%if student and student.teacher%}{{student.teacher.id|default:''}}{%elif to%}{{to.id}}{%endif%}">
+<input type="hidden" name="sourceType" value="C">
+<input id="teacher" type="hidden" name="teacher" value="{%if student and student.teacher%}{{student.teacher.id|default:''}}{%elif to%}{{to.id}}{%endif%}" />
+<div style="padding-top:6px;padding-bottom:6px;"><input style="border-radius:3px;height:30px" type="text" name="name" id="name" placeholder="孩子名"></div>
+<div style="padding-top:8px;padding-bottom:14px;"><input style="border-radius:3px;height:30px" type="text" id="prt1mobile" name="prt1mobile" placeholder="手机号"></div>
+<div><span onclick="checkInput()" class="btn btn-success" style="width:80px;">提交</span></div>
+</form>
+<div class="footer_text">我们可以为您安排<font style="font-weight:600;color:rgb(255, 104, 39)">免费的体验课</font>哦</div>
+
+</div>
+
+<style>
+.para{padding:10px;%}
+.footer_text{
+font-size:12px;
+}
+#grad1 {
+    height: 3px;
+    background: -webkit-linear-gradient(left, rgba(255,0,0,0), rgba(255,0,0,1)); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right, rgba(255,0,0,0), rgba(255,0,0,1)); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right, rgba(255,0,0,0), rgba(255,0,0,1)); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right, rgba(10,10,10,0), rgba(10,10,10,1)); /* 标准的语法（必须放在最后） */
+}
+#grad2 {
+    height: 3px;
+    background: -webkit-linear-gradient(right, rgba(255,0,0,0), rgba(255,0,0,1)); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(left, rgba(255,0,0,0), rgba(255,0,0,1)); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(left, rgba(255,0,0,0), rgba(255,0,0,1)); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to left, rgba(10,10,10,0), rgba(10,10,10,1)); /* 标准的语法（必须放在最后） */
+}
+</style>

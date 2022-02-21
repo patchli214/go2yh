@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block content %}
+<div >
+<a href="{%url 'statistic:indexStat'%}"><返回</a><span id='tip' style="color:red;"></span>
+</div>
+
+<div>
+
+
+<center><h4>调查问卷回收统计</h4>
+
+<div style="width:100%;margin:0 auto;text-align:center;">
+
+<input id="beginDate" type="text" placeholder="起始日期">
+<input id="endDate" type="text" placeholder="截至日期">
+<button id="searchButton">统计</button>
+</center>
+</div>
+
+<br>
+<div id="table-container">
+<center>
+    <table  id="datatable"  class="table table-striped table-bordered" width="800">
+    <thead>
+        <tr>
+
+        <th  align="center" nowrap>老师</th>
+        <th  align="center" nowrap>回收问卷数</th>
+        <th  align="center" nowrap>孩子喜欢上围棋课吗</th>
+        <th  align="center" nowrap>对任课老师是否满意</th>
+        <th  align="center" nowrap>多久开一次家长会<br>A-每次课,B-每月,C-季度,D-学期,E-几乎不</th>
+
+        <th  align="center" nowrap>老师每次有课后反馈吗？您知道孩子每次学了什么吗</th>
+        <th  align="center" nowrap>您知道这个班的课程规划吗</th>
+
+        </tr>
+</thead>
+<tbody>
+{%for quests in res%}
+
+<tr>
+<td nowrap>{{quests.teacherName}}</td>
+<td nowrap>{{quests.quests}}</td>
+<td nowrap>{%if quests.a1%}{{quests.a1}}{%endif%}</td>
+<td nowrap>{%if quests.a2%}{{quests.a2}}{%endif%}</td>
+<td nowrap>{%if quests.a3%}{{quests.a3}}{%endif%}</td>
+
+<td nowrap>{%if quests.a5%}{{quests.a5}}{%endif%}</td>
+<td nowrap>{%if quests.a6%}{{quests.a6}}{%endif%}</td>
+
+</tr>
+{%endfor%}
+
+</tbody>
+</table>
+{%if branchData%}
+<div>校区满意度：{%if branchData.b1%}{{branchData.b1}}%{%endif%}&nbsp;&nbsp;运营满意度：{%if branchData.b1%}{{branchData.b2}}%{%endif%}</div>
+{%endif%}
+</center>
+</div>
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#searchButton").click(function(){
+    if($("#beginDate").val()==''){
+        alert('请填写起始日期')
+        return
+    }
+    if($("#endDate").val()==''){
+        alert('请填写截至日期')
+        return
+    }
+	var url = "{%url 'statistic:branchQuests'%}?beginDate="+$("#beginDate").val()+"&endDate="+$("#endDate").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	$("#tip").html("查询中...");
+	window.location.href=url;
+})
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+
+$(document).ready(function() {
+    $('#datatable').DataTable({
+    	    	"paging":   false,
+       	"searching": false,
+    	    "info":false,
+        dom: 'Bfrtip',
+        "order": [[ 1, "desc" ]],
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ]
+	});
+
+});
+</script>
+{% endblock %}

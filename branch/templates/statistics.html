@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a> | 客户号码来源统计
+</div>
+<hr style="margin-top:2px;margin-bottom:10px"/>
+<div style="padding:10px;">
+
+  <input id="beginDate" type="text" placeholder="日期">
+  <select id="dateType">
+    <option value="week">所在周</option>
+    <option value="month">所在月</option>
+  </select>
+
+   <button id="searchButton"  class="btn btn-success" onclick="search()">查询</button>
+</div>
+    <div class="text-right" style="margin-right: 20px;margin-bottom: 10px;">
+
+    </div>
+
+
+    <table  id="datatable" border="1">
+<thead>
+        <tr style="background:#eeeeee;">
+        <th>城市</th>
+        <th>校区</th>
+        <th>转介</th>
+        <!--th>周年庆</th-->
+        <th>总拜访</th>
+        <th>早拜</th>
+        <th>晚拜</th>
+        <th>网络</th>
+        <th>社会</th>
+        <th>联络数</th>
+
+</tr>
+</thead>
+        <tbody>
+        {% for stat in stats %}
+
+            <tr>
+                <td>{{ stat.branch.city.cityName }}</td>
+                <td>{{ stat.branch.branchName }}</td>
+                <td>{{ stat.refer }}</td>
+                <!--td>{{ stat.refer2 }}</td-->
+                <td>{{ stat.visit }}</td>
+                <td>{{ stat.visit2 }}</td>
+                <td>{{ stat.visit3 }}</td>
+                <td>{{ stat.online }}</td>
+                <td>{{ stat.walkin }}</td>
+                <td>{{ stat.c }}</td>
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+        <tr style="background:#eeeeee;">
+        <td>城市</td>
+        <td>校区</td>
+        <td>转介</td>
+        <!--td>周年庆</td-->
+        <td>总拜访</td>
+        <td>早拜访</td>
+        <td>晚拜访</td>
+        <td>网络</td>
+        <td>社会</td>
+        <td>联络数</td>
+
+        </tr>
+        <tfoot style="background:#eeeeee;">
+          <th></th>
+          <th>合计</th>
+          <th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+        </tfoot>
+    </table>
+<div style="text-align:center;padding:20px;">
+<a href="#top"><button>返回顶部</button></a>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+    <script>
+
+
+    function search(){
+      $("#searchButton").html("<font style='color:grey;'>查询中请稍候...</font>")
+
+    	var y = $("#beginDate").val();
+    	var m = $("#endDate").val();
+      var t = $("#dateType").val();
+    	search = '?';
+    	search = search+'beginDate='+y;
+    	search = search+'&endDate='+m;
+      search = search+'&dateType='+t;
+
+      //alert(search)
+    	var url = "{% url 'branch:statistics' %}"+search
+    	window.location.href=url;
+    }
+
+
+
+    $('#beginDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+    $('#endDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+
+        {% if beginDate%}
+        $("#beginDate").val('{{beginDate}}')
+        $("#beginDate").css("color","red")
+        {%endif%}
+        {% if dateType%}
+        $("#dateType").val('{{dateType}}')
+        
+        {%endif%}
+
+
+
+        $(document).ready(function() {
+
+            $('#datatable').DataTable( {
+            	"paging":   false,
+            	"searching": false,
+            	"info":false,
+              "language": {
+                    "lengthMenu": "每页显示 _MENU_ ",
+                    "zeroRecords": "空空如也",
+                    "sInfo":"共 _TOTAL_ ",
+                    "infoEmpty": "没有找到哦",
+                    "sSearch":"查询",
+                    "oPaginate": {
+        		        "sFirst":"首页",
+        		        "sPrevious": 	"上一页",
+        		        "sNext":     	"下一页",
+        		        "sLast":     	"末页"
+        	        },
+                    "infoFiltered": "(从 _MAX_ 中搜索)"
+                },
+              "order": [[ 3, "desc" ]],
+              dom: 'Bfrtip',
+              buttons: [
+                    { extend: 'copy', text: '复制' },
+                    { extend: 'csv', text: '保存' },
+                    { extend: 'print', text: '打印' }
+                ],
+
+
+              "footerCallback": function( tfoot, data, start, end, display ) {
+                var api = this.api();
+                $( api.column( 2 ).footer() ).html(
+                    api.column( 2 ).data().reduce( function ( a, b ) {
+                        var ai = new Number(a)
+                        var bi = new Number(b)
+                        return ai + bi;
+                    }, 0 )
+                );
+                $( api.column( 3 ).footer() ).html(
+                    api.column( 3 ).data().reduce( function ( a, b ) {
+                        var ai = new Number(a)
+                        var bi = new Number(b)
+                        return ai + bi;
+                    }, 0 )
+                );
+                $( api.column( 4 ).footer() ).html(
+                    api.column( 4 ).data().reduce( function ( a, b ) {
+                        var ai = new Number(a)
+                        var bi = new Number(b)
+                        return ai + bi;
+                    }, 0 )
+                );
+                $( api.column( 5 ).footer() ).html(
+                    api.column( 5 ).data().reduce( function ( a, b ) {
+                        var ai = new Number(a)
+                        var bi = new Number(b)
+                        return ai + bi;
+                    }, 0 )
+                );
+                $( api.column( 6 ).footer() ).html(
+                    api.column( 6 ).data().reduce( function ( a, b ) {
+                        var ai = new Number(a)
+                        var bi = new Number(b)
+                        return ai + bi;
+                    }, 0 )
+                );
+                $( api.column( 7 ).footer() ).html(
+                    api.column( 7 ).data().reduce( function ( a, b ) {
+                        var ai = new Number(a)
+                        var bi = new Number(b)
+                        return ai + bi;
+                    }, 0 )
+                );
+                $( api.column( 8 ).footer() ).html(
+                    api.column( 8 ).data().reduce( function ( a, b ) {
+                        var ai = new Number(a)
+                        var bi = new Number(b)
+                        return ai + bi;
+                    }, 0 )
+                );
+              }
+
+
+
+
+            });
+
+        });
+            </script>
+{% endblock %}

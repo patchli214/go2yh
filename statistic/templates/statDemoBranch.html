@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+th{padding:0}
+tr:hover{background:#eeeeee}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a>
+</div>
+
+<div>
+<div style="margin-left:20px;"><center><b>校区一周预约到场成交统计</b>
+<select id="searchCity">
+<option value="1">{{login_teacher.city}}</option>
+</select>
+<select id="searchWeekBegin">
+<option value="">本周</option>
+<option value="1">上周</option>
+</select>
+<button id="searchButton">查询</button>
+</center>
+</div>
+
+<div id="table-container">
+    <table border="1" id="datatable">
+       <thead>
+        <tr style="background:#eeeeee;">
+        <th rowspan="2" width="30" style="padding:0;">校区</th>
+        <th colspan="3" align="center"><center>周二</center></th>
+        <th colspan="3" align="center"><center>周三</center></th>
+        <th colspan="3" align="center"><center>周四</center></th>
+        <th colspan="3" align="center"><center>周五</center></th>
+        <th colspan="3" align="center"><center>周六</center></th>
+        <th colspan="3" align="center"><center>周日</center></th>
+        <th colspan="3" align="center"><center>周一</center></th>
+        <th colspan="3" align="center"><center>合计</center></th>
+        </tr>
+        <tr style="background:#eeeeee;">
+        <!-- th width="30" style="padding:0;"></th-->
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">学籍</th>
+</tr>
+</thead>
+<tbody>
+        {% for days in branches %}
+
+            <tr style="background:#{% cycle 'ffffff' 'eeeeee' %}">
+            {% for two in days %}
+                {%if forloop.counter == 1%}<td nowrap width="60" style="padding:0;">{{two.statBranch.memo|default:'合计'}}</td>{%endif%}
+                <!--td colspan="3" width="100">
+                <table width="100%" border="1"><tr-->
+                <td width="45" style="padding:0;border-left:1px solid black;"><center>
+                    {%if two.statBranch.reservation > 0%}{{ two.statBranch.reservation }}{%else%}&nbsp;{%endif%}
+                    {%if two.statNet.reservation > 0%}({{ two.statNet.reservation }}){%endif%}
+                </center></td>
+                <td width="45" style="padding:0;"><center>
+                    {%if two.statBranch.show > 0%}{{ two.statBranch.show }}{%else%}&nbsp;{%endif%}
+                    {%if two.statNet.show > 0%}({{ two.statNet.show }}){%endif%}
+                </center></td>
+                <td width="45" style="padding:0;border-right:1px solid black;"><center>
+                    {%if two.statBranch.newdeal > 0%}{{ two.statBranch.newdeal }}{%else%}&nbsp;{%endif%}
+                    {%if two.statNet.newdeal > 0%}({{ two.statNet.newdeal }}){%endif%}
+                </center></td>
+                {%if forloop.counter == 8%}
+                <td width="45" style="padding:0;border-right:1px solid black;"><center>
+                {%if two.studentSum > 0%}{{two.studentSum}}{%endif%}
+                </center></td>
+                {%endif%}
+                <!--/tr></table>
+                </td-->
+            {% endfor %}
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    </div>
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+function moveScroll(){
+    var scroll = $(window).scrollTop();
+    console.log(scroll)
+    var anchor_top = $("#maintable").offset().top;
+    var anchor_bottom = $("#bottom_anchor").offset().top;
+    if (scroll>anchor_top && scroll<anchor_bottom) {
+    clone_table = $("#clone");
+    if(clone_table.length == 0){
+        clone_table = $("#maintable").clone();
+        clone_table.attr('id', 'clone');
+        clone_table.css({position:'fixed',
+                 'pointer-events': 'none',
+                 top:0});
+        clone_table.width($("#maintable").width());
+        $("#table-container").append(clone_table);
+        $("#clone").css({visibility:'hidden'});
+        $("#clone thead").css({'visibility':'visible','pointer-events':'auto'});
+    }
+    } else {
+    $("#clone").remove();
+    }
+}
+$(window).scroll(moveScroll);
+
+$("#searchButton").click(function(){
+var url = "{%url 'statistic:statDemoBranch'%}?doSearch=1&searchWeekBegin="+$("#searchWeekBegin").val();
+$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+window.location.href=url;
+})
+
+$("#searchWeekBegin").val('{{searchWeekBegin}}')
+$("#searchWeekBegin").css("color","red")
+
+
+
+$(document).ready(function() {
+$('#datatable').DataTable( {
+"fixedHeader": true,
+  "ordering": false,
+  "paging":   false,
+  "searching": false,
+  "info":false,
+    dom: 'Bfrtip',
+    buttons: [
+        { extend: 'copy', text: '复制' },
+        { extend: 'csv', text: '保存' },
+        { extend: 'print', text: '打印' }
+    ]
+});
+});
+
+</script>
+{% endblock %}

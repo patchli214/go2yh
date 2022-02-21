@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="padding:10px;">
+  {%if login_teacher.branchType == '9'%}
+  <select id="searchCity" name="searchCity">
+    <option value="0">全部城市</option>
+    {%for c in cities%}
+      <option value="{{c.id}}">{{c.cityName}}</option>
+    {%endfor%}
+  </select>
+  {%endif%}
+<input style="width:90px;" type="text" id="beginDate" name="beginDate" placeholder="起始日期">
+   <input style="width:90px;" type="text" id="endDate" name="endDate" placeholder="截至日期">
+
+<!--select id="searchStatus" name="searchStatus">
+  <option>全部状态</option>
+  <option value="0">有效</option>
+  <option value="2">退费</option>
+  <option value="-1">退费申请</option>
+  <option value="1">结束</option>
+</select-->
+
+
+
+
+<button id="searchButton"  class="btn btn-success" onclick="search()">网课合同查询</button>
+
+<button id="searchButton2"  class="btn btn-success" onclick="searchStudents()">学生查询</button>
+
+</div>
+<table  id="datatable"  class="table table-hover">
+  <thead>
+<tr>
+<th nowrap style="padding:10px;">部门</th>
+<th nowrap style="padding:10px;">渠道</th>
+<th nowrap style="width:140px;padding:10px;">助教</th>
+<th nowrap style="padding:10px;">学生姓名</th>
+<th nowrap style="padding:10px;">注册姓名</th>
+<th nowrap style="padding:10px;">授课老师</th>
+
+<th nowrap style="padding:10px;">签约日期</th>
+
+<th nowrap style="padding:10px;">{%if login_teacher.showIncome == '1'%}课时{%else%}周{%endif%}</th>
+<th nowrap style="padding:10px;">金额</th>
+
+
+<th nowrap style="width:140px;padding:10px;">备注</th>
+{%if login_teacher.branchType == '0' or login_teacher.cityRB == login_teacher.id or login_teacher.branch == '5ab86f5397a75d3c74041a69'%}
+<th></th>{%endif%}
+</tr>
+</thead>
+<tbody>
+{%for c in list%}
+
+<tr style="color:#{%if c.status == 1%}aaaaaa{%endif%};">
+
+
+  <td nowrap style="padding:2px;">
+
+  {{c.branch.branchName|default:""}}
+
+  </td>
+  <td style="padding:2px;">{%if c.sourceType == 'A'%}<font color="green">网络</font>{%elif  c.sourceType == 'B'%}<font color="red">拜访</font>{%elif  c.sourceType == 'C'%}<font color="red">转介</font>{%elif  c.sourceType == 'D'%}社会{%endif%}</td>
+  <td  style="padding:2px;">{{c.assistant.name|default:""}}</td>
+
+
+<td nowrap style="padding:2px;">{{c.student.name|default:""}} {{c.student.name2|default:""}}</td>
+  <td nowrap style="padding:2px;">{{c.regName|default:""}}</td>
+  <td nowrap style="padding:2px;">{{c.teacher.name|default:""}}</td>
+  {%if searchStatus == '2' or searchStatus == '1' or searchStatus == '-1'%}
+  <td style="padding:2px;">
+    {{c.singDate|date:"Y-m-d"|default:""}}
+
+  </td>
+  {%endif%}
+  <td nowrap style="padding:2px;">{{c.singDate|date:"Y-m-d"|default:""}}</td>
+
+  <td style="padding:2px;">{%if c.contractType.type == 1%}{{c.weeks|default:"0"}}周{%elif login_teacher.showIncome == '1'%}{{c.weeks|add:c.weeks|default:""}}{%else%}{{c.weeks|default:""}}{%endif%}</td>
+  <td style="padding:2px;">{{c.paid|default:""}}</td>
+
+  <td nowrap style='width:160px;padding:2px;'>{{c.memo|default:""}}</td>
+  <td  style="padding:2px;">
+    <div style="max-height:50px;text-overflow:ellipsis;overflow:hidden;">
+
+
+  </div></td>
+
+  {%if login_teacher.branchType == '0' or login_teacher.cityRB == login_teacher.id or login_teacher.branch == '5ab86f5397a75d3c74041a69'%}
+  <td nowrap style="padding:2px;">
+  <button onclick="change('{{c.student_oid}}')">修改</button>
+  </td>
+  {%endif%}
+
+</tr>
+{%endfor%}
+</tbody>
+</table>
+<tr>
+  <td colspan="6"></td>
+
+  <td>共 {{list|length}} 个合同，合计</td>
+  <td>{{sum}} 元</td>
+</tr>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+function change(oid) {
+	var url = "{% url 'contract:studentContracts' %}"+"?student_oid="+oid;
+  window.open(url);
+}
+function removeContract(id){
+	if(confirm("确定删除？")){
+	$.post("{% url 'contract:removeContract'%}", {
+  	  'id':id
+    }, function (res) {
+      if (res.error == 0) {
+          alert("删除成功");
+          location.reload(true);
+      } else {
+          alert(res.msg);
+      }
+    });
+	}
+}
+document.onkeydown=function(event){
+    e = event ? event :(window.event ? window.event : null);
+	    if(e.keyCode==13){
+	    	search();
+     	}
+}
+function search(){
+  $("#searchButton").html("<font style='color:grey;'>查询中请稍候...</font>")
+	var searchStatus = $("#searchStatus").val();
+  var searchMulti = $("#searchMulti").val();
+  var searchCT = $("#searchCT").val();
+  var searchCity = $("#searchCity").val();
+  var searchCTtype = $("#searchCTtype").val();
+	var y = $("#beginDate").val();
+	var m = $("#endDate").val();
+	search = '?branch={{branch}}';
+	if(y)search = search+'&beginDate='+y;
+	if(m)search = search+'&endDate='+m;
+  if(searchStatus)
+	   search = search+'&searchStatus='+searchStatus;
+  if(searchMulti)
+	   search = search+'&searchMulti='+searchMulti;
+  if(searchCT)
+     search = search+'&searchCT='+searchCT;
+  if(searchCity)
+        search = search+'&searchCity='+searchCity;
+  if(searchCTtype)
+   	 search = search+'&searchCTtype='+searchCTtype;
+  //alert(search)
+	var url = "{% url 'contract:netcontracts' %}"+search
+	window.location.href=url;
+}
+function clickPage(page){
+	var url = '{% url 'contract:contract_list' %}'
+	url = url+'?branch={{branch}}&page='+page;
+	window.location.href = url;
+	//window.location.href = '/go?page='+page;
+}
+$("#nav6").css("color","red");
+$("#nav6").css("font-weight","bold");
+$("#searchStatus").val('{{searchStatus}}')
+{%if searchStatus == None%}
+$("#searchStatus").val('全部状态')
+{%endif%}
+$("#searchStatus").css("color","red")
+$("#searchMulti").val('{{searchMulti}}')
+$("#searchMulti").css("color","red")
+$("#searchCTtype").val('{{searchCTtype}}')
+$("#searchCTtype").css("color","red")
+$("#searchCT").val('{{searchCT}}')
+$("#searchCT").css("color","red")
+{%if searchCity == None%}
+$("#searchCity").val('0')
+{%else%}
+$("#searchCity").val('{{searchCity}}')
+{%endif%}
+$("#searchCity").css("color","red")
+{% if beginDate%}
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+{%endif%}
+{% if endDate%}
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+{%endif%}
+
+
+$(document).ready(function() {
+
+    $('#datatable').DataTable( {
+    	"paging":   false,
+    	"searching": true,
+    	"info":false,
+      "language": {
+            "lengthMenu": "每页显示 _MENU_ 学生",
+            "zeroRecords": "空空如也",
+
+            "sInfo":"共 _TOTAL_ 合同",
+            "infoEmpty": "没有找到哦",
+            "sSearch":"查询",
+            "oPaginate": {
+		        "sFirst":"首页",
+		        "sPrevious": 	"上一页",
+		        "sNext":     	"下一页",
+		        "sLast":     	"末页"
+	        },
+            "infoFiltered": "(从 _MAX_ 中搜索)"
+        },
+      "order": [[ {{showCol}}, "desc" ]],
+      dom: 'Bfrtip',
+      buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ],
+
+
+    });
+
+});
+
+$("#incomes").click(function(){
+  window.location.href='incomes'
+})
+$("#Y19Incomes").click(function(){
+  window.open('Y19Incomes')
+})
+$("#searchButton2").click(function(){
+  window.open('cstudents')
+})
+$("#deposits").click(function(){
+  window.location.href='deposits'
+})
+</script>
+{% endblock %}

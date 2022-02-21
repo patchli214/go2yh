@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include 'back.html' %}
+<h4>resovle</h4>
+<table class="table  table-hover">
+{%for s in dups%}
+  <tr>
+    <td>{{s.name}}</td>
+    <td>{{s.prt1mobile}}</td>
+    <td>{{s.regTeacher.name}}</td>
+    <td>{{s.regTime|date:"Y-m-d"|default:""}}</td>
+    <td><font color="red">{{s.regBranch.branchName}}</font></td>
+    <td>{{s.branch.branchName}}</td>
+    <td><form id="form1" method="post"><input type="hidden" id="prt1mobile" name="prt1mobile"><input type="hidden" id="validStudent" name="validStudent"></form><button onclick="keep('{{s.id}}','{{s.prt1mobile}}')">保留</button></td>
+  </tr>
+{%endfor%}
+</table>
+{% endblock %}
+{% block scripts %}
+<script>
+function keep(id,mobile){
+	$("#validStudent").val(id);
+	$("#prt1mobile").val(mobile);
+	$("#form1").submit();
+}
+</script>
+{% endblock %}

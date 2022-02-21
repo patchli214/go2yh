@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% load filter %}
+{% load filter_regUser %}
+{% block content %}
+{% include 'back.html' %}
+
+<div style="width:100%;margin:0 auto;">
+  <center><h4>添加补课</h4></center>
+</div>
+
+    <div style="width:100%;border:1px solid;">
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;班级:{{ gradeClass.name }}</div>
+        <div>补课时间:<input type="text" id="lessonTime" /></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;教室:<select id="classroom">
+                    <option value="">无</option>
+                    {% for classroom in classrooms %}
+                        <option value={{ classroom }} {% if gradeClass.classroom == classroom %}selected{% endif %}>
+                            {{ classroom }}教室
+                        </option>
+                    {% endfor %}
+                </select>
+        </div>
+
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;老师:<select id="teacherId">
+                    <option value="">无</option>
+                    {% for teacher in teachers %}
+                        <option value={{ teacher.id }} {% if gradeClass.teacher.id == teacher.id %}selected{% endif %}>
+                            {{ teacher.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+        </div>
+
+    </div>
+
+    <div style="width:100%;">
+      <table>
+        <tr style="height:30px;">
+          <td nowrap>补课学生</td>
+          <td align="left">补哪次课(<font color="red">必填</font>)</td>
+        </tr>
+
+        {% for student in gradeClass.students %}
+        <tr>
+        <td colspan="2"><table border="1" style="margin:2px;">
+        <tr style="height:30px;">
+          <td nowrap style="padding:6px;">
+            {{ student.name }}&nbsp;
+          </td>
+          <td valign="top" style="padding:6px;">
+            <input class="targetLesson" id="{{student.id}}" size="12" /><br>
+            <input class="targetLesson" id="{{student.id}}" size="12" />
+          </td>
+        </tr>
+      </table></td></tr>
+        {% endfor %}
+      </table>
+    </div>
+
+
+    <div style="width:100%;padding:10px;">
+        <button class="btn btn-default" onclick="schedule_list()">看日程</button>
+        <button class="btn btn-danger" onclick="save_gradeClass()">保存</button>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var gradeClass_type = '{{ gradeClass_type }}';
+        var less = new Array()
+        $(document).ready(function () {
+            //上课时间
+            $('#lessonTime').datetimepicker({
+                datepicker: true,
+                timepicker: true,
+                step: 10,
+                format: 'Y-m-d H:i'
+            });
+
+            $('.targetLesson').datetimepicker({
+                datepicker: true,
+                timepicker: false,
+                format: 'Y-m-d'
+            });
+
+            {%for less in lessLessons%}
+
+              {%for l in less%}
+                less.push('{{l.student}}-{{l.id}}-{{l.lessonTime|date:"Y年m月d日"}}')
+              {%endfor%}
+
+            {%endfor%}
+        });
+        $("#add").click(function () {
+            var $option = $("#select1 option:selected");  //获取选中的选项
+            $option.appendTo(surplus_select);  //追加给对方
+            $("#select1").val("");
+            $(surplus_select).val("");
+        });
+        $("#remove").click(function () {
+            var $option = $(surplus_select + " option:selected");
+            $option.appendTo("#select1");
+            $("#select1").val("");
+            $(surplus_select).val("");
+        });
+
+
+
+        function save_gradeClass() {
+            var lessonTime = $("#lessonTime").val();
+            var classroom = $("#classroom").val();
+            var teacherId = $("#teacherId").val();
+            var studentTargets = ''
+            var ids = new Array()
+            var i = 0
+
+            $(".targetLesson").each(function(){
+              if(!ids.includes($(this).attr('id'))){
+                ids[i] = $(this).attr('id')
+                if(i>0&&$(this).val()!=''){studentTargets = studentTargets+','}
+                if($(this).val()!='')
+                    studentTargets = studentTargets+ids[i]+'_'+$(this).val()
+                i++
+              }else{
+                if($(this).val()!='')
+                    studentTargets = studentTargets+'_'+$(this).val()
+              }
+console.log(studentTargets)
+
+            });
+            if(studentTargets.indexOf(',')==0){
+              studentTargets = studentTargets.substring(1,studentTargets.length)
+              console.log(studentTargets)
+            }
+
+
+
+
+
+            if (!lessonTime) {
+                alert("请填写补课时间");
+                return;
+            }
+            if (!classroom){
+            	alert("请填写补课教室");
+                return;
+            }
+
+            if (!teacherId){
+            	alert("请填写补课老师");
+                return;
+            }
+
+            if(studentTargets.length==0){
+              alert("请填写补哪次课");
+                return;
+            }
+            st = ''
+            for(var i=0;i<studentTargets.length;i++){
+              if(i==0)
+                st = studentTargets[i]
+              else
+                st = st + ',' + studentTargets[i]
+
+            }
+
+            $.post("{% url 'gradeClass:api_extraLesson' %}", {
+                "classId": '{{gradeClass.id}}',
+                "lessonTime": lessonTime,
+                "classroom": classroom,
+                "teacherId": teacherId,
+                //"students": students,
+                "studentTargets":studentTargets
+            }, function (res) {
+                alert(res["msg"]);
+                if(res["error"]==0){
+                    var url = "{% url 'gradeClass:lessons' %}?type=1&id={{gradeClass.id}}";
+                    window.location.href = url;
+                }
+            });
+
+        }
+
+        function schedule_list() {
+            var url = "{% url 'gradeClass:schedule' %}";
+            window.open(url);
+        }
+        $("#selectDate").click(function(){
+          console.log('select')
+
+          var sedate = ''// = $("#tl")[0].options[$("#tl")[0].selectedIndex].innerHTML
+
+          var select1 = document.getElementById("tl")
+          for (var i = 0; i < select1.length; i++) {
+            if(select1.options[i].selected)
+              if(sedate!='')
+                sedate = sedate + '|' + select1.options[i].innerHTML
+              else {
+                sedate = select1.options[i].innerHTML
+              }
+          }
+
+          seStudent = $("#tl").val()
+          var student = seStudent[0].split("-")[0]
+          var newarray = new Array()
+          for(var i=0;i<studentTargets.length;i++){
+            if(studentTargets[i].split("-")[0]!=student)
+              newarray.push(studentTargets[i])
+          }
+          studentTargets = newarray
+          for(var l=0;l<seStudent.length;l++){
+            studentTargets.push(seStudent[l])
+          }
+
+          $("#"+student).val(sedate)
+          for(var k=0;k<studentTargets.length;k++){
+            console.log(studentTargets[k])
+          }
+
+        })
+        var studentTargets = new Array()
+    </script>
+{% endblock %}

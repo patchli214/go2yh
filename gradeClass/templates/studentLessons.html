@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+<center><h4>签到表</h4></center>
+<div style="float:left;width:70%;">
+<div style="padding-bottom:5px;">【学生】{{student.name}},【老师】{{gradeClass.teacher.name}}【班级】{{gradeClass.name}}【上课时间】周{%if gradeClass.school_day == 7%}日{%else%}{{gradeClass.school_day}}{%endif%}&nbsp;{{gradeClass.school_time}}</div>
+<div style="background:#eeeeee;width:96%;">合同：{% if contracts%}
+            {% for contract in contracts %}
+                【{{ contract.singDate|date:"Y-m-d"|default:"" }}签约 {{ contract.beginDate|date:"Y-m-d"|default:"" }}开课 {{ contract.weeks|default:"" }}周 {{contract.paid|default:""}}元 {{contract.classType.name|default:""}}】
+            {% endfor %}
+            {% endif %}</div>
+<div style="padding-top:5px;">
+  应上周数：<span id="lessonSigned">{{shouldLesson}}</span>&nbsp;&nbsp;
+  已上周数：<span id="lessonSigned">{{student.lessons}}</span>&nbsp;&nbsp;<a href="{% url 'gradeClass:lessons' %}?type=1&id={{gradeClass.id}}"><button>去签到</button></a>&nbsp;&nbsp;
+  剩余周数：<span id="lessonLeft">{{student.lessonLeft}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+  结束日期：{{endDate|date:"Y-m-d"}}
+</div>
+
+<div style="width:96%;">
+<table class="table table-hover">
+<tr style="background:#eeeeee;">
+<td></td>
+<td>班级</td>
+<td>上课时间</td>
+<td>老师</td>
+<td>系数</td>
+</tr>
+{% for lesson in lessons %}
+ {%if lesson.type == 3 %}
+<tr class="extraLesson">
+ {%else%}
+<tr>
+ {%endif%}
+<td>{{forloop.counter}}</td>
+<td>{{lesson.gradeClass.name|default:""}}</td>
+<td>{{lesson.lessonTime|date:"Y-m-d H:i"|default:""}} {%if lesson.type == 3%}补课{%endif%}</td>
+<td>{{lesson.teacher.name}}</td>
+<td>{%if lesson.value != 1.0%}{{lesson.value}}{%endif%}{%if login_teacher.isSuper%}&nbsp;<button class="delLesson" id="{{lesson.gradeClass.id}}">删除</button>{%endif%}</td>
+
+
+</tr>
+{% endfor %}
+</table>
+</div>
+</div>
+
+
+<div style="float:left;width:28%;padding:5px 25px 5px 5px;margin-bottom:5px;border:solid 1px grey;text-align:center;">
+  <div style="font-size:16px;font-weight:bold;">休学</div>
+  <div style="text-align:left;padding:5px 0 5px 15px;">
+  {%for s in sus%}
+      <li>{{s.beginDate|date:"Y-m-d"}}&nbsp; 到&nbsp;{{s.endDate|date:"Y-m-d"}}<i onclick="removeSuspension('{{s.id}}')" class="glyphicon glyphicon-trash" title="删除" style="padding-left:12px;color:#337ab8;cursor:pointer;"></i></li>
+  {%endfor%}
+</div>
+  <div style="padding-top:5px;">添加新休学：<input id="beginDate" placeholder="开始日期" style="width:90px;">&nbsp;<input id="endDate" type="text" placeholder="结束日期" style="width:90px;"></div>
+  <div style="padding-top:8px;"><button id="sus">保存</button></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$("#sus").click(function(){
+	if(confirm("确定休学？")){
+	    var url = "{% url 'student:api_suspend' %}";
+        $.post(url, {
+            "sid": "{{student.id}}",
+            "beginDate":$("#beginDate").val(),
+            "endDate":$("#endDate").val()
+        }, function (res) {
+            alert(res["msg"]);
+            location.reload(true);
+        });
+    }
+});
+function removeSuspension(id){
+  if(confirm("确定删除休学？")){
+	    var url = "{% url 'student:api_delSuspension' %}";
+        $.post(url, {
+            "id": id
+        }, function (res) {
+            alert(res["msg"]);
+            location.reload(true);
+        });
+    }
+}
+
+$(".delLesson").click(function(){
+  var id=$(this).attr("id")
+  if(confirm("确定删除？")){
+	    var url = "{% url 'gradeClass:delLessons' %}";
+        $.post(url, {
+            "sId": "{{student.id}}",
+            "gcId":id
+        }, function (res) {
+            alert(res["msg"]);
+            location.reload(true);
+        });
+    }
+})
+</script>
+{%endblock%}

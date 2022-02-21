@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a><span id='tip' style="color:red;"></span>
+</div>
+
+<div>
+
+
+<center><h4>各校区客户跟踪情况统计</h4>
+
+<div style="width:100%;margin:0 auto;text-align:center;">
+<select id="city"><option value="{{city}}">{{cityName}}</option></select>
+
+<button id="searchButton">统计</button>
+</center>
+</div>
+
+<br>
+<div id="table-container">
+<center>
+    <table  id="datatable" border="1">
+    <thead>
+        <tr style="background:#eeeeee;">
+
+        <th  align="center">部门</th>
+        <th  align="center">上周及以前未联系</th>
+        <th  align="center">本周未联系({{weekBegin|date:"m月d日"}}周二到{{weekEnd|date:"m月d日"}}周一)</th>
+
+
+        </tr>
+</thead>
+<tbody>
+
+{%for stat in res%}
+<tr>
+<td>{{stat.branch.branchName}}</td>
+<td>{%if stat.notShow > 0%}{{stat.notShow}}{%endif%}</td>
+<td>{%if stat.showNet > 0%}{{stat.showNet}}{%endif%}</td>
+
+</tr>
+{%endfor%}
+</tbody>
+</table>
+</center>
+</div>
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#searchButton").click(function(){
+  var city = $("#city").val()
+	var url = "{%url 'statistic:allBranchRemindStat'%}?cityId="+city;
+	$("#searchButton").html("<font style='color:grey;'>查询时间较长，请耐心等待...</font>")
+	$("#tip").html("查询时间较长，请耐心等待...");
+	window.location.href=url;
+})
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+
+$(document).ready(function() {
+    $('#datatable').DataTable( {
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+      "order": [[ 1, "desc" ]],
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ]
+    });
+});
+</script>
+{% endblock %}

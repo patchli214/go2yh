@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<title>DataTables example - Zero configuration</title>
+	<link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.css">
+	<script type="text/javascript" language="javascript" src="../js/jquery.js">
+	</script>
+	<script type="text/javascript" language="javascript" src="../js/jquery.dataTables.js">
+	</script>
+	<script type="text/javascript" language="javascript" class="init">
+	
+
+$(document).ready(function() {
+	$('#example').DataTable({
+	"paging":   false,
+	"searching": false,
+	"info":false,
+	"order": [[ 1, "desc" ]]
+	});
+} );
+
+
+	</script>
+</head>
+<body class="dt-example">
+	<div class="container">
+		<section>
+			<h1>DataTables example <span>Zero configuration</span></h1>
+
+
+			<table id="datatable" >
+        <thead>
+        <tr>
+        <td></td>
+        
+        <th>编号</th>
+        
+        <th></th>
+        <th>孩子</th>
+        <th>年龄</th>
+        <th>电话</th>
+        
+        <th>意向</th>
+        
+        
+        <th width="60">提醒老师</th>
+        
+        
+        <th width="120">提醒事项</th>
+        <th width="350">联络记录</th>
+        <th colspan="4" align="center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+          
+            
+            <tr 
+             class="A" 
+             
+             
+            >
+            <td width="10">1</td>
+                
+                <td width="60" nowrap>122017071811</td>
+                
+                <td width="10">A</td>
+                <td width="70"><a href="/go2/regUser/studentInfo/596dc98c97a75d2d713e6f49/" >刘郁童</a></td>
+                <td width="30">6.3</td>
+                
+                <td width="60">13681583833...</td>
+                
+        <td  width="70" nowrap>五棵松</td>
+        
+                
+                
+                
+                <td width="100" nowrap>
+                
+                  许倩倩&nbsp;
+                
+                  周宣军&nbsp;
+                
+                </td>
+                
+                
+                
+                <td width="100" nowrap>[2017-07-21]问问姥爷孩子爸妈回来了吗</td>
+                <td width="350">
+
+<div onclick="gotrack('596dc98c97a75d2d713e6f49')" class="showMemo" goid="596dc98c97a75d2d713e6f49" style="overflow:hidden;min-height:40px;max-height:100px;text-overflow:ellipsis;width:350px;">
+        【备注】 五棵松校区 122017071811 张先生（姥爷）孩子刘郁童 6岁多男孩性格居中零基础，在家玩过跳棋和五子棋，看到别人下围棋孩子走不动，就想着给孩子报一个围棋班。大概了解课程费用，介绍了20课时。小学开学之前住永定路，上小学后会搬到北航爷爷住的地方，因为孩子在北航附近上小学。孩子学围棋的事情要和爸妈商量一下，因为是父母出钱和排班级时间，试听课也是爸妈带着去，爸妈现在在出差，星期五六就回来了，可能会约周末的试听课，爸妈不会围棋，介绍了家长课堂。请先发短信周五晚上联系姥爷问问孩子爸妈回来了没有13681583833；68387741【网络部许倩倩】
+        </div>
+        <div onclick="gotrack('596dc98c97a75d2d713e6f49')"  class="showMemo2" id="596dc98c97a75d2d713e6f49" style="display:none;position:fixed;left:0;top:0;min-height:40px;max-height:700px;width:350px;">
+        【备注】 五棵松校区 122017071811 张先生（姥爷）孩子刘郁童 6岁多男孩性格居中零基础，在家玩过跳棋和五子棋，看到别人下围棋孩子走不动，就想着给孩子报一个围棋班。大概了解课程费用，介绍了20课时。小学开学之前住永定路，上小学后会搬到北航爷爷住的地方，因为孩子在北航附近上小学。孩子学围棋的事情要和爸妈商量一下，因为是父母出钱和排班级时间，试听课也是爸妈带着去，爸妈现在在出差，星期五六就回来了，可能会约周末的试听课，爸妈不会围棋，介绍了家长课堂。请先发短信周五晚上联系姥爷问问孩子爸妈回来了没有13681583833；68387741【网络部许倩倩】</div>
+
+</td>
+                <td width="40">
+                    <button style="width:40px;font-size:12px;padding:2px;"
+                            
+                                class="btn btn-default" onclick = "addDemo('596dc98c97a75d2d713e6f49');"
+                            
+                                >试听
+                    </button>
+                </td>
+<td width="40">
+                    <button style="font-size:12px;padding:2px;" id="depositButton" onclick="go_deposit('596dc98c97a75d2d713e6f49')"
+                
+                class="btn btn-default"
+                
+                >定金</button>
+                </td>
+                
+            </tr>
+            
+          
+        
+          
+            
+            <tr 
+             class="A" 
+             
+             
+            >
+            <td width="10">2</td>
+                
+                <td width="60" nowrap>662017071910</td>
+                
+                <td width="10">A</td>
+                <td width="70"><a href="/go2/regUser/studentInfo/596ed70f97a75d2d713e70ad/" >姓韩</a></td>
+                <td width="30">4</td>
+                
+                <td width="60">13146006445</td>
+                
+        <td  width="70" nowrap>五棵松</td>
+        
+                
+                
+                
+                <td width="100" nowrap>
+                
+                  许倩倩&nbsp;
+                
+                  周宣军&nbsp;
+                
+                </td>
+                
+                
+                
+                <td width="100" nowrap>[2017-07-21]确认试听时间</td>
+                <td width="350">
+
+<div onclick="gotrack('596ed70f97a75d2d713e70ad')" class="showMemo" goid="596ed70f97a75d2d713e70ad" style="overflow:hidden;min-height:40px;max-height:100px;text-overflow:ellipsis;width:350px;">
+        【备注】 五棵松校区 662017071910 陈女士 孩子姓韩 4岁男孩性格活泼零基础吗，住鲁谷。大概了解了课程费用，孩子放假了在家没事干，想让孩子学点东西。孩子的专注力也不是很好，希望可以锻炼孩子的专注力能够坐得住。想周末过来试听，但是现在不能确定试听时间，请先发短信周五下午联系家长13146006445【网络部许倩倩】
+        </div>
+        <div onclick="gotrack('596ed70f97a75d2d713e70ad')"  class="showMemo2" id="596ed70f97a75d2d713e70ad" style="display:none;position:fixed;left:0;top:0;min-height:40px;max-height:700px;width:350px;">
+        【备注】 五棵松校区 662017071910 陈女士 孩子姓韩 4岁男孩性格活泼零基础吗，住鲁谷。大概了解了课程费用，孩子放假了在家没事干，想让孩子学点东西。孩子的专注力也不是很好，希望可以锻炼孩子的专注力能够坐得住。想周末过来试听，但是现在不能确定试听时间，请先发短信周五下午联系家长13146006445【网络部许倩倩】</div>
+
+</td>
+                <td width="40">
+                    <button style="width:40px;font-size:12px;padding:2px;"
+                            
+                                class="btn btn-default" onclick = "addDemo('596ed70f97a75d2d713e70ad');"
+                            
+                                >试听
+                    </button>
+                </td>
+<td width="40">
+                    <button style="font-size:12px;padding:2px;" id="depositButton" onclick="go_deposit('596ed70f97a75d2d713e70ad')"
+                
+                class="btn btn-default"
+                
+                >定金</button>
+                </td>
+                
+            </tr>
+            
+          
+        
+          
+            
+            <tr 
+             class="A" 
+             
+             
+            >
+            <td width="10">3</td>
+                
+                <td width="60" nowrap>1120170704</td>
+                
+                <td width="10">A</td>
+                <td width="70"><a href="/go2/regUser/studentInfo/595b4e2b97a75d2883309466/" >黄皓南</a></td>
+                <td width="30">6.6</td>
+                
+                <td width="60">82120836</td>
+                
+        <td  width="70" nowrap>中关村</td>
+        
+                
+                
+                
+                <td width="100" nowrap>
+                
+                  温婧&nbsp;
+                
+                  赵文英&nbsp;
+                
+                  李志强&nbsp;
+                
+                </td>
+                
+                
+                
+                <td width="100" nowrap>[2017-07-21]提醒温老师跟进</td>
+                <td width="350">
+
+<div onclick="gotrack('595b4e2b97a75d2883309466')" class="showMemo" goid="595b4e2b97a75d2883309466" style="overflow:hidden;min-height:40px;max-height:100px;text-overflow:ellipsis;width:350px;">
+        [20170719]孩子姥姥接的，说还没商量，等回头问一下妈妈。7月21温婧联系[20170719]已提醒温老师[20170705]在“中关村网络”群里，@了温婧，回复是：昨天妈妈没加我，我来打电话问问妈妈态度吧【备注】中关村校+苏州街区1120170704 余女士 孩子黄皓南 男 6岁6个月 之前在广东学了半年左右，孩子上小学来北京了。因为北京天气不好所以一直在南方那边。现在孩子有点倦怠，妈妈担心孩子以后就放弃这个事情，对状态有影响要跟孩子商量一下在来测棋。要了温婧的微信号82120836
+        </div>
+        <div onclick="gotrack('595b4e2b97a75d2883309466')"  class="showMemo2" id="595b4e2b97a75d2883309466" style="display:none;position:fixed;left:0;top:0;min-height:40px;max-height:700px;width:350px;">
+        [20170719]孩子姥姥接的，说还没商量，等回头问一下妈妈。7月21温婧联系[20170719]已提醒温老师[20170705]在“中关村网络”群里，@了温婧，回复是：昨天妈妈没加我，我来打电话问问妈妈态度吧【备注】中关村校+苏州街区1120170704 余女士 孩子黄皓南 男 6岁6个月 之前在广东学了半年左右，孩子上小学来北京了。因为北京天气不好所以一直在南方那边。现在孩子有点倦怠，妈妈担心孩子以后就放弃这个事情，对状态有影响要跟孩子商量一下在来测棋。要了温婧的微信号82120836</div>
+
+</td>
+                <td width="40">
+                    <button style="width:40px;font-size:12px;padding:2px;"
+                            
+                                class="btn btn-default" onclick = "addDemo('595b4e2b97a75d2883309466');"
+                            
+                                >试听
+                    </button>
+                </td>
+<td width="40">
+                    <button style="font-size:12px;padding:2px;" id="depositButton" onclick="go_deposit('595b4e2b97a75d2883309466')"
+                
+                class="btn btn-default"
+                
+                >定金</button>
+                </td>
+                
+            </tr>
+            
+          
+        
+          
+            
+            <tr 
+             class="A" 
+             
+             
+            >
+            <td width="10">4</td>
+                
+                <td width="60" nowrap>142017071912</td>
+                
+                <td width="10">A</td>
+                <td width="70"><a href="/go2/regUser/studentInfo/596f026897a75d2d713e70fb/" >马钱苗</a></td>
+                <td width="30">6.6</td>
+                
+                <td width="60">13141443202</td>
+                
+        <td  width="70" nowrap>五棵松</td>
+        
+                
+                
+                
+                <td width="100" nowrap>
+                
+                  
+                
+                  周宣军&nbsp;
+                
+                </td>
+                
+                
+                
+                <td width="100" nowrap>[2017-07-21]的反根倒舌</td>
+                <td width="350">
+
+<div onclick="gotrack('596f026897a75d2d713e70fb')" class="showMemo" goid="596f026897a75d2d713e70fb" style="overflow:hidden;min-height:40px;max-height:100px;text-overflow:ellipsis;width:350px;">
+        【备注】五棵松142017071912 马先生 孩子马钱苗 男 6岁6个月 性格安静，之前在浙江的机构学了一学期，来北京上小学了想接着学。住玉泉路。预约今天或者明天的试听的，请联系家长 13141443202【网路部温婧】
+        </div>
+        <div onclick="gotrack('596f026897a75d2d713e70fb')"  class="showMemo2" id="596f026897a75d2d713e70fb" style="display:none;position:fixed;left:0;top:0;min-height:40px;max-height:700px;width:350px;">
+        【备注】五棵松142017071912 马先生 孩子马钱苗 男 6岁6个月 性格安静，之前在浙江的机构学了一学期，来北京上小学了想接着学。住玉泉路。预约今天或者明天的试听的，请联系家长 13141443202【网路部温婧】</div>
+
+</td>
+                <td width="40">
+                    <button style="width:40px;font-size:12px;padding:2px;"
+                            
+                                class="btn btn-default" onclick = "addDemo('596f026897a75d2d713e70fb');"
+                            
+                                >试听
+                    </button>
+                </td>
+<td width="40">
+                    <button style="font-size:12px;padding:2px;" id="depositButton" onclick="go_deposit('596f026897a75d2d713e70fb')"
+                
+                class="btn btn-default"
+                
+                >定金</button>
+                </td>
+                
+            </tr>
+            
+          
+        
+          
+            
+            <tr 
+             class="A" 
+             
+             
+            >
+            <td width="10">5</td>
+                
+                <td width="60" nowrap>112015091506</td>
+                
+                <td width="10">A</td>
+                <td width="70"><a href="/go2/regUser/studentInfo/5941f9d097a75d73c8dc8b7e/" >无</a></td>
+                <td width="30">6.1</td>
+                
+                <td width="60">15210916883</td>
+                
+        <td  width="70" nowrap>五棵松</td>
+        
+                
+                
+                
+                <td width="100" nowrap>
+                
+                  鲁玉祥&nbsp;
+                
+                  周宣军&nbsp;
+                
+                </td>
+                
+                
+                
+                <td width="100" nowrap>[2017-07-20]孩子现在8岁多，校区还能收吗？</td>
+                <td width="350">
+
+<div onclick="gotrack('5941f9d097a75d73c8dc8b7e')" class="showMemo" goid="5941f9d097a75d73c8dc8b7e" style="overflow:hidden;min-height:40px;max-height:100px;text-overflow:ellipsis;width:350px;">
+        【备注】零基础型格局中朱青塔，个爸爸商量接送等问题0917回家商量周五回电话0919孩子不想来0925国庆后联系1009未接1014跟爸爸商量1019未接；1022腿磕了下，约好12月联系1203倾向周末班，明天联系问孩子要不要来试听1204未接1217家长比较有责任心，希望能知道孩子每节课都学了什么，回家能陪孩子练习，希望老师固定，快寒假了想让孩子找一个新开的差不多大零基础的一起学，就是常规的学，因为我不知道开班情况请黄老师联系下已联系，推荐周五班，她需要考虑一下1223忙周五联系1225完全要新班级，第一次课的这种1230家长特别固执，下周再联系0117未接0121未接0401未接
+        </div>
+        <div onclick="gotrack('5941f9d097a75d73c8dc8b7e')"  class="showMemo2" id="5941f9d097a75d73c8dc8b7e" style="display:none;position:fixed;left:0;top:0;min-height:40px;max-height:700px;width:350px;">
+        【备注】零基础型格局中朱青塔，个爸爸商量接送等问题0917回家商量周五回电话0919孩子不想来0925国庆后联系1009未接1014跟爸爸商量1019未接；1022腿磕了下，约好12月联系1203倾向周末班，明天联系问孩子要不要来试听1204未接1217家长比较有责任心，希望能知道孩子每节课都学了什么，回家能陪孩子练习，希望老师固定，快寒假了想让孩子找一个新开的差不多大零基础的一起学，就是常规的学，因为我不知道开班情况请黄老师联系下已联系，推荐周五班，她需要考虑一下1223忙周五联系1225完全要新班级，第一次课的这种1230家长特别固执，下周再联系0117未接0121未接0401未接</div>
+
+</td>
+                <td width="40">
+                    <button style="width:40px;font-size:12px;padding:2px;"
+                            
+                                class="btn btn-default" onclick = "addDemo('5941f9d097a75d73c8dc8b7e');"
+                            
+                                >试听
+                    </button>
+                </td>
+<td width="40">
+                    <button style="font-size:12px;padding:2px;" id="depositButton" onclick="go_deposit('5941f9d097a75d73c8dc8b7e')"
+                
+                class="btn btn-default"
+                
+                >定金</button>
+                </td>
+                
+            </tr>
+            
+          
+        
+          
+            
+            
+            
+          
+        
+        </tbody>
+    </table>
+			
+			
+		</section>
+	</div>
+	
+</body>
+</html>

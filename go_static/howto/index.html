@@ -1,0 +1,108 @@
+<html>
+<head>
+
+    <title>CRM帮助主页</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+div{font-weight:600;}
+.block{
+       border:5px solid white;
+       cursor:pointer;
+       padding-left:6px;padding-right:16px;padding-top:6px;
+       float:left;
+       height:60px;
+       color:#444444;
+       margin:3px;
+       }
+.block:hover{
+       color:black;border:5px solid green;
+       box-shadow: 3px 3px 3px #888888;
+       text-shadow: 1px 1px 1px white;
+}
+</style>
+</head>
+<body >
+<div style="cursor:pointer;margin-left:20px;" onclick="window.location.href='/'"
+style="cursor:pointer;color:#999999">
+  <h4>
+    <img src="/go_static/img/logo.png" width="30" />CRM
+  </h4>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<div style="margin-top:10px;">
+
+<div id="teacher" class="block" style="background:#7ee2eb;">
+如何添加修改老师
+</div>
+<div id="diagram" class="block" style="background:#7ee2eb;">
+网络部客户管理流程
+</div>
+<div id="kids" class="block" style="background-color:#efb1e0;">
+如何添加拜访来的孩子
+</div>
+<div id="school" class="block" style="background-color:#efb1e0;">
+如何添加幼儿园或学校
+</div>
+<div id="refer" class="block" style="background-color:#efb1e0;">
+如何记录转介信息
+</div>
+<div id="contact" class="block" style="background:#b3efb1;">
+如何使用联络记录和提醒功能
+</div>
+
+<div id="demo" class="block" style="background:#b3efb1;">
+如何添加试听课
+</div>
+<div id="schedule" class="block" style="background:#b3efb1;">
+如何查看一周课程安排
+</div>
+
+<div id="student" class="block" style="background:#f8ef66;">
+合同和班级管理
+</div>
+<div id="checkin" class="block" style="background:#f8ef66;">
+如何上课签到
+</div>
+<div id="addlesson" class="block" style="background-color:#f8ef66;">
+补课操作
+</div>
+
+<div id="album" class="block" style="background:#f8ef66;">
+如何上传学生相册
+</div>
+<div id="albumB" class="block" style="background:#f8ef66;">
+如何修改学生相册
+</div>
+<div id="enduser" class="block" style="background-color:#f8ef66;">
+流失（课程结束）操作
+</div>
+
+<div id="refund" class="block" style="background-color:#f8ef66;">
+财务退费操作
+</div>
+
+</div>
+
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>

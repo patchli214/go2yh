@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="float:left">
+今日已联系
+</div>
+<div style="float:right"><input type="text" id="sdate" /><button onclick="search()">查询</button></div>
+<div  id="table-container">
+<table id="datatable" border="1">
+  <thead>
+  <tr>
+    <th>编号</th>
+    <th>联系老师</th>
+    <th>孩子/家长</th>
+    <th>联系内容</th>
+  </tr>
+  </thead>
+  <tbody>
+{%for c in contacts%}
+  <tr>
+    <td>{{forloop.counter}}</td>
+    <td>{{c.teacher.name}}</td>
+    <td><a href="/go2/regUser/studentInfo/{{c.student.id}}/">{{c.student.name}} {{c.student.name2}}/{{c.student.prt1|default:''}}</a></td>
+    <td>{{c.track_txt}}</td>
+  </tr>
+{%endfor%}
+</tbody>
+</table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  $('#sdate').datetimepicker({
+      timepicker: false,
+      format: 'Y-m-d'
+  });
+
+  function search(){
+    url = '/go2/workflow/todayContact?sdate='+$("#sdate").val()
+    document.location.href=url
+  }
+
+  $(document).ready(function() {
+
+      $("#sdate").val('{{sdate}}')
+      $("#datatable").DataTable({
+      	"paging":   false,
+      	"searching": false,
+      	"info":false,
+        "order": [[ 0, "asc" ]],
+          //dom: 'Bfrtip',
+          buttons: [
+              { extend: 'copy', text: '复制' },
+              { extend: 'csv', text: '保存' },
+              { extend: 'print', text: '打印' }
+          ]
+      });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.container{padding:0}
+.ad{display: block;width:100%}
+body {
+	font-family: 微软雅黑, Arial;
+}
+
+div {
+	padding: 10px 30px 10px 30px;text-align:center;
+}
+
+#submitBtn {
+	padding: 10px 40px 10px 40px;
+	font-size: 16px;
+}
+
+label.valid {
+	width: 24px;
+	height: 24px;
+	background: url(assets/img/valid.png) center center no-repeat;
+	display: inline-block;
+	text-indent: -9999px;
+}
+
+label.error {
+	font-weight: bold;
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
+}
+</style>
+
+</head>
+<body>
+	<div style="padding-top:25px;font-size:20px;">
+
+		<img src="/go_static/img/logo.png"  width="30"/>&nbsp;真朴儿童围棋教室
+
+
+	</div>
+	<div style="padding-top:5px;font-size:20px;">
+
+		    {%if student.name2%}{{student.name2|default:""}}小朋友<br>邀请你免费试听围棋课
+		    {%elif student.name%}{{student.name}}小朋友<br>邀请你免费试听围棋课
+
+		    {%else%}<br>免费试听课登记
+		    {%endif%}
+
+		</div>
+		<form id="qform" action="rer" method="post"
+			class="form-inline">
+	<input id="referrer" type="hidden" name="referrer" value="{{rid|default:''}}" />
+	<input id="regBranch" type="hidden" name="regBranch" value="{%if student%}{{student.regBranch.id|default:''}}{%else%}{{branchid}}{%endif%}" />
+	<input id="branch" type="hidden" name="branch" value="{%if student%}{{student.branch.id}}{%else%}{{branchid}}{%endif%}" />
+	<input id="sourceType" type="hidden" name="sourceType" value="{{sourceType|default:''}}" />
+	<input id="sourceCategory" type="hidden" name="sourceCategory" value="sourceCategory|default:''" />
+	<input id="source" type="hidden" name="source" value="{{source|default:''}}" />
+	<input id="teacher" type="hidden" name="teacher" value="{{student.teacher.id|default:''}}" />
+<input type="hidden" id="title" name="title" value="{{title|default:''}}" />
+
+			<div>
+	           <input  style="max-width:400px;min-width:250px;" type="text" name="name"
+					id="name" value="" placeholder="孩子姓名或小名（必填）" class="form-control">
+			</div>
+			<div >
+			<select id="ageYear" name="ageYear">
+			  <option value="">几岁?</option>
+			  {% for y in year%}
+			  <option value="{{y}}">{{y}}岁</option>
+			  {%endfor%}
+			</select>
+			<select  id="ageMonth" name="ageMonth" >
+			<option value="0">几个月?</option>
+			<option value="0">整</option>
+			  {% for m in month%}
+			  <option value="{{m}}">{{m}}个月</option>
+			  {%endfor%}
+			</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			    <label class="radio-inline"> <input type="radio"
+					name="gender" value="女" id="female" />女
+				</label> <label class="radio-inline"> <input type="radio"
+					name="gender" value="男" id="male" />男
+				</label>
+
+			</div>
+			<div>
+				 <input style="max-width:400px;min-width:250px;" type="text" name="prt1mobile"
+					id="prt1mobile" value="" placeholder="手机号（必填）"
+					class="form-control">
+			</div>
+			<div>
+				<input style="max-width:300px;height:40px;font-size:16px;" type="submit" class="btn btn-danger" value="提交试听申请" />
+	&nbsp;或&nbsp;
+	</div>
+	<div><a href="tel:{{branch.branchTel}}"><span style="max-width:300px;height:40px;font-size:16px;"  class="btn btn-danger">拨打电话咨询</span></a>
+	</div>
+					</form>
+
+
+
+
+
+
+<div style="width:100%;padding:0">
+	<img class="ad" src="http://www.zenweiqi.com/m/images/b_01.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_02.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_03.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_04.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_05.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_06.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_07.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_08.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_09.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_10.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_11.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_12.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_13.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_14.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_15.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_16.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_17.jpg" />
+	<img class="ad"  src="http://www.zenweiqi.com/m/images/b_23.jpg" />
+
+</div>
+<div style="padding-top:25px;font-size:20px;">
+
+	<img src="/go_static/img/logo.png"  width="30"/>&nbsp;真朴儿童围棋教室
+
+
+</div>
+<div>
+{%if filepath%}<img style="border-radius:50%" width="100" src="{{filepath}}" />{%endif%}
+</div>
+<div style="padding-top:5px;font-size:16px;">
+
+	    {%if student.name2%}{{student.name2|default:""}}小朋友<br>邀请你免费试听围棋课
+	    {%elif student.name%}{{student.name}}小朋友<br>邀请你免费试听围棋课
+	    {%else%}<br>免费试听课登记
+	    {%endif%}
+
+	</div>
+	<form id="qform2" action="rer" method="post"
+		class="form-inline">
+<input id="referrer" type="hidden" name="referrer" value="{{rid|default:''}}" />
+<input id="regBranch" type="hidden" name="regBranch" value="{%if student%}{{student.regBranch.id|default:''}}{%else%}{{branchid}}{%endif%}" />
+<input id="branch" type="hidden" name="branch" value="{%if student%}{{student.branch.id}}{%else%}{{branchid}}{%endif%}" />
+<input id="sourceType" type="hidden" name="sourceType" value="{{sourceType|default:''}}" />
+<input id="sourceCategory" type="hidden" name="sourceCategory" value="sourceCategory|default:''" />
+<input id="source" type="hidden" name="source" value="{{source|default:''}}" />
+<input id="teacher" type="hidden" name="teacher" value="{{student.teacher.id|default:''}}" />
+<input type="hidden" id="title" name="title" value="{{title|default:''}}" />
+
+
+		<div>
+           <input  style="max-width:400px;min-width:250px;" type="text" name="name"
+				id="name" value="" placeholder="孩子姓名或小名（必填）" class="form-control">
+		</div>
+		<div >
+		<select id="ageYear" name="ageYear">
+		  <option value="">几岁?</option>
+		  {% for y in year%}
+		  <option value="{{y}}">{{y}}岁</option>
+		  {%endfor%}
+		</select>
+		<select  id="ageMonth" name="ageMonth" >
+		<option value="0">几个月?</option>
+		<option value="0">整</option>
+		  {% for m in month%}
+		  <option value="{{m}}">{{m}}个月</option>
+		  {%endfor%}
+		</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		    <label class="radio-inline"> <input type="radio"
+				name="gender" value="女" id="female" />女
+			</label> <label class="radio-inline"> <input type="radio"
+				name="gender" value="男" id="male" />男
+			</label>
+
+		</div>
+		<div>
+			 <input style="max-width:400px;min-width:250px;" type="text" name="prt1mobile"
+				id="prt1mobile" value="" placeholder="手机号（必填）"
+				class="form-control">
+		</div>
+		<div>
+			<input id="submitButton" style="max-width:300px;height:40px;font-size:16px;" type="submit" class="btn btn-danger" value="提交试听申请" />
+&nbsp;或&nbsp;
+</div>
+<div><a href="tel:{{branch.branchTel}}"><span style="max-width:300px;height:40px;font-size:16px;"  class="btn btn-danger">拨打电话咨询</span></a>
+</div>
+				</form>
+		</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+	$('#qform').validate({
+		rules : {
+			name : {
+				minlength : 2,
+				required : true
+			},
+
+			prt1mobile : {
+				minlength : 11,
+				required : true
+			},
+			year : {
+				minlength : 1,
+				required : true
+			},
+
+			gender : {
+				required : true
+			}
+		},
+		messages : {
+            name : {
+                required : "孩子名必填"
+            },
+            prt1mobile : {
+                required : "手机号必填"
+            },
+            gender : {
+                required : "请选择男或女"
+            }
+        },
+				submitHandler: function(form) {
+					 $("#submitButton").attr("disabled","disabled")
+					 $(form).ajaxSubmit();
+				}
+	});
+{%if title == 'n'%}
+  $("title").html('10天让孩子学会围棋的方法！')
+{%else%}
+	$("title").html('{{student.name}}{%if student.name2%}({{student.name2|default:""}}){%endif%}小朋友邀请你免费试听围棋课');
+{%endif%}
+</script>
+{% endblock %}

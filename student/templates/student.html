@@ -1,0 +1,336 @@
+{% load staticfiles %}
+<html>
+<head>
+
+    <title>{{user.student.name}}的真朴学习档案</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css?tag=1">
+    <!-- link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css"-->
+    <link rel="stylesheet" type="text/css" href="/go_static/media/css/buttons.dataTables.min.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/media/js/jquery.dataTables.min.js"></script>
+   	<script type="text/javascript" language="javascript" src="/go_static/media/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" language="javascript" src="/go_static/media/js/buttons.html5.min.js"></script>
+	<script type="text/javascript" language="javascript" src="/go_static/media/js/buttons.print.min.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+
+    <script src="/go_static/js/utils.js?ver=20170909b"></script>
+    <script src="/go_static/js/config.js"></script>
+
+<style>
+ .stat{text-align:right;padding-right:10px;padding-left:10px;}
+ #inc_reg{visibility: hidden;}
+ #photo_title{visibility: hidden;}
+ #search_button{display: none;}
+
+ @media screen and (min-width: 300px) {
+   #inc_reg{visibility: visible;}
+   #photo_title{visibility: visible;}
+   #search_button{display: inline;}
+ }
+
+</style>
+
+</head>
+
+<body style="-webkit-print-color-adjust:exact;">
+
+<center>
+  <h3 style="">{{user.student.name}}的真朴学习档案</h3>
+  <input id="begin" placeholder="开始日期" value="{{begin|default:''}}" style="width:90px;">
+  - <input id="end" placeholder="截止日期" value="{{end|default:''}}" style="width:90px;">
+  &nbsp;<button id="search_button" onclick="search()">查询</button>
+</center>
+<hr style="margin-top:7px;margin-bottom:4px;">
+</div>
+<div style="width:100%;margin:0 auto;padding-left:10px;">
+
+<div id="frame-right" style="float:right;min-width:300px;">
+<center><h4>PROFILE</h4><center>
+
+<div style="-webkit-print-color-adjust:exact;background-color: #fe5f01;font-size:18px;color:white;width:90%;padding-left:10px;margin-bottom:5px;text-align:center;border-top-left-radius:0;
+border-top-right-radius:2em;
+border-bottom-right-radius:2em;
+border-bottom-left-radius:0;">
+    {{user.level|default:'25K'}}</div>
+<div>目标</div>
+<div style="width:90%;">
+  <span style="
+  display:inline-block;width:30%;background:white;padding-left:0px;padding-top:4px;padding-right:0px;padding-bottom:8px;text-align:right;">3个月<b>{{target.quarterTarget}}</b></span><span style="
+display:inline-block;width:30%;background:white;padding-left:0;padding-top:4px;padding-right:0px;padding-bottom:8px;text-align:right;">半年<b>{{target.halfyearTarget}}</b></span><span style="
+display:inline-block;width:30%;background:white;padding-left:0;padding-top:4px;padding-right:0px;padding-bottom:8px;text-align:right;">一年<b>{{target.yearTarget}}</b></span>
+
+</div>
+<div>完成</div>
+<div style="width:90%;">
+  <span style="border-top-left-radius:2em;
+  border-top-right-radius:0em;
+  border-bottom-right-radius:0em;
+  border-bottom-left-radius:2em;
+  display:inline-block;width:{{nowPercent}}%;background:orange;padding-left:20px;padding-top:4px;padding-right:20px;padding-bottom:8px;text-align:right;"></span><span style="
+border-top-left-radius:0;
+border-top-right-radius:2em;
+border-bottom-right-radius:2em;
+border-bottom-left-radius:0;display:inline-block;width:{{unPercent}}%;background:#e0dfdf;padding-left:20px;padding-top:4px;padding-right:20px;padding-bottom:8px;text-align:right;"></span>
+</div>
+<div style="width:90%;">
+  <span style="
+  display:inline-block;width:{{nowPercent}}%;background:white;padding-left:0px;padding-top:4px;padding-right:0px;padding-bottom:8px;text-align:right;">{{user.level}}</span><span style="
+display:inline-block;width:{{unPercent}}%;background:white;padding-left:0;padding-top:4px;padding-right:0px;padding-bottom:8px;text-align:right;"></span>
+</div>
+
+<!--钻石和金币数
+<div style="width:90%;">
+<span style=""><img src="/go_static/img/diamond.png"></span><span style="
+border-top-left-radius:0;
+border-top-right-radius:2em;
+border-bottom-right-radius:2em;
+border-bottom-left-radius:0;display:inline-block;width:80%;background:#e0dfdf;padding-left:20px;padding-top:4px;padding-right:20px;padding-bottom:8px;text-align:right;">{{user.diamonds}}</span>
+</div>
+<div style="width:90%;">
+<span><img src="/go_static/img/coin.png"></span><span style="border-top-left-radius:0;
+border-top-right-radius:2em;
+border-bottom-right-radius:2em;
+border-bottom-left-radius:0;display:inline-block;width:80%;background:#e0dfdf;padding-left:20px;padding-top:4px;padding-right:20px;padding-bottom:8px;text-align:right;">{{user.coins}}</span>
+</div>
+-->
+
+<div style="padding:10px 0 0 30px;">
+{%for badge in badges%}
+  {%if badge.type == 2%}
+  <div style="float:left;padding:6px;"><img src="/go_static/img/star.png" width="40" /><br>{{badge.memo}}</div>
+  {%endif%}
+
+  {%if badge.type == 3%}
+  <div style="float:left;padding:6px;"><img src="/go_static/img/level.png" width="40" /><br>{{badge.memo}}</div>
+  {%endif%}
+
+  {%if badge.type == 8%}
+  <div style="float:left;padding:6px;"><img src="/go_static/img/cup.png" width="40" /><br>{{badge.memo}}</div>
+  {%endif%}
+{%endfor%}
+</div>
+{%if student.lessons > 0 %}<div style="clear:both;padding-top:13px;padding-right:26px;width:90%;text-align:right;">出勤: {{student.lessons}}</div>{%endif%}
+{%if user.lessonContinue > 0 and not begin and not end%}<div style="padding-top:0px;padding-right:26px;padding-bottom:0;width:90%;text-align:right;">连续出勤: {{user.lessonContinue}}</div>{%endif%}
+{%if not begin and not end%}<div style="padding-top:0px;padding-right:26px;padding-bottom:0;width:90%;text-align:right;"><span class="glyphicon glyphicon-question-sign" id="tipVoucher"></span>出勤奖励券: {{voucher|default:"0"}}</div>{%endif%}
+<div style="padding:10px">
+<table cellpadding="10" width="90%" border="1">
+  <tr>
+    <td></td>
+    <td style="padding-left:10px;text-align:center;">做题</td>
+    <td style="padding-left:10px;text-align:center;">下棋</td>
+  </tr>
+  {%if not begin and not end%}
+
+  <tr>
+    <td style="text-align:center">上周</td>
+    <td class="stat">{{user.last_one_week_total_question_count}}</td>
+    <td class="stat">{{user.last_one_week_total_match_count}}</td>
+  </tr>
+  {%endif%}
+  <tr>
+    <td style="text-align:center">{%if not begin and not end%}全部{%else%}本阶段{%endif%}</td>
+    <td class="stat">{{user.history_total_question_count}}</td>
+    <td class="stat">{{user.history_total_match_count}}</td>
+  </tr>
+</table>
+</div>
+</div>
+<div id="frame-left" style="float:left;min-width:300px;max-width:480px;padding-left:20px;padding-bottom:20px;">
+<center style="margin-bottom:20px;height:35px;background:orange;margin-right:10px;border-top-left-radius:0;
+border-top-right-radius:2em;
+border-bottom-right-radius:2em;
+border-bottom-left-radius:0;"><h4 style="padding-top:8px;">成长足迹</h4></center>
+{%for h in history%}
+<!--贡献和进步-->
+{%if h.type == 6%}<div style="width:300px;min-height:60px;line-height:60px;vertical-align: middle;padding-left:20px;background-size:30px 30px;"><img width="30" src="/go_static/img/thumb.png" />
+{{h.date|date:"Y-m-d"}}<font >&nbsp;{{h.memo|default:""}}</font></div>{%endif%}
+
+<!--星级考证书-->
+{%if h.type == 2%}<div style="width:300px;min-height:60px;line-height:60px;vertical-align: middle;padding-left:20px;background:url('/go_static/img/star.png') no-repeat;background-size:40px 40px;">
+{{h.date|date:"Y-m-d"}}<font style="color:#fe5f01;font-weight:bold;">&nbsp;获得{{h.memo|default:""}}证书</font></div>{%endif%}
+
+<!--上课-->
+{%if h.type == 0%}<div style="width:100%;min-height:40px;vertical-align: middle;padding-left:20px;padding-right:20px;padding-bottom:10px;"><img src="/go_static/img/grow.png" />
+{{h.date|date:"Y-m-d"}}&nbsp;{%if h.memo1%}<font color="#38be21">上课：</font>{%endif%}<font style="color:#666666;">{{h.memo1|default:""}}</font>{%if h.memo2 and h.memo2 != ''%}<br><font color="#38be21">表现：</font>{%endif%}<font style="color:#666666;">{{h.memo2|default:""}}</font></div>{%endif%}
+
+<!--在线围棋级别上升-->
+{%if h.type == 1%}<div style="width:100%;min-height:40px;line-height:44px;vertical-align: middle;padding-left:20px;"><img src="/go_static/img/flag.png" />
+{{h.date|date:"Y-m-d"}}&nbsp;<font style="color:#fe5f01;">{{h.memo|default:""}}</font></div>{%endif%}
+
+<!--下几盘棋｜几胜-->
+{%if h.type == 4%}<div style="width:100%;min-height:40px;line-height:44px;vertical-align: middle;padding-left:20px;"><img src="/go_static/img/go.png" />
+{{h.date|date:"Y-m-d"}}&nbsp;<font style="color:#666666;">{{h.memo|default:""}}</font></div>{%endif%}
+<!--在线练习＊＊题-->
+{%if h.type == 5%}<div style="width:100%;min-height:40px;line-height:44px;vertical-align: middle;padding-left:20px;"><img src="/go_static/img/go.png" />
+{{h.date|date:"Y-m-d"}}&nbsp;<font style="color:#666666;">{{h.memo|default:""}}</font></div>{%endif%}
+
+<!--老师记录每周做题下棋数-->
+{%if h.type == 11%}<div style="width:100%;min-height:40px;line-height:44px;vertical-align: middle;padding-left:20px;"><img src="/go_static/img/go.png" />
+{{h.date|date:"Y-m-d"}}&nbsp;<font style="color:#666666;">{{h.memo|default:""}}</font></div>{%endif%}
+
+<!--证书-->
+{%if h.type == 3%}<div style="width:100％;min-height:60px;line-height:60px;vertical-align: middle;padding-left:20px;"><img src="/go_static/img/level.png" width="35"/>
+{{h.date|date:"Y-m-d"}}<font style="color:#fe5f01;font-weight:bold;">荣获业余{{h.memo|default:""}}证书</font></div>{%endif%}
+
+{%if h.type == 8%}<div style="width:100％;min-height:60px;line-height:60px;vertical-align: middle;padding-left:20px;"><img src="/go_static/img/cup.png" width="35"/>
+{{h.date|date:"Y-m-d"}}<font style="color:#fe5f01;font-weight:bold;">{{h.memo|default:""}}</font></div>{%endif%}
+
+{%endfor%}
+<div style="line-height:30px;vertical-align: middle;padding-left:20px;"><img src="/go_static/img/begin.png" />
+{{user.created_at|date:"Y-m-d"}}&nbsp;开通学棋账号</div>
+</div>
+<div id="frame-middle" style="float:left;min-width:300px;max-width:450px;">
+<center id="photo_title" style="margin-bottom:20px;height:35px;background:orange;margin-right:10px;border-top-left-radius:0;
+border-top-right-radius:2em;
+border-bottom-right-radius:2em;
+border-bottom-left-radius:0;"><h4 style="padding-top:8px;">成长相册</h4></center>
+
+{%for image in studentFiles%}
+
+<img class="pics" style="padding:30px 30px 10px 30px;width:90%;" src='{{imagePath}}{{image.filepath}}{{image.filename}}'>
+   <div style="width:100%;padding-bottom:20px;text-align:center;">{{image.memo|default:""}}</div>
+
+
+{%endfor%}
+
+<div id="inc_reg">
+{% include 'include_reg.html' %}
+</div>
+
+</div>
+</div>
+
+
+
+<div class="modal fade" id="voucherModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">全勤奖励规则</h4>
+            </div>
+            <div class="modal-body" id="info-body">
+                    连续出勤12次课，可以获得价值500元真朴围棋假期班抵用券一张
+            </div>
+            <div class="modal-footer">
+                <button id="save_userInfo" type="button" class="btn btn-danger" data-dismiss="modal"> 关闭
+                        </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+<script>
+$("#tipVoucher").click(function(){$("#voucherModal").modal();});
+$(document).ready(function(){
+    if(mobileCheck()){
+        WIDTH = screen.width-20 + "px"
+        $("#frame-right").css("width",WIDTH)
+        $("#frame-left").css("width",WIDTH)
+        $("#frame-middle").css("width",WIDTH)
+        console.log($("#frame-right").css("width"))
+
+    }
+
+});
+
+</script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<!--script src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script-->
+<script>
+  /*
+   * 注意：
+   * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+   * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+   * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+   *
+   * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+   * 邮箱地址：weixin-open@qq.com
+   * 邮件主题：【微信JS-SDK反馈】具体问题
+   * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+   */
+  var ticket = '{{ticket}}'
+  var string1 = '{{string1}}'
+  var url = '{{url}}'
+  wx.config({
+    debug: false,
+    appId: '{{appId}}',
+    timestamp: '{{res.timestamp}}',
+    nonceStr: '{{res.nonceStr}}',
+    signature: '{{res.signature}}',
+    jsApiList: [
+      'checkJsApi',
+      'onMenuShareAppMessage',
+      'onMenuShareTimeline'
+      //'updateAppMessageShareData',
+      //'updateTimelineShareData'
+      // 所有要调用的 API 都要加到这个列表中
+    ]
+  });
+
+  wx.ready(function () {
+      wxOnShare();
+  });
+
+  function wxOnShare() {
+      var title = "{{user.student.name}}的真朴学习档案";
+      var desc = "{%if user.level %}{{user.level}}级证书，{%endif%}{%if user.star %}{{user.star}}星考证书，{%endif%}级别：{{user.rank|default:30}}K，做题：{{user.history_total_question_count}}，下棋：{{user.history_total_match_count}}，拥有钻石：{{user.diamonds}}，金币：{{user.coins}}";
+      var link = location.href.split('#')[0];
+
+      var imgUrl = "http://rang.jieli360.com{{iconUrl}}";
+      wx.onMenuShareAppMessage({
+      //wx.updateAppMessageShareData({
+          title: title,
+          desc: desc,
+          link: link,
+          imgUrl: imgUrl,
+          success: function (res) {
+          }
+      });
+      wx.onMenuShareTimeline({
+      //wx.updateTimelineShareData({
+          title: title,
+          link: link,
+          imgUrl: imgUrl,
+          success: function (res) {
+          }
+      });
+    }
+
+    function search(){
+      var b = $("#begin").val()
+      var e = $("#end").val()
+      var url = '{%url "student:achievement"%}?studentId={{student.id}}'
+      if(b==''&&e==''){
+        b=1
+      }else{
+        url = url + '&begin='+b+'&end='+e
+      }
+      document.location.href=url
+    }
+
+    $('#begin').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+    $('#end').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+</script>

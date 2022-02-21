@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <style>
+.container{margin:0;padding:0;}
+    </style>
+
+
+<div id="poster" style="text-align: right;padding:30px 18px 0 0px;width:100%;height:90%;background:url(/go_static/img/20181111.jpg?tag=1);background-size:100% 100%">
+  <img src="/go_static/users/{{bid}}/20181111qrcode{{tid}}.jpg" style="width:20%;" />
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+var wid = $(window).width()
+var hei = wid / 534 * 800
+$("#poster").css("height",hei+"px")
+</script>
+{% endblock %}

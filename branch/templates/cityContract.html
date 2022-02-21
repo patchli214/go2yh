@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+
+
+
+    <div class="text-center"><h3>{{city.cityName}}合同类型</h3></div>
+<BR>
+<center><button onclick="addContract()">添加</button></center>
+<br>
+
+    <table class="table  table-hover"=>
+        <tbody>
+        <tr style="background:#eeeeee;">
+
+        <td>排序编码</td>
+        <td>类型</td>
+        <td>课时</td>
+
+        <td>标准价</td>
+        <td>优惠价</td>
+        <td>季度学费</td>
+        <td>平均课时费</td>
+        <td>备注</td>
+        <td>作废</td>
+        <td></td>
+        </tr>
+        {% for c in cityContracts %}
+
+            <tr>
+                <td>{{c.code|default:""}}</td>
+                <td>{%if c.type == 0%}常规班{%elif c.type == 1%}集训班{%elif c.type == 2%}增课{%elif c.type == 3%}会员费{%elif c.type == 4%}网课{%endif%}</td>
+                
+                <td>{{c.duration}}</td>
+                <td>{{c.fee}}</td>
+                <td>{{c.discountPrice|default:""}}</td>
+                <td>{%if c.tuition > 0%}{{c.tuition}}{%endif%}</td>
+                <td>{{c.eve}}</td>
+                <td>{{c.memo|default:""}}</td>
+                <td>{%if c.deleted and c.deleted == 1%}已作废{%endif%}</td>
+                <td><button onclick="editContract('{{c.id}}')">修改</button></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+    function editContract(id){
+    	var url = "{% url 'branch:editContract' %}?id="+id;
+  	  window.location.href = url;
+    }
+    function addContract(){
+    	var url = "{% url 'branch:editContract' %}?city={{city.id}}";
+  	  window.location.href = url;
+    }
+</script>
+{% endblock %}

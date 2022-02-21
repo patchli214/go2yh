@@ -1,0 +1,35 @@
+{
+  "_id" : ObjectId("5867c26f0bb1e63b74d6cd62"),
+  "sn" : 0,
+  "branchName" : "网络部",
+  "branchAddr" : "总部"
+}
+
+{
+  "username" : "admin",
+  "name" : "管理员",
+  "name2" : "admin",
+  "password" : "1284f21db5fe940d831af3051fbfbc13",
+  "role" : 9,
+  "weixin" : "",
+  "mobile" : "",
+  "branch" : ObjectId("5867c26f0bb1e63b74d6cd62"),
+  "checkinDate" : new Date("12/31/2016 00:00:00"),
+  "page" : 20
+}
+
+密码：jieli2017
+
+{"typeCode":"A","typeName":"网络",content:2}
+{"typeCode":"B","typeName":"拜访",content:1}
+{"typeCode":"C","typeName":"社会",content:1}
+
+{"duration":4,"fee":1800}
+{"duration":30,"fee":9000}
+{"duration":70,"fee":18900}
+
+{
+"branch":ObjectId("5867c0c33010a51fa4f5abe6"),
+"name":"2教室",
+"sn":2
+}

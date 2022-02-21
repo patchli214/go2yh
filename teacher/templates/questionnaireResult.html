@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block content %}
+	<style>
+	body{font-family:微软雅黑,Arial;max-width:100%;margin:0 auto}
+	td{padding:4px;}
+	th{padding:4px;}
+	h3{margin-top:5px;margin-bottom:5px;}
+	h5{font-weight: bold;}
+	div{padding:5px 0px 0px 5px;}
+	#submitBtn{padding:10px 40px 10px 40px;font-size:16px;}
+    label.valid {
+	  width: 24px;
+	  height: 24px;
+	  background: url(assets/img/valid.png) center center no-repeat;
+	  display: inline-block;
+	  text-indent: -9999px;
+    }
+    label.error {
+	  font-weight: bold;
+	  color: red;
+	  padding: 2px 8px;
+	  margin-top: 2px;
+    }
+	</style>
+	<div style="padding-top:10px;padding-bottom:3;">
+	<a href="{%url 'statistic:indexStat'%}"><返回</a>
+	</div>
+<center><h4>{{q.title}}</h4></center>
+<div style="width:100%;margin:0 auto;text-align:center;">
+<select id="assessCode" style="font-size:18px;">
+<option value="201808">201808</option>
+</select>
+
+{%if login_teacher.branchType != '0'%}
+<select id="branchId">
+	<option value="">全部校区</option>
+	{%for b in branches%}
+	<option value='{{b.id}}'>{{b.branchName}}</option>
+	{%endfor%}
+</select>
+{%else%}
+<input type="hidden" id="branchId" name="branchId" value="{{branchId}}"
+{%endif%}
+<button id="searchButton" style="font-size:18px;">查询</button>
+</center>
+</div>
+
+{%if branchId%}
+回收问卷总数：{{gotAll}} |
+{%for key,value in got.items%}
+{{key}} {{value}}，
+{%endfor%}
+{%else%}
+<center>问卷回收总数：{{gotAll}}</center>
+<table border="1" id="datatable" width="400">
+	<thead>
+	<tr>
+		<th stye="width:80px;">校区</th><th stye="width:70px;">老师</th><th stye="width:70px;">回收数</th><th stye="width:70px;">平均分</th>
+	</tr>
+</thead>
+<tbody>
+	{%for got in gotAvs%}
+	<tr>
+		<td style="">{{got.branch}}</td>
+    <td style="">{{got.teacher}}</td>
+    <td style="">{{got.got}}</td>
+		<td style="">{{got.score}}</td>
+
+	</tr>
+	{%endfor%}
+</tbody>
+</table>
+{%endif%}
+{%if teacherResults%}
+<div style="padding:10px;">
+<table id="datatable" border="1">
+	<thead>
+	  <tr>
+		  <th width="60">老师</th>
+			<th width="50">提交时间</th>
+			<th width="60">学生</th>
+			{%for qq in quest%}
+			<th>{{qq.q}}</th>
+			{%endfor%}
+		</tr>
+	</thead>
+	<tbody>
+	{%for an in teacherResults%}
+	  <tr>
+			<td>{{an.assessObjectName}}</td>
+			<td>{{an.assessDate|date:"m-d"}}</td>
+			<td>{{an.assessorName}}</td>
+			{%for k in keys%}
+	      {%for key,value in an.answers.items%}
+					{%if k == key%}
+			      <td>{{value}}</td>
+					{%endif%}
+				{%endfor%}
+		  {%endfor%}
+	</tr>
+	{%endfor%}
+</tbody>
+</table>
+</div>
+{%endif%}
+{% endblock %}
+{% block scripts %}
+<script>
+$("#branchId").val('{{branchId}}')
+$("#searchButton").click(function(){
+	var url = "{%url 'teacher:questionnaireResult'%}?assessCode="+$("#assessCode").val()+"&branchId="+$("#branchId").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+})
+
+
+$(document).ready(function() {
+    $('#datatable').DataTable({
+    	  "paging":   false,
+       	"searching": false,
+    	  "info":false,
+
+        "order": [[ 0, "desc" ]]
+	});
+})
+</script>
+{% endblock %}

@@ -1,0 +1,12 @@
+#CRM server
+* * * * * /data/go2/monitor.sh
+30 2 * * * /data/go2/getGoUsers.sh
+30 4 11 * * /data/go2/pic_backup.sh
+
+#mongodb server
+1 3 1 * * /data/mongo_backup.sh
+15 13,22 * * * /data/backup_go.sh
+18 1 * * * /data/backup_man.sh
+
+#mongodb backup server
+32 14,22 * * * /data/dbrestore.sh

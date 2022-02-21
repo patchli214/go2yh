@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="js/jquery-1.10.2.js"></script>
+<script src="js/school.js"></script>
+<script src="js/school_zt_1.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+	<style>
+   body{height:100%;margin:0;padding: 0;background:#ededed}
+   img{display: block;width:100%}
+   #div-contant img{display:inline;width:31%}
+   a{text-decoration:none;}
+</style>
+
+</head>
+<body>
+<div style="width:100%;margin:0;padding:0;"><a href="index.html"><img src="img/title.gif" width="100%"></a></div>
+<div id="all_school" style="margin:0;padding-bottom:50px;border:0;background:#ededed;">
+ 
+</div>
+
+</body>
+</html>
+
+
+
+
+
+<script>
+
+$("#button1").click(function(){
+    document.location.href="index.html";
+});
+$("#button2").click(function(){
+    document.location.href="tel:010-65202212";
+});
+$("#button3").click(function(){
+    document.location.href="c.html";
+});
+
+
+var u = navigator.userAgent;
+if(u.indexOf('iPad') > -1){
+    $("#div-contant").css("height","82px");
+}
+$(document).ready(function(){
+var Request = new QueryString();
+var c = Request['c'];
+m_loadall(c);
+});
+</script>

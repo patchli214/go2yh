@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+<style>
+body{
+    border;0
+    padding:0;
+    margin:0;
+    font-family:微软雅黑;
+}
+td{
+border-width:6px;
+border-style:solid;
+border-color:white;
+font-size:12px;
+}
+.time_tag{
+    border-style: solid;
+    border-width:0px;
+    border-color:#ff0000 #ffffff #ffffff #ffffff;
+    margin-top:0px;
+    background: #fff;
+    width:60px;
+    height:30px;
+    text-align:right;
+    padding-right:6px;
+}
+.room{
+float:left;margin-right:1px;}
+.d{border;0
+    padding:0;
+    margin-top:1px;
+    width:9px;
+    }
+.d1{
+    background: red;
+}
+.d1_done{
+    background: green;
+}
+.d2{
+    background: #eeeeee;
+}
+.d3{
+    background: white;
+}
+.d4{
+    background: blue;
+}
+.d5{
+    background: #c13fc9;
+}
+.d5_done{
+    background: green;
+}
+.roomtag{font-size:13.2px;letter-spacing:2px;}
+</style>
+<script>
+var has = false;
+</script>
+
+<table>
+<tr>
+
+<td colspan="8" width="100%" align="center">
+<table width="100%">
+<tr><td><a href="javascript:otherWeek(-1)"><上周</a></td>
+<td width="80%" align="center">
+<h4>{{title}}课表</h4>
+</td>
+<td><a href="javascript:otherWeek(1)">下周></a></td>
+</tr>
+</table>
+</td>
+
+</tr>
+  <tr>
+    <td></td>
+    <td>周一{{dates.0|date:"m.d"}}</td>
+    <td>周二{{dates.1|date:"m.d"}}</td>
+    <td>周三{{dates.2|date:"m.d"}}</td>
+    <td>周四{{dates.3|date:"m.d"}}</td>
+    <td>周五{{dates.4|date:"m.d"}}</td>
+    <td>周六{{dates.5|date:"m.d"}}</td>
+    <td>周日{{dates.6|date:"m.d"}}</td>
+  </tr>
+  <tr>
+    <td align="right">教室</td>
+    <td class="roomtag">{% for r in rooms%}{{r}}{% endfor %}</td>
+    <td class="roomtag">{% for r in rooms%}{{r}}{% endfor %}</td>
+    <td class="roomtag">{% for r in rooms%}{{r}}{% endfor %}</td>
+    <td class="roomtag">{% for r in rooms%}{{r}}{% endfor %}</td>
+    <td class="roomtag">{% for r in rooms%}{{r}}{% endfor %}</td>
+    <td class="roomtag">{% for r in rooms%}{{r}}{% endfor %}</td>
+    <td class="roomtag">{% for r in rooms%}{{r}}{% endfor %}</td>
+  </tr>
+  <tr>
+    <td>
+    <div class="time_tag">上午 8:00</div>
+<div class="time_tag">9:00</div>
+<div class="time_tag">10:00</div>
+<div class="time_tag">11:00</div>
+<div class="time_tag">12:00</div>
+<div class="time_tag">下午1:00</div>
+<div class="time_tag">2:00</div>
+<div class="time_tag">3:00</div>
+<div class="time_tag">4:00</div>
+<div class="time_tag">5:00</div>
+<div class="time_tag">6:00</div>
+<div class="time_tag">7:00</div>
+<div class="time_tag">8:00</div>
+
+    </td>
+
+
+    {% for day_list in week_list %}
+       <td><div>
+
+
+       {% for rs in day_list %}
+
+       <div class="room" id = "{{day_list|length}}">
+{% if not rs%}
+<div class="d d2"  style="height:390px"><img/></div>
+{% endif %}
+           {% for gradeClass in rs %}
+
+          <div class="d d2" style="height:{{gradeClass.fromLast}}px"><img/></div>
+          <div
+          {% if gradeClass.gradeClass_type == 1 %}
+          class="d d4"
+          {%elif gradeClass.demoIsFinish == 1%}
+          class="d d1_done"
+          {%elif gradeClass.gradeClass_type == 3 %}
+          class="d d5"
+          {%else%}
+          class="d d1"
+          {%endif%}
+
+           id="{{gradeClass.id}}" onclick="goClass('{{gradeClass.id|stringformat:"s"}}',
+        		   '{% if gradeClass.gradeClass_type == 2 %}{{gradeClass.start_date|date:"Y-n-d"}}{%endif%} 周{{gradeClass.start_date|date:"w"}}',
+        		   '{{gradeClass.school_time}}','{{gradeClass.classroom}}',
+        		   '{{gradeClass.teacher.name}}',
+        		   '{{gradeClass.gradeClass_type}}',
+        		   '{%for st in gradeClass.students%}{{st.id}}-{%if st.name%}{{st.name}}{%elif st.name2%}{{st.name2}}{%else%}无{%endif%}{%if not forloop.last%},{% endif %}{%endfor%}')"
+        		    style="height:{% if gradeClass.gradeClass_type == 3 %}30{%else%}45{%endif%}px"><img/></div>
+            {% if forloop.last %}
+                 <div class="d d2"  style="height:{{gradeClass.toLast}}px"><img/></div>
+            {% endif %}
+
+          {% endfor %}
+                 </div>
+       {% endfor %}
+
+
+
+       </div></td>
+    {% endfor %}
+  </tr>
+</table>
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="info-body">
+            <div id="date"></div>
+            <div id="classTime"></div>
+            <div id="classroom"></div>
+            <div id="teacherName"></div>
+            <div id="studentName"></div>
+            <input type="hidden" id="editClassOid">
+            <input type="hidden" id="editStudentOid">
+            <input type="hidden" id="classType">
+            </div>
+            <div class="modal-footer">
+                <button id="editClass" type="button" class="btn btn-success" data-dismiss="modal">修改</button>
+                <button id="recordLesson" type="button" class="btn btn-success" data-dismiss="modal">签到</button>
+                <button id="changeLesson" type="button" class="btn btn-success" data-dismiss="modal">临时改动</button>
+            </div>
+            </div>
+            </div>
+            </div>
+{% endblock %}
+{% block scripts %}
+<script>
+$(".navbar").css("margin-bottom","0");
+function otherWeek(tag){
+	if(tag==-1)
+		firstDay = '{{lastWeekFirstDay|date:"Y-m-d"|default:""}}';
+	if(tag==1)
+		firstDay = '{{nextWeekFirstDay|date:"Y-m-d"|default:""}}';
+	document.location.href="{% url 'gradeClass:schedule' %}?firstDay="+firstDay;
+}
+
+$("#recordLesson").click(function(){
+	document.location.href="{% url 'gradeClass:lessons' %}?type="+$("#classType").val()+'&id='+$("#editClassOid").val();
+});
+$("#changeLesson").click(function(){
+	document.location.href="{% url 'gradeClass:changeLesson' %}?&classId="+$("#editClassOid").val()+"&beginDate={{beginDate|date:'Y-m-d'}}";
+});
+$("#editClass").click(function(){
+	var url = "";
+	if($("#classType").val()=='2'){
+		var url = '{% url 'gradeClass:studentDemo' '111111111111111111111111'%}';
+		url = url.replace("111111111111111111111111", $("#editStudentOid").val());
+	}else{
+		url = '/go2/gradeClass/editGradeClass/'+$("#classType").val()+'/'+$("#editClassOid").val();
+	}
+	document.location.href=url;
+});
+
+function goClass(oid,date,time,room,teacher,type,students){
+
+	console.log(oid);
+	var s = students.split(',');
+	var ss = "";
+	var sid = "";
+	for (var i = 0;i<s.length;i++){
+		w = s[i].split('-');
+		ss=ss+"<a href='/go2/regUser/studentInfo/"+w[0]+"/'>"+w[1]+"</a>&nbsp;";
+		sid = w[0];
+	}
+	$("#infoModal").modal();
+	$("#editStudentOid").val(sid);
+	$("#editClassOid").val(oid);
+	$("#classType").val(type);
+	$("#classTime").html(time);
+
+	date = date.replace('周0','周日');
+	date = date.replace('周1','周一');
+	date = date.replace('周2','周二');
+	date = date.replace('周3','周三');
+	date = date.replace('周4','周四');
+	date = date.replace('周5','周五');
+	date = date.replace('周6','周六');
+
+	$("#date").html(date);
+	$("#classroom").html("教室："+room+'教室');
+	console.log('classType:'+type)
+	if(type==GradeClassType.normal)
+	  $("#myModalLabel").html("类型：正课");
+	  $("#recordLesson").css("display","inline");
+	  $("#editClass").css("display","none");
+	  $("#changeLesson").css("display","inline");
+	if(type==3){
+		  $("#myModalLabel").html("类型：补课");
+		  $("#recordLesson").css("display","inline");
+		  $("#editClass").css("display","none");
+		  $("#changeLesson").css("display","none");
+	}
+	if(type==GradeClassType.demo){
+	  $("#myModalLabel").html("类型：试听课");
+	  $("#recordLesson").css("display","none");
+	  $("#editClass").css("display","inline");
+	  $("#changeLesson").css("display","none");
+	}
+	$("#teacherName").html("老师："+teacher);
+	$("#studentName").html("孩子："+ss);
+
+}
+$("#nav3").css("color","red");
+$("#nav3").css("font-weight","bold");
+$("#navbarDiv").append('&nbsp;颜色条定义，<b style="color:red">红色</b>：试听课未上，<b style="color:green">绿色</b>：试听课已上，<b style="color:blue">蓝色</b>：正课，<b style="color:purple">紫色</b>：补课');
+</script>
+{% endblock %}

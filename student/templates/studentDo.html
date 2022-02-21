@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<table>
+  <tr>
+    <th>学生</th>
+    <th>做题数</th>
+    </tr>
+{%for s in students%}
+<tr>
+<td>
+{{s.name|default:""}}&nbsp;{{s.name2|default:""}}
+</td>
+<td>{{s.memo}}</td>
+</tr>
+{%endfor%}
+</table>
+{% endblock %}
+{% block scripts %}
+<script>
+
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+th{padding:0}
+tr:hover{background:#eeeeee}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a>
+</div>
+
+<div>
+<div style="margin-left:20px;"><center><b>校区一周预约到场成交统计({{login_teacher.branchName}})</b>
+<select id="searchCity">
+<option value="1">{{login_teacher.city}}</option>
+</select>
+<select id="searchWeekBegin">
+<option value="">本周</option>
+
+</select>
+<button id="searchButton">查询</button>
+<span id="weekSpan">&nbsp;&nbsp;<a href="javascript:search('{{lastWeekStr}}')"><<</a>&nbsp;{{weekBeginStr}}到{{weekEndStr}}&nbsp;<a href="javascript:search('{{nextWeekStr}}')">>></a></span>
+</center>
+</div>
+
+<div id="table-container">
+    <table border="1" id="datatable">
+       <thead>
+        <tr style="background:#eeeeee;">
+        <th rowspan="2" width="30" style="padding:0;">校区</th>
+        <th colspan="3" align="center"><center>周一</center></th>
+        <th colspan="3" align="center"><center>周二</center></th>
+        <th colspan="3" align="center"><center>周三</center></th>
+        <th colspan="3" align="center"><center>周四</center></th>
+        <th colspan="3" align="center"><center>周五</center></th>
+        <th colspan="3" align="center"><center>周六</center></th>
+        <th colspan="3" align="center"><center>周日</center></th>
+        <th colspan="3" align="center"><center>合计</center></th>
+        </tr>
+        <tr style="background:#eeeeee;">
+
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+        <th width="30" style="padding:0;">预约</th>
+        <th width="30" style="padding:0;">到场</th>
+        <th width="30" style="padding:0;">成交</th>
+</tr>
+</thead>
+<tbody>
+        {% for days in branches %}
+
+            <tr >
+            {% for stat in days %}
+                {%if forloop.counter == 1%}<td nowrap width="60" style="padding:0;">{{stat.memo|default:'合计'}}</td>{%endif%}
+
+                <td width="20" style="width:20px;padding:0;border-left:1px solid black;">{%if stat.reservation > 0%}<center>{{ stat.reservation }}</center>{%else%}&nbsp;{%endif%}</td>
+                <td width="20" style="padding:0;">{%if stat.show > 0%}<center>{{ stat.show }}</center>{%else%}&nbsp;{%endif%}</td>
+                <td width="20" style="padding:0;border-right:1px solid black;">{%if stat.newdeal > 0%}<center>{{ stat.newdeal }}</center>{%else%}&nbsp;{%endif%}</td>
+
+            {% endfor %}
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    </div>
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    function moveScroll(){
+        var scroll = $(window).scrollTop();
+        console.log(scroll)
+        var anchor_top = $("#maintable").offset().top;
+        var anchor_bottom = $("#bottom_anchor").offset().top;
+        if (scroll>anchor_top && scroll<anchor_bottom) {
+        clone_table = $("#clone");
+        if(clone_table.length == 0){
+            clone_table = $("#maintable").clone();
+            clone_table.attr('id', 'clone');
+            clone_table.css({position:'fixed',
+                     'pointer-events': 'none',
+                     top:0});
+            clone_table.width($("#maintable").width());
+            $("#table-container").append(clone_table);
+            $("#clone").css({visibility:'hidden'});
+            $("#clone thead").css({'visibility':'visible','pointer-events':'auto'});
+        }
+        } else {
+        $("#clone").remove();
+        }
+    }
+    $(window).scroll(moveScroll);
+
+$("#searchButton").click(function(){
+	var url = "{%url 'statistic:statDayDemoBranch'%}?doSearch=1&searchWeekBegin="+$("#searchWeekBegin").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+})
+
+function search(weekBegin){
+  var url = "{%url 'statistic:statDayDemoBranch'%}?doSearch=1&searchWeekBegin="+weekBegin;
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+}
+
+$("#searchWeekBegin").val('{{searchWeekBegin}}')
+$("#searchWeekBegin").css("color","red")
+
+$(document).ready(function() {
+  {%if not title%}
+  $("#weekSpan").css("display","none")
+  var url = "{%url 'statistic:statDayDemoBranch'%}?doSearch=1&searchWeekBegin=";
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+
+  {%else%}
+  $("#weekSpan").css("display","inline")
+    $('#datatable').DataTable( {
+    	"ordering": false,
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ]
+    });
+  {%endif%}
+});
+
+    </script>
+{% endblock %}

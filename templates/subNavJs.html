@@ -1,0 +1,50 @@
+$("#subNav span").click(function(){
+    $(this).append("<span style='background:white;color:red;'>查询中...</span>")
+	var nav = $(this).attr("id");
+	var less = 1;
+	if(nav.length==8)less = 2;
+	var a = nav.substring(nav.length-less,nav.length);
+	var url = "{% url 'regUser:dboard1' %}";
+	url = url.substring(0,url.length-1)+a;
+	if(a=='8'){
+	    url = "{% url 'regUser:reg' %}";
+	}
+  if(a=='14'){
+	    url = "{% url 'web:regList' %}";
+	}
+  if(a=='15'){
+	    url = "{% url 'contract:duePay' %}";
+	}
+  if(a=='20'){
+	    url = "{% url 'workflow:refundApprovedList' %}";
+	}
+  if(a=='21'){
+      url = "{% url 'workflow:refundWaitingList' %}";
+  }
+  if(a=='22'){
+      url = "{% url 'workflow:receiptRequire' %}";
+  }
+  if(a=='23'){
+      url = "{% url 'workflow:receipts' %}";
+  }
+  if(a=='25'){
+      url = "{% url 'workflow:reimburseApps' %}?hasReceipt=1";
+  }
+  if(a=='26'){
+      url = "{% url 'workflow:reimburseApps' %}?hasReceipt=0";
+  }
+  if(a=='27'){
+      url = "{% url 'workflow:reimburseDeals' %}?hasReceipt=1";
+  }
+  if(a=='28'){
+      url = "{% url 'workflow:reimburseDeals' %}?hasReceipt=0";
+  }
+  if(a=='30'){
+      url = "{% url 'contract:AllduePay' %}";
+  }
+	if(a==99){
+	   alert('功能即将完成，敬请期待');
+	   return;
+	}
+	window.location.href=url;
+});

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <style>
+    div{padding-bottom:10px;}
+    </style>
+{% endblock %}
+{% block content %}
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="javascript:backInfo('{{student.id}}')"><返回</a>
+</div>
+<hr style="margin-top:2px;margin-bottom:10px"/>
+
+    <div>
+        孩子: {{ student.name }}, 手机: {{student.prt1mobile}}
+    {%if not demo.start_date%}<br><font color="red">还没安排试听课或试听课已过期</font>{% endif %}
+        </div>
+                <div>短信模板:</div>
+                <div id="smsfield" style="border:1px solid #777777;padding:5px;">
+{{txt}}
+                </div>
+                <div><a href="{% url 'regUser:showSMSTemplates'%}?student_oid={{student.id}}">更换短信模板-></a></div>
+    <div>
+    <a href='sms:{{student.prt1mobile}}?body={{txt2}}'><button type="button">发送短信</button></a>
+    </button></div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        function backInfo(oid) {
+        	var url = '{% url 'regUser:student_info' '111111111111111111111111'  %}';
+            url = url.replace("111111111111111111111111", oid);
+            document.location.href=url;
+        }
+    </script>
+{% endblock %}

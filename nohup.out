@@ -1,0 +1,1742 @@
+*** Starting uWSGI 2.0.17 (64bit) on [Fri May 11 10:59:34 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x78d8c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 2 seconds on interpreter 0x78d8c0 pid: 38148 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 38148, cores: 1)
+[pid: 38148|app: 0|req: 1/1] 113.47.254.148 () {40 vars in 1376 bytes} [Fri May 11 15:00:13 2018] GET /go2/login => generated 0 bytes in 92 msecs (HTTP/1.1 301) 3 headers in 116 bytes (1 switches on core 0)
+[pid: 38148|app: 0|req: 2/2] 113.47.254.148 () {40 vars in 1378 bytes} [Fri May 11 15:00:13 2018] GET /go2/login/ => generated 2863 bytes in 13 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 38148|app: 0|req: 3/3] 113.47.254.148 () {40 vars in 1378 bytes} [Fri May 11 15:00:21 2018] GET /go2/login/ => generated 2863 bytes in 7 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 38148|app: 0|req: 4/4] 113.47.254.148 () {48 vars in 789 bytes} [Fri May 11 15:00:31 2018] POST /go2/regUser/regFromWxProg => generated 57 bytes in 100 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 38148|app: 0|req: 5/5] 113.47.254.148 () {48 vars in 789 bytes} [Fri May 11 15:18:48 2018] POST /go2/regUser/regFromWxProg => generated 42 bytes in 3 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 38148|app: 0|req: 6/6] 113.47.254.148 () {48 vars in 789 bytes} [Fri May 11 15:19:14 2018] POST /go2/regUser/regFromWxProg => generated 42 bytes in 2 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 38148|app: 0|req: 7/7] 113.47.254.148 () {48 vars in 789 bytes} [Fri May 11 15:21:00 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 66 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 38148|app: 0|req: 8/8] 113.47.254.148 () {48 vars in 789 bytes} [Fri May 11 15:21:04 2018] POST /go2/regUser/regFromWxProg => generated 56 bytes in 103 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 38148|app: 0|req: 9/9] 113.47.254.148 () {40 vars in 1378 bytes} [Fri May 11 15:40:51 2018] GET /go2/login/ => generated 2863 bytes in 9 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+[pid: 38148|app: 0|req: 10/10] 114.242.250.70 () {48 vars in 789 bytes} [Sat May 12 04:27:58 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 60 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 38148|app: 0|req: 11/11] 114.242.250.70 () {48 vars in 789 bytes} [Sat May 12 04:28:05 2018] POST /go2/regUser/regFromWxProg => generated 58 bytes in 106 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 38148|app: 0|req: 12/12] 114.242.250.70 () {48 vars in 789 bytes} [Sat May 12 04:35:07 2018] POST /go2/regUser/regFromWxProg => generated 58 bytes in 116 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 00:36:31 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x23d88c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x23d88c0 pid: 40075 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 40075, cores: 1)
+[pid: 40075|app: 0|req: 1/1] 114.242.250.70 () {40 vars in 1378 bytes} [Sat May 12 04:36:50 2018] GET /go2/login/ => generated 2863 bytes in 140 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 40075|app: 0|req: 2/2] 114.242.250.70 () {48 vars in 789 bytes} [Sat May 12 04:36:55 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 119 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 40075|app: 0|req: 3/3] 114.242.250.70 () {48 vars in 789 bytes} [Sat May 12 04:36:58 2018] POST /go2/regUser/regFromWxProg => generated 58 bytes in 80 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 01:34:48 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x12c08c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x12c08c0 pid: 37192 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 37192, cores: 1)
+[pid: 37192|app: 0|req: 1/1] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 05:35:15 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 283 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 37192|app: 0|req: 2/2] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 05:37:22 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 66 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 01:42:14 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0xff88c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0xff88c0 pid: 2070 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 2070, cores: 1)
+[pid: 2070|app: 0|req: 1/1] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 05:42:20 2018] POST /go2/regUser/regFromWxProg => generated 56 bytes in 233 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 2070|app: 0|req: 2/2] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 05:42:27 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 44 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 2070|app: 0|req: 3/3] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 05:59:50 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 46 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 02:15:23 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x92a8c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x92a8c0 pid: 23599 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 23599, cores: 1)
+[pid: 23599|app: 0|req: 1/1] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:17:24 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 1819 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 02:23:19 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x204a8c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 2 seconds on interpreter 0x204a8c0 pid: 28812 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 28812, cores: 1)
+[pid: 28812|app: 0|req: 1/1] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:23:30 2018] POST /go2/regUser/regFromWxProg => generated 66528 bytes in 343 msecs (HTTP/1.1 500) 4 headers in 129 bytes (1 switches on core 0)
+[pid: 28812|app: 0|req: 2/2] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:23:38 2018] POST /go2/regUser/regFromWxProg => generated 56 bytes in 89 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 28812|app: 0|req: 3/3] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:23:45 2018] POST /go2/regUser/regFromWxProg => generated 66531 bytes in 165 msecs (HTTP/1.1 500) 4 headers in 129 bytes (2 switches on core 0)
+[pid: 28812|app: 0|req: 4/4] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:25:05 2018] POST /go2/regUser/regFromWxProg => generated 66528 bytes in 175 msecs (HTTP/1.1 500) 4 headers in 129 bytes (2 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 02:27:00 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0xb278c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0xb278c0 pid: 31437 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 31437, cores: 1)
+[pid: 31437|app: 0|req: 1/1] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:27:08 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 757 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 31437|app: 0|req: 2/2] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:28:30 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 639 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 31437|app: 0|req: 3/3] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:32:33 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 1462 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 02:34:49 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x1e038c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 2 seconds on interpreter 0x1e038c0 pid: 36080 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 36080, cores: 1)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 02:35:06 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x15968c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x15968c0 pid: 36729 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 36729, cores: 1)
+[pid: 36729|app: 0|req: 1/1] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:35:18 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 581 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 36729|app: 0|req: 2/2] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:38:36 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 581 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 36729|app: 0|req: 3/3] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:40:03 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 455 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 36729|app: 0|req: 4/4] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:40:45 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 439 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 36729|app: 0|req: 5/5] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:42:06 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 618 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 36729|app: 0|req: 6/6] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:46:34 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 668 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 36729|app: 0|req: 7/7] 61.148.245.16 () {42 vars in 963 bytes} [Sat May 12 06:48:14 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 1528 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 36729|app: 0|req: 8/8] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:52:13 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 566 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 36729|app: 0|req: 9/9] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:52:20 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 562 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 36729|app: 0|req: 10/10] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 06:53:15 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 493 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 36729|app: 0|req: 11/11] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 07:01:06 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 435 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 36729|app: 0|req: 12/12] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 07:01:40 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 402 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 36729|app: 0|req: 13/13] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 08:23:46 2018] POST /go2/regUser/regFromWxProg => generated 67470 bytes in 180 msecs (HTTP/1.1 500) 4 headers in 129 bytes (2 switches on core 0)
+[pid: 36729|app: 0|req: 14/14] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 08:24:28 2018] POST /go2/regUser/regFromWxProg => generated 67478 bytes in 181 msecs (HTTP/1.1 500) 4 headers in 129 bytes (2 switches on core 0)
+[pid: 36729|app: 0|req: 15/15] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 08:30:52 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 49 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 04:34:34 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0xac78c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0xac78c0 pid: 32935 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 32935, cores: 1)
+[pid: 32935|app: 0|req: 1/1] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 08:34:48 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 197 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 04:35:50 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x20828c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x20828c0 pid: 33664 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 33664, cores: 1)
+[pid: 33664|app: 0|req: 1/1] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 08:36:04 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 298 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sat May 12 04:38:07 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x10d78c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x10d78c0 pid: 35655 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 35655, cores: 1)
+[pid: 35655|app: 0|req: 1/1] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 08:38:25 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 1737 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 35655|app: 0|req: 2/2] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 09:41:22 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 2129 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 35655|app: 0|req: 3/3] 114.242.249.210 () {48 vars in 792 bytes} [Sat May 12 09:45:24 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 330 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 35655|app: 0|req: 4/4] 61.148.245.18 () {42 vars in 963 bytes} [Mon May 14 03:08:10 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 439 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 35655|app: 0|req: 5/5] 61.148.245.18 () {42 vars in 963 bytes} [Mon May 14 03:11:30 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 1030 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Sun May 13 23:19:09 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0xd788c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 2 seconds on interpreter 0xd788c0 pid: 34104 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 34104, cores: 1)
+[pid: 34104|app: 0|req: 1/1] 61.148.245.18 () {42 vars in 963 bytes} [Mon May 14 03:19:34 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 927 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 34104|app: 0|req: 2/2] 61.148.245.18 () {42 vars in 963 bytes} [Mon May 14 03:32:06 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 1466 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 34104|app: 0|req: 3/3] 125.33.174.181 () {40 vars in 1378 bytes} [Mon May 14 03:32:27 2018] GET /go2/login/ => generated 2863 bytes in 27 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Mon May 14 00:28:59 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x18ed8c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x18ed8c0 pid: 39091 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 39091, cores: 1)
+[pid: 39091|app: 0|req: 1/1] 125.33.174.181 () {40 vars in 1378 bytes} [Mon May 14 04:29:25 2018] GET /go2/login/ => generated 2863 bytes in 114 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Mon May 14 00:31:46 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x26f78c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 2 seconds on interpreter 0x26f78c0 pid: 40412 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 40412, cores: 1)
+[pid: 40412|app: 0|req: 1/1] 125.33.174.181 () {40 vars in 1378 bytes} [Mon May 14 04:31:53 2018] GET /go2/login/ => generated 2863 bytes in 114 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 40412|app: 0|req: 2/2] 125.33.174.181 () {40 vars in 1378 bytes} [Mon May 14 04:31:56 2018] GET /go2/login/ => generated 2863 bytes in 8 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+Mon May 14 04:35:04 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/regUser/regFromWxProg (ip 61.148.245.18) !!!
+Mon May 14 04:35:04 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during POST /go2/regUser/regFromWxProg (61.148.245.18)
+IOError: write error
+[pid: 39091|app: 0|req: 2/2] 61.148.245.18 () {42 vars in 963 bytes} [Mon May 14 04:30:03 2018] POST /go2/regUser/regFromWxProg => generated 0 bytes in 300877 msecs (HTTP/1.1 500) 4 headers in 0 bytes (0 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Mon May 14 00:36:31 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x190e8c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 2 seconds on interpreter 0x190e8c0 pid: 3074 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 3074, cores: 1)
+Mon May 14 04:37:09 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/regUser/regFromWxProg (ip 61.148.245.18) !!!
+Mon May 14 04:37:09 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during POST /go2/regUser/regFromWxProg (61.148.245.18)
+IOError: write error
+[pid: 40412|app: 0|req: 3/3] 61.148.245.18 () {42 vars in 963 bytes} [Mon May 14 04:32:08 2018] POST /go2/regUser/regFromWxProg => generated 0 bytes in 300379 msecs (HTTP/1.1 500) 4 headers in 0 bytes (0 switches on core 0)
+[pid: 3074|app: 0|req: 1/1] 125.33.174.181 () {40 vars in 1408 bytes} [Mon May 14 04:36:42 2018] GET /go2/regUser/regFromWxProg => generated 42 bytes in 30412 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+Mon May 14 04:37:12 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/login/ (ip 125.33.174.181) !!!
+Mon May 14 04:37:12 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /go2/login/ (125.33.174.181)
+IOError: write error
+[pid: 3074|app: 0|req: 2/2] 125.33.174.181 () {40 vars in 1378 bytes} [Mon May 14 04:37:12 2018] GET /go2/login/ => generated 0 bytes in 15 msecs (HTTP/1.1 200) 3 headers in 0 bytes (0 switches on core 0)
+Mon May 14 04:37:12 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/login/ (ip 125.33.174.181) !!!
+Mon May 14 04:37:12 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /go2/login/ (125.33.174.181)
+IOError: write error
+[pid: 3074|app: 0|req: 3/3] 125.33.174.181 () {40 vars in 1378 bytes} [Mon May 14 04:37:12 2018] GET /go2/login/ => generated 0 bytes in 8 msecs (HTTP/1.1 200) 3 headers in 0 bytes (0 switches on core 0)
+[pid: 3074|app: 0|req: 4/4] 125.33.174.181 () {40 vars in 1378 bytes} [Mon May 14 04:37:12 2018] GET /go2/login/ => generated 2863 bytes in 8 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Mon May 14 00:37:24 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x10d58c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 2 seconds on interpreter 0x10d58c0 pid: 3735 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 3735, cores: 1)
+[pid: 3735|app: 0|req: 1/1] 125.33.174.181 () {40 vars in 1378 bytes} [Mon May 14 04:37:30 2018] GET /go2/login/ => generated 2863 bytes in 134 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+Mon May 14 04:40:05 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/regUser/regFromWxProg (ip 61.148.245.18) !!!
+Mon May 14 04:40:05 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during POST /go2/regUser/regFromWxProg (61.148.245.18)
+IOError: write error
+[pid: 39091|app: 0|req: 3/3] 61.148.245.18 () {42 vars in 963 bytes} [Mon May 14 04:35:04 2018] POST /go2/regUser/regFromWxProg => generated 0 bytes in 301263 msecs (HTTP/1.1 500) 4 headers in 0 bytes (0 switches on core 0)
+Mon May 14 04:40:05 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/login/ (ip 125.33.174.181) !!!
+Mon May 14 04:40:05 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /go2/login/ (125.33.174.181)
+IOError: write error
+[pid: 39091|app: 0|req: 4/4] 125.33.174.181 () {40 vars in 1378 bytes} [Mon May 14 04:40:05 2018] GET /go2/login/ => generated 0 bytes in 10 msecs (HTTP/1.1 200) 3 headers in 0 bytes (0 switches on core 0)
+Mon May 14 04:42:10 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/regUser/regFromWxProg (ip 125.33.174.181) !!!
+Mon May 14 04:42:10 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during POST /go2/regUser/regFromWxProg (125.33.174.181)
+IOError: write error
+[pid: 40412|app: 0|req: 4/4] 125.33.174.181 () {48 vars in 791 bytes} [Mon May 14 04:37:09 2018] POST /go2/regUser/regFromWxProg => generated 0 bytes in 301285 msecs (HTTP/1.1 500) 4 headers in 0 bytes (0 switches on core 0)
+Mon May 14 04:42:40 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/regUser/regFromWxProg (ip 125.33.174.181) !!!
+Mon May 14 04:42:40 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /go2/regUser/regFromWxProg (125.33.174.181)
+IOError: write error
+[pid: 40412|app: 0|req: 5/5] 125.33.174.181 () {40 vars in 1408 bytes} [Mon May 14 04:42:10 2018] GET /go2/regUser/regFromWxProg => generated 0 bytes in 30435 msecs (HTTP/1.1 200) 3 headers in 0 bytes (0 switches on core 0)
+Mon May 14 04:42:44 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/regUser/regFromWxProg (ip 125.33.174.181) !!!
+Mon May 14 04:42:44 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during POST /go2/regUser/regFromWxProg (125.33.174.181)
+IOError: write error
+[pid: 3735|app: 0|req: 2/2] 125.33.174.181 () {48 vars in 791 bytes} [Mon May 14 04:37:43 2018] POST /go2/regUser/regFromWxProg => generated 0 bytes in 301716 msecs (HTTP/1.1 500) 4 headers in 0 bytes (0 switches on core 0)
+Mon May 14 04:43:10 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/regUser/regFromWxProg (ip 125.33.174.181) !!!
+Mon May 14 04:43:10 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /go2/regUser/regFromWxProg (125.33.174.181)
+IOError: write error
+[pid: 40412|app: 0|req: 6/6] 125.33.174.181 () {40 vars in 1408 bytes} [Mon May 14 04:42:40 2018] GET /go2/regUser/regFromWxProg => generated 0 bytes in 30024 msecs (HTTP/1.1 200) 3 headers in 0 bytes (0 switches on core 0)
+Mon May 14 04:43:15 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/regUser/regFromWxProg (ip 125.33.174.181) !!!
+Mon May 14 04:43:15 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during GET /go2/regUser/regFromWxProg (125.33.174.181)
+IOError: write error
+[pid: 3735|app: 0|req: 3/3] 125.33.174.181 () {40 vars in 1408 bytes} [Mon May 14 04:42:44 2018] GET /go2/regUser/regFromWxProg => generated 0 bytes in 30445 msecs (HTTP/1.1 200) 3 headers in 0 bytes (0 switches on core 0)
+Mon May 14 04:56:29 2018 - SIGPIPE: writing to a closed pipe/socket/fd (probably the client disconnected) on request /go2/regUser/regFromWxProg (ip 125.33.174.181) !!!
+Mon May 14 04:56:29 2018 - uwsgi_response_writev_headers_and_body_do(): Broken pipe [core/writer.c line 306] during POST /go2/regUser/regFromWxProg (125.33.174.181)
+IOError: write error
+[pid: 3735|app: 0|req: 4/4] 125.33.174.181 () {48 vars in 791 bytes} [Mon May 14 04:51:28 2018] POST /go2/regUser/regFromWxProg => generated 0 bytes in 300857 msecs (HTTP/1.1 500) 4 headers in 0 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Mon May 14 01:00:15 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-22-generic #40-Ubuntu SMP Thu May 12 22:03:46 UTC 2016
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 2
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 15635
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x8648c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x8648c0 pid: 19171 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 19171, cores: 1)
+[pid: 19171|app: 0|req: 1/1] 125.33.174.181 () {48 vars in 791 bytes} [Mon May 14 05:01:03 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 2400 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 19171|app: 0|req: 2/2] 112.224.23.83 () {42 vars in 957 bytes} [Sat May 26 05:24:19 2018] POST /go2/regUser/regFromWxProg => generated 67343 bytes in 1143 msecs (HTTP/1.1 500) 4 headers in 129 bytes (1 switches on core 0)
+[pid: 19171|app: 0|req: 3/3] 223.72.94.7 () {42 vars in 963 bytes} [Sat May 26 05:47:25 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 521 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 19171|app: 0|req: 4/4] 223.72.94.7 () {42 vars in 963 bytes} [Sat May 26 07:56:58 2018] POST /go2/regUser/regFromWxProg => generated 57 bytes in 119 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 19171|app: 0|req: 5/5] 112.224.19.4 () {42 vars in 956 bytes} [Fri Jun  1 12:07:03 2018] POST /go2/regUser/regFromWxProg => generated 57 bytes in 277 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 19171|app: 0|req: 6/6] 114.242.249.210 () {42 vars in 836 bytes} [Thu Jun 14 08:54:12 2018] GET /go2/login => generated 0 bytes in 18 msecs (HTTP/1.1 301) 3 headers in 116 bytes (1 switches on core 0)
+[pid: 19171|app: 0|req: 7/7] 114.242.249.210 () {42 vars in 838 bytes} [Thu Jun 14 08:54:12 2018] GET /go2/login/ => generated 2863 bytes in 399 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 19171|app: 0|req: 8/8] 118.26.73.237 () {44 vars in 846 bytes} [Mon Jun 25 06:23:11 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 809 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 19171|app: 0|req: 9/9] 219.143.154.15 () {44 vars in 850 bytes} [Mon Jun 25 15:17:26 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 1015 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 19171|app: 0|req: 10/10] 117.136.0.189 () {44 vars in 844 bytes} [Tue Jun 26 12:17:10 2018] POST /go2/regUser/regFromWxProg => generated 57 bytes in 108 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 19171|app: 0|req: 11/11] 118.126.51.230 () {44 vars in 847 bytes} [Thu Jun 28 09:22:19 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 57 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 19171|app: 0|req: 12/12] 59.109.216.129 () {44 vars in 845 bytes} [Sat Jun 30 15:14:08 2018] POST /go2/regUser/regFromWxProg => generated 67375 bytes in 594 msecs (HTTP/1.1 500) 4 headers in 129 bytes (1 switches on core 0)
+[pid: 19171|app: 0|req: 13/13] 59.109.216.129 () {44 vars in 845 bytes} [Sat Jun 30 15:14:35 2018] POST /go2/regUser/regFromWxProg => generated 57 bytes in 41 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 19171|app: 0|req: 14/14] 124.207.81.15 () {42 vars in 968 bytes} [Mon Jul  2 06:30:01 2018] POST /go2/regUser/regFromWxProg => generated 67393 bytes in 174 msecs (HTTP/1.1 500) 4 headers in 129 bytes (2 switches on core 0)
+[pid: 19171|app: 0|req: 15/15] 117.113.123.18 () {44 vars in 846 bytes} [Tue Jul  3 01:10:02 2018] POST /go2/regUser/regFromWxProg => generated 57 bytes in 50 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 19171|app: 0|req: 16/16] 36.102.212.164 () {44 vars in 850 bytes} [Sat Jul  7 07:50:09 2018] POST /go2/regUser/regFromWxProg => generated 57 bytes in 128 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 19171|app: 0|req: 17/17] 117.136.38.162 () {44 vars in 844 bytes} [Mon Jul  9 08:50:15 2018] POST /go2/regUser/regFromWxProg => generated 57 bytes in 45 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 19171|app: 0|req: 18/18] 124.207.69.93 () {42 vars in 959 bytes} [Fri Jul 13 04:59:27 2018] POST /go2/regUser/regFromWxProg => generated 67403 bytes in 177 msecs (HTTP/1.1 500) 4 headers in 129 bytes (2 switches on core 0)
+[pid: 19171|app: 0|req: 19/19] 117.136.38.174 () {42 vars in 965 bytes} [Wed Jul 18 06:00:05 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 1359 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+Gracefully killing worker 1 (pid: 39091)...
+Gracefully killing worker 1 (pid: 3735)...
+Gracefully killing worker 1 (pid: 3074)...
+Gracefully killing worker 1 (pid: 2070)...
+Gracefully killing worker 1 (pid: 34104)...
+Gracefully killing worker 1 (pid: 32935)...
+Gracefully killing worker 1 (pid: 33664)...
+Gracefully killing worker 1 (pid: 35655)...
+Gracefully killing worker 1 (pid: 37192)...
+Gracefully killing worker 1 (pid: 23599)...
+Gracefully killing worker 1 (pid: 28812)...
+*** Starting uWSGI 2.0.17 (64bit) on [Fri Jul 20 04:04:50 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-130-generic #156-Ubuntu SMP Thu Jun 14 08:53:28 UTC 2018
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 3738
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x20258c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x20258c0 pid: 5319 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 5319, cores: 1)
+[pid: 5319|app: 0|req: 1/1] 124.64.16.92 () {40 vars in 789 bytes} [Fri Jul 20 08:05:01 2018] GET /go2/regUser/regFromWxProg => generated 42 bytes in 289 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 2/2] 124.64.16.92 () {40 vars in 789 bytes} [Fri Jul 20 08:05:15 2018] GET /go2/regUser/regFromWxProg => generated 42 bytes in 5 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 3/3] 124.64.16.92 () {40 vars in 789 bytes} [Fri Jul 20 08:05:18 2018] GET /go2/regUser/regFromWxProg => generated 42 bytes in 3 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 4/4] 222.126.194.234 () {44 vars in 848 bytes} [Wed Jul 25 05:23:52 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 2034 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 5/5] 222.126.194.234 () {44 vars in 848 bytes} [Thu Jul 26 01:11:13 2018] POST /go2/regUser/regFromWxProg => generated 57 bytes in 136 msecs (HTTP/1.1 200) 3 headers in 114 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 6/6] 114.244.126.142 () {42 vars in 963 bytes} [Wed Aug  1 10:48:37 2018] POST /go2/regUser/regFromWxProg => generated 12 bytes in 589 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 7/7] 223.104.3.225 () {38 vars in 639 bytes} [Fri Aug  3 13:57:31 2018] GET /go2/login => generated 0 bytes in 20 msecs (HTTP/1.1 301) 3 headers in 116 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 8/8] 223.104.3.225 () {38 vars in 641 bytes} [Fri Aug  3 13:57:31 2018] GET /go2/login/ => generated 2863 bytes in 762 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 9/9] 223.104.3.225 () {40 vars in 761 bytes} [Fri Aug  3 13:57:47 2018] GET /go2/login/2 => generated 3651 bytes in 40 msecs (HTTP/1.1 404) 3 headers in 102 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 10/10] 223.104.3.225 () {42 vars in 767 bytes} [Fri Aug  3 14:04:04 2018] GET /js/bootstrap.min.js => generated 3675 bytes in 8 msecs (HTTP/1.1 404) 3 headers in 102 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 11/11] 223.104.3.225 () {42 vars in 815 bytes} [Fri Aug  3 14:04:04 2018] GET /img/rang04.jpg => generated 3660 bytes in 9 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 12/12] 223.104.3.225 () {42 vars in 815 bytes} [Fri Aug  3 14:04:04 2018] GET /img/rang02.png => generated 3660 bytes in 8 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 13/13] 223.104.3.225 () {42 vars in 815 bytes} [Fri Aug  3 14:04:04 2018] GET /img/rang01.png => generated 3660 bytes in 8 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 14/14] 223.104.3.225 () {40 vars in 852 bytes} [Fri Aug  3 14:04:08 2018] GET / => generated 0 bytes in 9 msecs (HTTP/1.1 302) 4 headers in 128 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 15/15] 223.104.3.225 () {40 vars in 862 bytes} [Fri Aug  3 14:04:08 2018] GET /login => generated 3633 bytes in 7 msecs (HTTP/1.1 404) 3 headers in 102 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 16/16] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:08 2018] GET /img/rang01.png => generated 3660 bytes in 8 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 17/17] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:08 2018] GET /img/rang02.png => generated 3660 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 18/18] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:08 2018] GET /img/rang04.jpg => generated 3660 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 19/19] 223.104.3.225 () {42 vars in 872 bytes} [Fri Aug  3 14:04:08 2018] GET /js/bootstrap.min.js => generated 3675 bytes in 7 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 20/20] 223.104.3.225 () {40 vars in 862 bytes} [Fri Aug  3 14:04:12 2018] GET /login => generated 3633 bytes in 7 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 21/21] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:13 2018] GET /img/rang01.png => generated 3660 bytes in 11 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 22/22] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:13 2018] GET /img/rang04.jpg => generated 3660 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 23/23] 223.104.3.225 () {42 vars in 872 bytes} [Fri Aug  3 14:04:13 2018] GET /js/bootstrap.min.js => generated 3675 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 24/24] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:13 2018] GET /img/rang02.png => generated 3660 bytes in 4 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 25/25] 223.104.3.225 () {42 vars in 872 bytes} [Fri Aug  3 14:04:13 2018] GET /js/bootstrap.min.js => generated 3675 bytes in 7 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 26/26] 223.104.3.225 () {40 vars in 852 bytes} [Fri Aug  3 14:04:13 2018] GET / => generated 0 bytes in 0 msecs (HTTP/1.1 302) 4 headers in 128 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 27/27] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:13 2018] GET /img/rang02.png => generated 3660 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 28/28] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:13 2018] GET /img/rang04.jpg => generated 3660 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 29/29] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:13 2018] GET /img/rang01.png => generated 3660 bytes in 4 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 30/30] 223.104.3.225 () {40 vars in 862 bytes} [Fri Aug  3 14:04:13 2018] GET /login => generated 3633 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 31/31] 223.104.3.225 () {40 vars in 862 bytes} [Fri Aug  3 14:04:17 2018] GET /login => generated 3633 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 32/32] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:18 2018] GET /img/rang02.png => generated 3660 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 33/33] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:18 2018] GET /img/rang04.jpg => generated 3660 bytes in 4 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 34/34] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:18 2018] GET /img/rang01.png => generated 3660 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 35/35] 223.104.3.225 () {42 vars in 872 bytes} [Fri Aug  3 14:04:18 2018] GET /js/bootstrap.min.js => generated 3675 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 36/36] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:18 2018] GET /img/rang04.jpg => generated 3660 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 37/37] 223.104.3.225 () {42 vars in 872 bytes} [Fri Aug  3 14:04:18 2018] GET /js/bootstrap.min.js => generated 3675 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 38/38] 223.104.3.225 () {40 vars in 852 bytes} [Fri Aug  3 14:04:18 2018] GET / => generated 0 bytes in 0 msecs (HTTP/1.1 302) 4 headers in 128 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 39/39] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:18 2018] GET /img/rang01.png => generated 3660 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 40/40] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:04:18 2018] GET /img/rang02.png => generated 3660 bytes in 4 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 41/41] 223.104.3.225 () {40 vars in 862 bytes} [Fri Aug  3 14:04:18 2018] GET /login => generated 3633 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 42/42] 223.104.3.225 () {40 vars in 862 bytes} [Fri Aug  3 14:08:57 2018] GET /login => generated 3633 bytes in 7 msecs (HTTP/1.1 404) 3 headers in 102 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 43/43] 223.104.3.225 () {42 vars in 872 bytes} [Fri Aug  3 14:08:57 2018] GET /js/bootstrap.min.js => generated 3675 bytes in 7 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 44/44] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:08:57 2018] GET /img/rang02.png => generated 3660 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 45/45] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:08:57 2018] GET /img/rang01.png => generated 3660 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 46/46] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:08:57 2018] GET /img/rang04.jpg => generated 3660 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 47/47] 223.104.3.225 () {40 vars in 852 bytes} [Fri Aug  3 14:08:58 2018] GET / => generated 0 bytes in 1 msecs (HTTP/1.1 302) 4 headers in 128 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 48/48] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:08:58 2018] GET /img/rang01.png => generated 3660 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 49/49] 223.104.3.225 () {42 vars in 872 bytes} [Fri Aug  3 14:08:58 2018] GET /js/bootstrap.min.js => generated 3675 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 50/50] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:08:58 2018] GET /img/rang04.jpg => generated 3660 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 51/51] 223.104.3.225 () {40 vars in 862 bytes} [Fri Aug  3 14:08:58 2018] GET /login => generated 3633 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 52/52] 223.104.3.225 () {42 vars in 920 bytes} [Fri Aug  3 14:08:58 2018] GET /img/rang02.png => generated 3660 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 53/53] 223.104.3.225 () {40 vars in 862 bytes} [Fri Aug  3 14:09:01 2018] GET /login => generated 3633 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 54/54] 223.104.3.225 () {38 vars in 629 bytes} [Fri Aug  3 14:09:15 2018] GET / => generated 0 bytes in 2 msecs (HTTP/1.1 302) 4 headers in 128 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 55/55] 223.104.3.225 () {38 vars in 639 bytes} [Fri Aug  3 14:09:15 2018] GET /login => generated 3633 bytes in 10 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 56/56] 223.104.3.225 () {40 vars in 638 bytes} [Fri Aug  3 14:09:17 2018] GET /favicon.ico => generated 3651 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (2 switches on core 0)
+[pid: 5319|app: 0|req: 57/57] 223.104.3.225 () {42 vars in 642 bytes} [Fri Aug  3 14:09:21 2018] GET / => generated 0 bytes in 1 msecs (HTTP/1.1 302) 4 headers in 128 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 58/58] 223.104.3.225 () {42 vars in 652 bytes} [Fri Aug  3 14:09:21 2018] GET /login => generated 3633 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 59/59] 223.104.3.225 () {38 vars in 599 bytes} [Fri Aug  3 14:09:21 2018] GET /apple-touch-icon-precomposed.png => generated 3714 bytes in 9 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 60/60] 223.104.3.225 () {38 vars in 575 bytes} [Fri Aug  3 14:09:21 2018] GET /apple-touch-icon.png => generated 3678 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 61/61] 223.104.3.225 () {38 vars in 557 bytes} [Fri Aug  3 14:09:21 2018] GET /favicon.ico => generated 3651 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 62/62] 223.104.3.225 () {38 vars in 599 bytes} [Fri Aug  3 14:09:21 2018] GET /apple-touch-icon-precomposed.png => generated 3714 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 63/63] 223.104.3.225 () {38 vars in 575 bytes} [Fri Aug  3 14:09:21 2018] GET /apple-touch-icon.png => generated 3678 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 64/64] 223.104.3.225 () {38 vars in 557 bytes} [Fri Aug  3 14:09:22 2018] GET /favicon.ico => generated 3651 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 65/65] 223.104.3.225 () {42 vars in 691 bytes} [Fri Aug  3 14:09:22 2018] GET / => generated 0 bytes in 1 msecs (HTTP/1.1 302) 4 headers in 128 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 66/66] 223.104.3.225 () {42 vars in 701 bytes} [Fri Aug  3 14:09:22 2018] GET /login => generated 3633 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 67/67] 223.104.3.225 () {38 vars in 599 bytes} [Fri Aug  3 14:09:22 2018] GET /apple-touch-icon-precomposed.png => generated 3714 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 68/68] 223.104.3.225 () {38 vars in 575 bytes} [Fri Aug  3 14:09:22 2018] GET /apple-touch-icon.png => generated 3678 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 69/69] 223.104.3.225 () {38 vars in 557 bytes} [Fri Aug  3 14:09:22 2018] GET /favicon.ico => generated 3651 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 70/70] 223.104.3.225 () {38 vars in 599 bytes} [Fri Aug  3 14:09:22 2018] GET /apple-touch-icon-precomposed.png => generated 3714 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 71/71] 223.104.3.225 () {38 vars in 575 bytes} [Fri Aug  3 14:09:22 2018] GET /apple-touch-icon.png => generated 3678 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 5319|app: 0|req: 72/72] 223.104.3.225 () {38 vars in 557 bytes} [Fri Aug  3 14:09:22 2018] GET /favicon.ico => generated 3651 bytes in 6 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Fri Aug  3 10:14:17 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-130-generic #156-Ubuntu SMP Thu Jun 14 08:53:28 UTC 2018
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 3738
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x1bb08c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 2 seconds on interpreter 0x1bb08c0 pid: 14894 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 14894, cores: 1)
+[pid: 14894|app: 0|req: 1/1] 223.104.3.225 () {38 vars in 639 bytes} [Fri Aug  3 14:14:35 2018] GET /login => generated 3633 bytes in 284 msecs (HTTP/1.1 404) 3 headers in 102 bytes (2 switches on core 0)
+[pid: 14894|app: 0|req: 2/2] 223.104.3.225 () {38 vars in 635 bytes} [Fri Aug  3 14:14:43 2018] GET /go2 => generated 3627 bytes in 5 msecs (HTTP/1.1 404) 3 headers in 102 bytes (1 switches on core 0)
+[pid: 14894|app: 0|req: 3/3] 223.104.3.225 () {38 vars in 647 bytes} [Fri Aug  3 14:14:49 2018] GET /go2/login => generated 0 bytes in 1 msecs (HTTP/1.1 301) 3 headers in 116 bytes (2 switches on core 0)
+[pid: 14894|app: 0|req: 4/4] 223.104.3.225 () {38 vars in 649 bytes} [Fri Aug  3 14:14:49 2018] GET /go2/login/ => generated 2863 bytes in 29 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+[pid: 14894|app: 0|req: 5/5] 223.104.3.225 () {40 vars in 767 bytes} [Fri Aug  3 14:15:34 2018] GET /go2/login/ => generated 2863 bytes in 8 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+[pid: 14894|app: 0|req: 6/6] 223.104.3.225 () {40 vars in 767 bytes} [Fri Aug  3 14:15:38 2018] GET /go2/login/ => generated 2863 bytes in 7 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 14894|app: 0|req: 7/7] 223.104.3.225 () {40 vars in 767 bytes} [Fri Aug  3 14:15:40 2018] GET /go2/login/ => generated 2863 bytes in 7 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Fri Aug  3 10:16:08 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-130-generic #156-Ubuntu SMP Thu Jun 14 08:53:28 UTC 2018
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 3738
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x13b48c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 2 seconds on interpreter 0x13b48c0 pid: 15576 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 15576, cores: 1)
+[pid: 15576|app: 0|req: 1/1] 223.104.3.225 () {40 vars in 767 bytes} [Fri Aug  3 14:16:11 2018] GET /go2/login/ => generated 2863 bytes in 103 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 2/2] 223.104.3.225 () {48 vars in 1046 bytes} [Fri Aug  3 14:16:17 2018] POST /go2/login/ => generated 0 bytes in 66 msecs (HTTP/1.1 302) 25 headers in 1180 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 3/3] 223.104.3.225 () {44 vars in 1462 bytes} [Fri Aug  3 14:16:17 2018] GET /?login=1 => generated 1882 bytes in 39 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+[pid: 15576|app: 0|req: 4/4] 223.104.3.225 () {42 vars in 1443 bytes} [Fri Aug  3 14:16:17 2018] GET /go2/regUser/dboard1 => generated 9718 bytes in 686 msecs (HTTP/1.1 200) 5 headers in 222 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 5/5] 223.104.3.225 () {48 vars in 1583 bytes} [Fri Aug  3 14:16:18 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 62 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 6/6] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:16:18 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 84 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 7/7] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:16:18 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 3 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 8/8] 223.104.3.225 () {40 vars in 1465 bytes} [Fri Aug  3 14:16:32 2018] GET /go2/regUser/dboard14 => generated 94 bytes in 8 msecs (HTTP/1.1 404) 3 headers in 100 bytes (2 switches on core 0)
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+[pid: 15576|app: 0|req: 9/9] 223.104.3.225 () {40 vars in 1463 bytes} [Fri Aug  3 14:16:36 2018] GET /go2/regUser/dboard1 => generated 9718 bytes in 422 msecs (HTTP/1.1 200) 5 headers in 222 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 10/10] 223.104.3.225 () {48 vars in 1583 bytes} [Fri Aug  3 14:16:37 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 11 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 11/11] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:16:37 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 12/12] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:16:37 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 79 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 13/13] 223.104.3.225 () {42 vars in 1544 bytes} [Fri Aug  3 14:16:38 2018] GET /go2/gradeClass/gradeClassList => generated 27 bytes in 154 msecs (HTTP/1.1 500) 3 headers in 112 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 14/14] 223.104.3.225 () {42 vars in 1526 bytes} [Fri Aug  3 14:16:49 2018] GET /go2/student/students => generated 27 bytes in 50 msecs (HTTP/1.1 500) 3 headers in 112 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 15/15] 223.104.3.225 () {42 vars in 1532 bytes} [Fri Aug  3 14:16:52 2018] GET /go2/regUser/studentList => generated 27 bytes in 471 msecs (HTTP/1.1 500) 3 headers in 112 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 16/16] 223.104.3.225 () {42 vars in 1536 bytes} [Fri Aug  3 14:16:57 2018] GET /go2/statistic/indexBranch => generated 6004 bytes in 11 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 17/17] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:16:57 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 5 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 18/18] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:16:57 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 96 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 19/19] 223.104.3.225 () {48 vars in 1589 bytes} [Fri Aug  3 14:16:58 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 15 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 20/20] 223.104.3.225 () {42 vars in 1603 bytes} [Fri Aug  3 14:17:02 2018] GET /go2/statistic/statDayBranch?doSearch=1&searchWeekBegin=0 => generated 3406 bytes in 797 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 21/21] 223.104.3.225 () {42 vars in 1573 bytes} [Fri Aug  3 14:17:07 2018] GET /go2/statistic/indexBranch => generated 6004 bytes in 5 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 22/22] 223.104.3.225 () {48 vars in 1589 bytes} [Fri Aug  3 14:17:07 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 47 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 23/23] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:17:07 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 24/24] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:17:07 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 137 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 25/25] 223.104.3.225 () {42 vars in 1534 bytes} [Fri Aug  3 14:17:08 2018] GET /go2/branch/reimburses => generated 27 bytes in 61 msecs (HTTP/1.1 500) 3 headers in 112 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 26/26] 223.104.3.225 () {42 vars in 1544 bytes} [Fri Aug  3 14:17:20 2018] GET /go2/statistic/branchIncome => generated 3291 bytes in 9 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 27/27] 223.104.3.225 () {42 vars in 1543 bytes} [Fri Aug  3 14:17:24 2018] GET /go2/statistic/indexBranch => generated 6004 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 28/28] 223.104.3.225 () {48 vars in 1589 bytes} [Fri Aug  3 14:17:24 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 9 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 29/29] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:17:24 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 3 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 30/30] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:17:24 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 83 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 31/31] 223.104.3.225 () {42 vars in 1603 bytes} [Fri Aug  3 14:17:26 2018] GET /go2/statistic/statDayBranch?doSearch=1&searchWeekBegin=0 => generated 3406 bytes in 348 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 32/32] 223.104.3.225 () {42 vars in 1634 bytes} [Fri Aug  3 14:17:29 2018] GET /go2/statistic/statDayBranch?doSearch=1&searchWeekBegin=1 => generated 27 bytes in 328 msecs (HTTP/1.1 500) 3 headers in 112 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 33/33] 223.104.3.225 () {42 vars in 1573 bytes} [Fri Aug  3 14:17:41 2018] GET /go2/statistic/indexBranch => generated 6004 bytes in 5 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 34/34] 223.104.3.225 () {48 vars in 1589 bytes} [Fri Aug  3 14:17:42 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 8 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 35/35] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:17:42 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 3 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 36/36] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:17:42 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 80 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 37/37] 223.104.3.225 () {42 vars in 1532 bytes} [Fri Aug  3 14:17:44 2018] GET /go2/student/students => generated 27 bytes in 35 msecs (HTTP/1.1 500) 3 headers in 112 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 38/38] 223.104.3.225 () {42 vars in 1552 bytes} [Fri Aug  3 14:19:48 2018] GET /go2/statistic/branchSourceStat => generated 4538 bytes in 8 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 39/39] 223.104.3.225 () {42 vars in 1547 bytes} [Fri Aug  3 14:19:51 2018] GET /go2/statistic/indexBranch => generated 6004 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 40/40] 223.104.3.225 () {48 vars in 1589 bytes} [Fri Aug  3 14:19:51 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 36 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 41/41] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:19:51 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 42/42] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:19:51 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 165 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 43/43] 223.104.3.225 () {42 vars in 1544 bytes} [Fri Aug  3 14:19:52 2018] GET /go2/statistic/branchQuests => generated 3642 bytes in 6 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 44/44] 223.104.3.225 () {42 vars in 1624 bytes} [Fri Aug  3 14:19:58 2018] GET /go2/statistic/branchQuests?beginDate=2018-08-01&endDate=2018-08-04 => generated 4384 bytes in 90 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 45/45] 114.115.206.76 () {40 vars in 649 bytes} [Fri Aug  3 14:20:02 2018] GET /pmd/index.php => generated 87 bytes in 1 msecs (HTTP/1.1 404) 3 headers in 100 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 46/46] 223.104.3.225 () {42 vars in 1664 bytes} [Fri Aug  3 14:20:07 2018] GET /go2/statistic/branchQuests?beginDate=2018-06-01&endDate=2018-08-04 => generated 4384 bytes in 30 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 47/47] 223.104.3.225 () {42 vars in 1664 bytes} [Fri Aug  3 14:20:17 2018] GET /go2/statistic/branchQuests?beginDate=2018-04-01&endDate=2018-08-04 => generated 4403 bytes in 141 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 48/48] 223.104.3.225 () {42 vars in 1583 bytes} [Fri Aug  3 14:21:10 2018] GET /go2/statistic/indexBranch => generated 6004 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 49/49] 223.104.3.225 () {48 vars in 1589 bytes} [Fri Aug  3 14:21:10 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 37 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 50/50] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:21:10 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 51/51] 223.104.3.225 () {48 vars in 1591 bytes} [Fri Aug  3 14:21:10 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 128 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 52/52] 223.104.3.225 () {42 vars in 1538 bytes} [Fri Aug  3 14:21:11 2018] GET /go2/regUser/studentList => generated 27 bytes in 483 msecs (HTTP/1.1 500) 3 headers in 112 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 53/53] 223.104.3.225 () {42 vars in 1492 bytes} [Fri Aug  3 14:21:14 2018] GET / => generated 1885 bytes in 3 msecs (HTTP/1.1 200) 3 headers in 110 bytes (1 switches on core 0)
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+[pid: 15576|app: 0|req: 54/54] 223.104.3.225 () {42 vars in 1505 bytes} [Fri Aug  3 14:21:14 2018] GET /go2/regUser/dboard1 => generated 9718 bytes in 453 msecs (HTTP/1.1 200) 5 headers in 222 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 55/55] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:21:15 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 56/56] 223.104.3.225 () {48 vars in 1583 bytes} [Fri Aug  3 14:21:15 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 11 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 57/57] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:21:15 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 212 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 58/58] 223.104.3.225 () {42 vars in 1524 bytes} [Fri Aug  3 14:21:18 2018] GET /go2/regUser/dboard2 => generated 15142 bytes in 126 msecs (HTTP/1.1 200) 5 headers in 223 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 59/59] 223.104.3.225 () {48 vars in 1583 bytes} [Fri Aug  3 14:21:18 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 9 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 60/60] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:21:18 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 3 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 61/61] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:21:18 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 81 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 62/62] 223.104.3.225 () {42 vars in 1524 bytes} [Fri Aug  3 14:21:24 2018] GET /go2/regUser/dboard5 => generated 27 bytes in 90 msecs (HTTP/1.1 500) 3 headers in 112 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 63/63] 223.104.3.225 () {42 vars in 1526 bytes} [Fri Aug  3 14:21:28 2018] GET /go2/regUser/dboard12 => generated 14286 bytes in 491 msecs (HTTP/1.1 200) 4 headers in 171 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 64/64] 223.104.3.225 () {48 vars in 1587 bytes} [Fri Aug  3 14:21:28 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 65/65] 223.104.3.225 () {48 vars in 1587 bytes} [Fri Aug  3 14:21:28 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 80 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 66/66] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:21:28 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 12 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 67/67] 223.104.3.225 () {42 vars in 1586 bytes} [Fri Aug  3 14:21:32 2018] GET /go2/regUser/studentInfo/592fe8aa97a75d156e20a28b/ => generated 19939 bytes in 484 msecs (HTTP/1.1 200) 4 headers in 200 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 68/68] 223.104.3.225 () {40 vars in 1455 bytes} [Fri Aug  3 14:22:03 2018] GET / => generated 1885 bytes in 3 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+[pid: 15576|app: 0|req: 69/69] 223.104.3.225 () {42 vars in 1535 bytes} [Fri Aug  3 14:22:03 2018] GET /go2/regUser/dboard1 => generated 9718 bytes in 423 msecs (HTTP/1.1 200) 5 headers in 222 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 70/70] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:22:04 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 71/71] 223.104.3.225 () {48 vars in 1583 bytes} [Fri Aug  3 14:22:04 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 7 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 72/72] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:22:04 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 81 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 73/73] 223.104.3.225 () {40 vars in 1435 bytes} [Fri Aug  3 14:22:15 2018] GET /login => generated 79 bytes in 2 msecs (HTTP/1.1 404) 3 headers in 100 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 74/74] 223.104.3.225 () {40 vars in 1425 bytes} [Fri Aug  3 14:22:23 2018] GET / => generated 1885 bytes in 2 msecs (HTTP/1.1 200) 3 headers in 110 bytes (2 switches on core 0)
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+The fields "set(['remindTeacherName'])" do not exist on the document "Student"
+[pid: 15576|app: 0|req: 75/75] 223.104.3.225 () {42 vars in 1505 bytes} [Fri Aug  3 14:22:23 2018] GET /go2/regUser/dboard1 => generated 9718 bytes in 447 msecs (HTTP/1.1 200) 5 headers in 222 bytes (2 switches on core 0)
+[pid: 15576|app: 0|req: 76/76] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:22:24 2018] POST /go2/branch/reimburseNum_api => generated 22 bytes in 4 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 77/77] 223.104.3.225 () {48 vars in 1583 bytes} [Fri Aug  3 14:22:24 2018] POST /go2/teacher/api_getMessage => generated 29 bytes in 7 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 78/78] 223.104.3.225 () {48 vars in 1585 bytes} [Fri Aug  3 14:22:24 2018] POST /go2/regUser/resolveToDo_api => generated 22 bytes in 89 msecs (HTTP/1.1 200) 3 headers in 114 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 79/79] 107.170.228.247 () {34 vars in 399 bytes} [Fri Aug  3 14:25:57 2018] GET / => generated 26 bytes in 2 msecs (HTTP/1.1 400) 1 headers in 53 bytes (1 switches on core 0)
+[pid: 15576|app: 0|req: 80/80] 114.115.203.130 () {40 vars in 650 bytes} [Fri Aug  3 14:32:25 2018] GET /pmd/index.php => generated 87 bytes in 2 msecs (HTTP/1.1 404) 3 headers in 100 bytes (2 switches on core 0)
+*** Starting uWSGI 2.0.17 (64bit) on [Fri Aug  3 10:32:40 2018] ***
+compiled with version: 5.4.0 20160609 on 10 May 2018 05:35:31
+os: Linux-4.4.0-130-generic #156-Ubuntu SMP Thu Jun 14 08:53:28 UTC 2018
+nodename: patch
+machine: x86_64
+clock source: unix
+detected number of CPU cores: 1
+current working directory: /data/go2
+detected binary path: /usr/local/bin/uwsgi
+!!! no internal routing support, rebuild with pcre support !!!
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** WARNING: you are running uWSGI without its master process manager ***
+your processes number limit is 3738
+your memory page size is 4096 bytes
+detected max file descriptor number: 1024
+lock engine: pthread robust mutexes
+thunder lock: disabled (you can enable it with --thunder-lock)
+uwsgi socket 0 bound to UNIX address go2.sock fd 3
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+Python version: 2.7.12 (default, Nov 20 2017, 18:23:56)  [GCC 5.4.0 20160609]
+*** Python threads support is disabled. You can enable it with --enable-threads ***
+Python main interpreter initialized at 0x8548c0
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+your server socket listen backlog is limited to 100 connections
+your mercy for graceful operations on workers is 60 seconds
+mapped 72904 bytes (71 KB) for 1 cores
+*** Operational MODE: single process ***
+WSGI app 0 (mountpoint='') ready in 1 seconds on interpreter 0x8548c0 pid: 26269 (default app)
+uWSGI running as root, you can use --uid/--gid/--chroot options
+*** WARNING: you are running uWSGI as root !!! (use the --uid flag) *** 
+*** uWSGI is running in multiple interpreter mode ***
+spawned uWSGI worker 1 (and the only) (pid: 26269, cores: 1)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 1/1] 223.104.3.225 () {42 vars in 1505 bytes} [Fri Aug  3 14:33:10 2018] GET /go2/regUser/dboard1 => generated 0 bytes in 99 msecs (HTTP/1.1 500) 0 headers in 0 bytes (1 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 2/2] 223.104.3.225 () {40 vars in 1463 bytes} [Fri Aug  3 14:33:17 2018] GET /go2/regUser/dboard1 => generated 0 bytes in 11 msecs (HTTP/1.1 500) 0 headers in 0 bytes (1 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 3/3] 223.104.3.225 () {40 vars in 1425 bytes} [Fri Aug  3 14:33:22 2018] GET / => generated 0 bytes in 21 msecs (HTTP/1.1 500) 0 headers in 0 bytes (1 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 4/4] 223.104.3.225 () {40 vars in 1425 bytes} [Fri Aug  3 14:33:23 2018] GET / => generated 0 bytes in 41 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 5/5] 223.104.3.225 () {38 vars in 629 bytes} [Fri Aug  3 14:33:33 2018] GET / => generated 0 bytes in 19 msecs (HTTP/1.1 500) 0 headers in 0 bytes (1 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 6/6] 223.104.3.225 () {40 vars in 633 bytes} [Fri Aug  3 14:33:34 2018] GET /favicon.ico => generated 0 bytes in 12 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 7/7] 223.104.3.225 () {38 vars in 647 bytes} [Fri Aug  3 14:33:41 2018] GET /go2/login => generated 0 bytes in 10 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 8/8] 223.104.3.225 () {42 vars in 642 bytes} [Fri Aug  3 14:34:29 2018] GET / => generated 0 bytes in 18 msecs (HTTP/1.1 500) 0 headers in 0 bytes (1 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 9/9] 223.104.3.225 () {38 vars in 599 bytes} [Fri Aug  3 14:34:30 2018] GET /apple-touch-icon-precomposed.png => generated 0 bytes in 12 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 10/10] 223.104.3.225 () {38 vars in 575 bytes} [Fri Aug  3 14:34:30 2018] GET /apple-touch-icon.png => generated 0 bytes in 10 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 11/11] 223.104.3.225 () {38 vars in 557 bytes} [Fri Aug  3 14:34:30 2018] GET /favicon.ico => generated 0 bytes in 10 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 12/12] 223.104.3.225 () {38 vars in 599 bytes} [Fri Aug  3 14:34:30 2018] GET /apple-touch-icon-precomposed.png => generated 0 bytes in 10 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 13/13] 223.104.3.225 () {38 vars in 575 bytes} [Fri Aug  3 14:34:30 2018] GET /apple-touch-icon.png => generated 0 bytes in 10 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 14/14] 223.104.3.225 () {38 vars in 557 bytes} [Fri Aug  3 14:34:30 2018] GET /favicon.ico => generated 0 bytes in 10 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 15/15] 223.104.3.225 () {42 vars in 691 bytes} [Fri Aug  3 14:34:30 2018] GET / => generated 0 bytes in 16 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 16/16] 223.104.3.225 () {38 vars in 599 bytes} [Fri Aug  3 14:34:30 2018] GET /apple-touch-icon-precomposed.png => generated 0 bytes in 10 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 17/17] 223.104.3.225 () {38 vars in 575 bytes} [Fri Aug  3 14:34:30 2018] GET /apple-touch-icon.png => generated 0 bytes in 10 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 18/18] 223.104.3.225 () {38 vars in 557 bytes} [Fri Aug  3 14:34:30 2018] GET /favicon.ico => generated 0 bytes in 9 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 19/19] 223.104.3.225 () {38 vars in 599 bytes} [Fri Aug  3 14:34:30 2018] GET /apple-touch-icon-precomposed.png => generated 0 bytes in 10 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 20/20] 223.104.3.225 () {38 vars in 575 bytes} [Fri Aug  3 14:34:30 2018] GET /apple-touch-icon.png => generated 0 bytes in 9 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/wsgi.py", line 157, in __call__
+    response = self.get_response(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 124, in get_response
+    response = self._middleware_chain(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 43, in inner
+    response = response_for_exception(request, exc)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 93, in response_for_exception
+    response = handle_uncaught_exception(request, get_resolver(get_urlconf()), sys.exc_info())
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py", line 142, in handle_uncaught_exception
+    callback, param_dict = resolver.resolve_error_handler(500)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 418, in resolve_error_handler
+    callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 35, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/urls/resolvers.py", line 398, in urlconf_module
+    return import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "./go2/urls.py", line 18, in <module>
+    from regUser.views import student_list,dboard
+  File "./regUser/views.py", line 14, in <module>
+    from gradeClass.views import getDayClasses,Lesson
+  File "./gradeClass/views.py", line 5, in <module>
+    from tools.data import saveLesson
+  File "./tools/data.py", line 12, in <module>
+    from tools.utils import getDateNow
+  File "./tools/utils.py", line 9, in <module>
+    from PIL import Image, ImageOps
+ImportError: No module named PIL
+[pid: 26269|app: 0|req: 21/21] 223.104.3.225 () {38 vars in 557 bytes} [Fri Aug  3 14:34:30 2018] GET /favicon.ico => generated 0 bytes in 10 msecs (HTTP/1.1 500) 0 headers in 0 bytes (0 switches on core 0)

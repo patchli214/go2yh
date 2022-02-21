@@ -1,0 +1,162 @@
+<html>
+<head>
+
+    <title>{%if s.name2%}{{s.name2}}{%else%}{{s.name}}{%endif%}的“真朴”成长画册</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<style>
+.ad{display: block;width:100%}
+</style>
+</head>
+{% block content %}
+<body style="margin:0;padding:0;font-family:'微软雅黑';background:#ffa719;">
+<center>
+<div style="width:100%;margin:0;padding:0;"><img src="/go_static/img/title.gif" width="100%">
+</div>
+<div style="padding:20px;"><h3>{%if s.name2%}{{s.name2}}{%else%}{{s.name}}{%endif%}
+{%if s.siblingName%} {{s.siblingName}}{%endif%}{%if s.siblingName2%} {{s.siblingName2}}{%endif%} {%if s.siblingName3%} {{s.siblingName3}}{%endif%}的“真朴”成长画册</h3></div>
+<div style="width:100%;margin:0;
+background-size: 300px 420px;
+background-image:
+radial-gradient(circle, #ffffff 50px, transparent 1%),
+radial-gradient(circle, #fc7202 90px, transparent 1%);
+text-align:center;">
+   {% for image in files %}
+
+   <img class="pics" style="max-width:70%;border-radius:20px" src='/go_static/users/{{imagePath}}{{image.filepath}}{{image.filename}}'>
+   <p style="padding:10px;font-size:14px;">
+   {{image.memo|default:""}}
+   </p>
+   <br>
+
+   {% endfor %}
+   <hr>
+   <br><br>
+   <center><img src="/go_static/users/{{s.branch.id}}/classroom.jpg" style="max-width:90%;border-radius:20px"></center>
+   <p>
+   <h4>这里是真朴围棋{{s.branchName}}校区</h4>
+   </p>
+   <br><br>
+   <p>
+   <h4>{%if s.name2 %}{{s.name2}}{%elif s.name%}{{s.name}}{%endif%}就在这里，你来吗？</h4>
+   </p>
+   <br><br>
+   <button style="box-shadow: 3px 3px 10px #ffffff;background:-webkit-linear-gradient(#58e13d,#32bf16);width: 90%;height: 60px;font-size: 18px;" class="btn btn-warning" onclick="goRefer()">报名免费试听</button>
+   <p>
+
+   <!-- button style="box-shadow: 3px 3px 10px #ffffff;background:#f83204;border-radius:10px;padding:50px 80px 50px 80px;color:white;" onclick="goRefer()"><font style="font-family:'微软雅黑';font-size:20px;">报名免费试听</font></button> -->
+   </p>
+   <br><br><br><br><br>
+</div>
+</center>
+{%if s.branchName != '槐房-万达'%}
+<div style="background:#ffa719;">
+<img class="ad" src="http://www.zenweiqi.com/m/images/b_01.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_02.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_03.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_04.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_05.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_06.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_07.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_08.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_09.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_10.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_11.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_12.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_13.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_14.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_15.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_16.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_17.jpg" />
+<img class="ad"  src="http://www.zenweiqi.com/m/images/b_23.jpg" />
+<p><center>
+   <button style="box-shadow: 3px 3px 10px #ffffff;background:-webkit-linear-gradient(#58e13d,#32bf16);width: 90%;height: 60px;font-size: 18px;" class="btn btn-warning" onclick="goRefer()">报名免费试听</button>
+   </center>
+   </p>
+<br>
+</div>
+{%endif%}
+</body></html>
+{% endblock %}
+<script>
+function goRefer(){
+	  var url = '{% url 'regUser:rr' %}'+'?st=C&rid={{s.id}}'+'&file_oid={{file_oid}}';
+	  window.location.href = url;
+}
+</script>
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+  /*
+   * 注意：
+   * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+   * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+   * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+   *
+   * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+   * 邮箱地址：weixin-open@qq.com
+   * 邮件主题：【微信JS-SDK反馈】具体问题
+   * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+   */
+  var ticket = '{{ticket}}'
+  var string1 = '{{string1}}'
+  var url = '{{url}}'
+  wx.config({
+    debug: false,
+    appId: '{{appId}}',
+    timestamp: '{{res.timestamp}}',
+    nonceStr: '{{res.nonceStr}}',
+    signature: '{{res.signature}}',
+    jsApiList: [
+      'checkJsApi',
+      'onMenuShareTimeline',
+      'onMenuShareAppMessage',
+      'onMenuShareQQ',
+      'onMenuShareWeibo',
+      'onMenuShareQZone'
+      // 所有要调用的 API 都要加到这个列表中
+    ]
+  });
+
+  wx.ready(function () {
+      wxOnShare();
+  });
+
+  function wxOnShare() {
+      var title = '{%if s.name2%}{{s.name2}}{%else%}{{s.name}}{%endif%}的“真朴”成长画册';
+      var desc = "学棋的孩子懂事早";
+      var link = location.href.split('#')[0];
+
+      var imgUrl = "http://www.go2crm.cn{{iconUrl}}";
+      wx.onMenuShareAppMessage({
+          title: title,
+          desc: desc,
+          link: link,
+          imgUrl: imgUrl,
+          trigger: function (res) {
+          },
+          success: function (res) {
+          },
+          cancel: function (res) {
+          },
+          fail: function (res) {
+          }
+      });
+      wx.onMenuShareTimeline({
+          title: title,
+          link: link,
+          imgUrl: imgUrl,
+          trigger: function (res) {
+          },
+          success: function (res) {
+          },
+          cancel: function (res) {
+          },
+          fail: function (res) {
+          }
+      });
+    }
+</script>

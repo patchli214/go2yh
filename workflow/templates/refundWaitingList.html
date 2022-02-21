@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+<link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+        <style>
+
+    .inactiveNam{background:#555555;color:white;}
+
+    .showMemo{cursor:pointer;}
+    .showMemo2{cursor:pointer;}
+    td{padding:1px;}
+    </style>
+{% include 'subNav.html' %}
+
+
+<div style="margin-left:0px;float:left;">
+<table id="datatable" >
+        <thead>
+        <tr>
+        <th nowrap>校区</th>
+        <th nowrap>学生</th>
+
+        <th>电话</th>
+        <th nowrap>来源</th>
+        <th nowrap>拜访老师</th>
+        <th nowrap>签约时间</th>
+        <th nowrap>合同金额</th>
+        <th nowrap>已开票金额</th>
+        <th nowrap>退费金额</th>
+        <th nowrap>合同周数</th>
+        <th nowrap>剩余周数</th>
+        <th nowrap>申请日期</th>
+        <th nowrap style="width:140px;">退费理由</th>
+        <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for refund in refunds %}
+        <tr>
+          <td nowrap>[{{refund.branch.city.cityName}}]{{refund.branch.branchName}}  </td>
+          <td nowrap>{{refund.student.name|default:""}}{%if not refund.student.name%}{{refund.student.name2|default:""}}{%endif%}  </td>
+
+          <td>{{refund.student.prt1|default:""}}{{refund.student.prt1mobile}}{{refund.student.prt2|default:""}}{{refund.student.prt2mobile|default:""}}</td>
+          <td nowrap>{{refund.student.regBranchName|default:""}}</td>
+          <td nowrap>{%if refund.student.sourceType == 'B' or refund.student.sourceType == 'C'%}{{refund.student.regTeacherName|default:""}}{%endif%}</td>
+          <td nowrap>{{refund.singDate|date:"Y-m-d"}}</td>
+          <td nowrap align="center">{{refund.paid}}</td>
+          <td nowrap align="center">{{refund.receipt}}</td>
+          <td nowrap align="center">{{refund.refund|default:refund.paid}}</td>
+          <td nowrap align="center">{{refund.weeks}}</td>
+
+          <td nowrap align="center">{{refund.lessonLeft}}</td>
+          <td nowrap>{{refund.refundAppDate|date:"Y-m-d"|default:""}}</td>
+          <td>{{refund.memo2}}</td>
+          <td nowrap>
+            <button id="refundButton"
+                sname="{{refund.student.name}}"
+                cpaid="{{refund.paid}}"
+                coid="{{refund.id}}"
+                refund="{{refund.refund}}"
+                pic="{%if refund.pic%}{{refund.pic}}{%endif%}"
+                class="btn btn-success approve">审批</button>
+            </td>
+        </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{{sum}}
+{%if sum > 10%}
+<div style="text-align:center;padding:20px;">
+<a href="#top"><button>返回顶部</button></a>
+</div>
+{%endif%}
+
+<div class="modal fade" id="refundModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <button onclick="save_refund(-1,1)" class="btn btn-success">批准</button>&nbsp;&nbsp;
+                <button  onclick="save_refund(0,2)"  class="btn btn-danger">驳回</button>
+            </div>
+            <div class="modal-body" id="info-body">
+                <div style="padding:10px">
+                  合同信息：
+                    <span id="sname"></span>
+                    <span id="cpaid"></span>
+                    退费金额：<input id="refund" readonly="readonly"／>
+                    <input id="refund_oid" type="hidden" />
+
+                  </div>
+                  <div style="padding:10px">
+                    审批意见：<input id="refundMemo" />
+                  </div>
+                  <div>
+                     <span id="attach"></span>
+
+                  </div>
+
+
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+  </center>
+</div>
+
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+$("#subNav21").attr("class","activeNav");
+
+{% include 'subNavJs.html' %}
+
+$(document).ready(function() {
+	$('#datatable').DataTable({
+	"paging":   false,
+	"searching": false,
+	"info":false,
+	"order": [[ 11, "desc" ]]
+
+	});
+});
+
+$(".approve").click(function(){
+
+    $("#sname").html('<font color="#888888">学生姓名：</font>'+$(this).attr("sname"))
+    $("#cpaid").html('<font color="#888888">合同金额：</font>'+$(this).attr("cpaid"))
+    var r = $(this).attr("refund")
+    if(r=='None'){
+      r = $(this).attr("cpaid")
+    }
+    $("#refund").val(r)
+    $("#refund_oid").val($(this).attr("coid"))
+    $("#attach").html('<img src="/go_static/users/'+$(this).attr("pic")+'?tag={{timenow}}" />')
+    $("#refundModal").modal();});
+
+function save_refund(status,approve){
+  oid = $("#refund_oid").val()
+  refundMemo = $("#refundMemo").val()
+  var mess = '确定批准退费？';
+  var mess2 = '已批准退费';
+  if(status=='0'){
+    mess='确定驳回退费申请？';
+    mess2='退费已驳回';
+  }
+  if(status=='0'&refundMemo.length==0){
+    alert('如驳回必须填写审批意见');
+    return;
+  }
+  if(!confirm(mess)){
+    return;
+  }
+  $.post("{% url 'workflow:api_refund'%}", {
+      'contract_oid':oid,
+      'status':status,
+      'refundMemo': refundMemo,
+      'refundApprove':approve
+
+  }, function (res) {
+      if (res.error == 0) {
+
+        var first= '退费';
+        var date = new Date();
+        var name = $("#sname").text();
+        var branch = res.branch
+        var keyword4= date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes();
+        inform(first,res.openId,name,'',keyword4,branch);
+        alert(mess2);
+
+          location.reload(true);
+      } else {
+          alert("操作失败，请重试");
+      }
+  });
+}
+
+
+
+$('#refundDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+</script>
+{% endblock %}

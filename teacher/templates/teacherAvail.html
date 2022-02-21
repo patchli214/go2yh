@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+<style>
+.title{
+  border:1px solid;
+}
+.title1{
+  border-top:0;border-right:0;border-bottom:1px;border-left:1px;border-style:solid;
+}
+.title2{
+  border-top:0;border-right:1px;border-bottom:1px;border-left:1px;border-style:solid;
+}
+.thin{height:16px;}
+.teacher{line-height:12px;}
+</style>
+
+<div style="float:left;font-weight:bold;">
+本周可试听时间表
+</div>
+<div style="float:right;">
+  <button class="btn-success btn" style="padding:4px 8px 4px 8px;">加试听</button>
+</div>
+<div style="clear:both;padding:20px 0 0 0;"></div>
+
+  <div style="float:left;width:12%;">日期</div>
+  <div class="title" style="float:right;width:42%;">周三</div>
+  <div style="float:right;">&nbsp;</div>
+  <div class="title" style="float:right;width:42%;">周二</div>
+  <div style="clear:both;"></div>
+  <div style="float:left;width:12%;">时间</div>
+  <div class="title2" style="float:right;width:14%;">7:30</div>
+  <div class="title1" style="float:right;width:14%;">6:30</div>
+  <div class="title1" style="float:right;width:14%;">5:30</div>
+  <div style="float:right;">&nbsp;</div>
+  <div class="title2" style="float:right;width:14%;">7:30</div>
+  <div class="title1" style="float:right;width:14%;">6:30</div>
+  <div class="title1" style="float:right;width:14%;">5:30</div>
+
+  <div class="teacher"  style="float:left;width:12%;padding:0px 0 0 0;font-size:8px;">王绘锦</div>
+  <div class="title2 thin" style="float:right;width:14%;">&nbsp;</div>
+  <div class="title1 thin" style="float:right;width:14%;">&nbsp;</div>
+  <div class="title1 thin" style="float:right;width:14%;">&nbsp;</div>
+  <div style="float:right;">&nbsp;</div>
+  <div class="title2 thin" style="float:right;width:14%;">&nbsp;</div>
+  <div class="title1 thin" style="float:right;width:14%;">&nbsp;</div>
+  <div class="title1 thin" style="float:right;width:14%;"><img src="/go_static/img/blue.png" style="width:30%;height:100%;"/><img src="/go_static/img/white.png" style="width:20%;height:100%;"/><img src="/go_static/img/blue.png" style="width:40%;height:100%;"/></div>
+
+<div style="clear:both;"></div>
+
+  <div class="teacher"  style="float:left;width:12%;padding:0px 0 0 0;font-size:8px;">王绘锦</div>
+  <div class="title2 thin" style="float:right;width:14%;">&nbsp;</div>
+  <div class="title1 thin" style="float:right;width:14%;">&nbsp;</div>
+  <div class="title1 thin" style="float:right;width:14%;">&nbsp;</div>
+  <div style="float:right;">&nbsp;</div>
+  <div class="title2 thin" style="float:right;width:14%;">&nbsp;</div>
+  <div class="title1 thin" style="float:right;width:14%;">&nbsp;</div>
+  <div class="title1 thin" style="float:right;width:14%;"><img src="/go_static/img/blue.png" style="width:30%;height:100%;"/><img src="/go_static/img/white.png" style="width:20%;height:100%;"/><img src="/go_static/img/blue.png" style="width:50%;height:100%;"/></div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+    </script>
+{% endblock %}

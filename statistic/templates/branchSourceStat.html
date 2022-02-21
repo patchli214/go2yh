@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a><span id='tip' style="color:red;"></span>
+</div>
+
+<div>
+
+
+<center><h4>{{branch.branchName}}校区渠道统计</h4>
+
+<div style="width:100%;margin:0 auto;text-align:center;">
+<input id="beginDate" type="text" placeholder="起始日期">
+<input id="endDate" type="text" placeholder="截至日期">
+<button id="searchButton">统计</button>
+
+</div>
+<center>
+<br>
+<div style="float:left;min-width:360px;padding-right:10px;">
+{%if isNet == 0%}
+<center>
+  <h5>校区渠道</h5>
+    <table  id="datatable" border="1">
+    <thead>
+        <tr style="background:#eeeeee;">
+
+        <th  align="center">渠道</th>
+        <th  align="center">咨询</th>
+        <th  align="center">到场</th>
+        <th  align="center">成交</th>
+
+
+
+        </tr>
+</thead>
+<tbody>
+
+{%for stat in all%}
+{%if stat.reg > 0 or stat.show > 0 or stat.deal > 0%}
+<tr {%if stat.type == 1%}style="background:#eeeeee;{%if stat.isSum == 1%}font-weight:bold{%endif%}"{%endif%}>
+<td>{{stat.title}}</td>
+<td>{%if stat.reg > 0%}{{stat.reg}}{%endif%}</td>
+<td>{%if stat.show > 0%}{{stat.show}}{%endif%}</td>
+<td>{%if stat.deal > 0%}{{stat.deal}}{%endif%}</td>
+
+
+</tr>
+{%endif%}
+{%endfor%}
+</tbody>
+</table>
+</center>
+{%endif%}
+</div>
+<div style="float:left;min-width:360px;">
+  <center>
+<h5>市场部渠道</h5>
+<table  id="datatable2" border="1">
+<thead>
+    <tr style="background:#eeeeee;">
+
+    <th  align="center">渠道</th>
+    <th  align="center">咨询</th>
+    <th  align="center">有效咨询</th>
+    <th  align="center">预约</th>
+    <th  align="center">到场</th>
+    <th  align="center">成交</th>
+
+    </tr>
+</thead>
+<tbody>
+
+{%for stat in net%}
+{%if stat.reg > 0 or stat.show > 0 or stat.deal > 0%}
+<tr{%if stat.type == 1%} style="background:#eeeeee;{%if stat.isSum == 1%}font-weight:bold{%endif%}"{%endif%}>
+<td>{{stat.title}}</td>
+<td>{%if stat.reg > 0%}{{stat.reg}}{%endif%}</td>
+<td>{%if stat.regValid > 0%}{{stat.regValid}}{%endif%}</td>
+<td>{%if stat.demo > 0%}{{stat.demo}}{%endif%}</td>
+<td>{%if stat.show > 0%}{{stat.show}}{%endif%}</td>
+<td>{%if stat.deal > 0%}{{stat.deal}}{%endif%}</td>
+
+
+</tr>
+{%endif%}
+{%endfor%}
+
+
+</tbody>
+
+<tfoot><th>合计</th>
+
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+  <th></th>
+
+
+</tfoot>
+
+
+</table>
+</center>
+</div>
+</center>
+</center>
+</div>
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#searchButton").click(function(){
+    if($("#beginDate").val()==''){
+        alert('请填写起始日期')
+        return
+    }
+    if($("#endDate").val()==''){
+        alert('请填写截至日期')
+        return
+    }
+	var url = "{%url 'statistic:branchSourceStat'%}?beginDate="+$("#beginDate").val()+"&endDate="+$("#endDate").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	$("#tip").html("查询中...");
+	window.location.href=url;
+})
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+
+$(document).ready(function() {
+    $('#datatable').DataTable( {
+    	"ordering": false,
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ]
+
+    });
+
+    $('#datatable2').DataTable( {
+    	"ordering": false,
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ],
+        "footerCallback": function( tfoot, data, start, end, display ) {
+        var api = this.api();
+
+        $( api.column( 1 ).footer() ).html(
+            api.column( 1 ).data().reduce( function ( a, b ) {
+                var ai = new Number(a)
+                var bi = new Number(b)
+                return ai + bi;
+            }, 0 )
+        );
+        $( api.column( 2 ).footer() ).html(
+            api.column( 2 ).data().reduce( function ( a, b ) {
+                var ai = new Number(a)
+                var bi = new Number(b)
+                return ai + bi;
+            }, 0 )
+        );
+        $( api.column( 3 ).footer() ).html(
+            api.column( 3 ).data().reduce( function ( a, b ) {
+                var ai = new Number(a)
+                var bi = new Number(b)
+                return ai + bi;
+            }, 0 )
+        );
+        $( api.column( 4 ).footer() ).html(
+            api.column( 4 ).data().reduce( function ( a, b ) {
+                var ai = new Number(a)
+                var bi = new Number(b)
+                return ai + bi;
+            }, 0 )
+        );
+        $( api.column( 5 ).footer() ).html(
+            api.column( 5 ).data().reduce( function ( a, b ) {
+                var ai = new Number(a)
+                var bi = new Number(b)
+                return ai + bi;
+            }, 0 )
+        );
+      }
+    });
+});
+</script>
+{% endblock %}

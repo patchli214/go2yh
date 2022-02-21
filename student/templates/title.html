@@ -1,0 +1,182 @@
+{% load staticfiles %}
+<html>
+<head>
+
+    <title>{%if user.student.name2%}{{user.student.name2}}{%elif user.student.name%}{{user.student.name}}{%endif%}的真朴成就</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css?tag=1">
+    <!-- link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css"-->
+    <link rel="stylesheet" type="text/css" href="/go_static/media/css/buttons.dataTables.min.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/media/js/jquery.dataTables.min.js"></script>
+   	<script type="text/javascript" language="javascript" src="/go_static/media/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" language="javascript" src="/go_static/media/js/buttons.html5.min.js"></script>
+	<script type="text/javascript" language="javascript" src="/go_static/media/js/buttons.print.min.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+
+    <script src="/go_static/js/utils.js?ver=20170909b"></script>
+    <script src="/go_static/js/config.js"></script>
+
+<style>
+ .stat{text-align:right;padding-right:10px;padding-left:10px;}
+</style>
+
+</head>
+
+<body>
+
+
+<div style="padding:20px;font-size:18px;text-align:center;">
+    <font style="font-size:22px">{%if user.student.name2%}{{user.student.name2}}{%elif user.student.name%}{{user.student.name}}{%endif%}</font>
+    &nbsp;&nbsp;<img src="{{iconUrl}}" width="24" style="padding-bottom:6px;"/>真朴围棋年度称号
+
+
+</div>
+<div style="clear:both;width:100%;text-align:center;">
+  <img id='userPic' style="border-radius:5%;border:1px solid black;" src="{{userPic}}" /></div>
+
+
+<div style="width:100%;padding-left:20px;padding-bottom:20px;">
+<center style="margin-bottom:20px;height:45px;background:orange;margin-right:10px;border-top-left-radius:0;
+border-top-right-radius:2em;
+border-bottom-right-radius:2em;
+border-bottom-left-radius:0;
+color:white;"><h3 style="padding-top:9px;">{{title}}</h3></center>
+
+<div>练习：{{user.history_total_question_count|default:'0'}}&nbsp;&nbsp;对局：{{user.history_total_match_count|default:'0'}}</div>
+<div>金币：{{user.coins|default:'0'}}&nbsp;&nbsp;钻石：{{user.diamonds|default:'0'}}</div>
+{%for h in history%}
+
+<!--下几盘棋｜几胜-->
+{%if h.type == 4%}<div style="width:100%;min-height:40px;line-height:44px;vertical-align: middle;padding-left:40px;background:url('/go_static/img/go.png') no-repeat;">
+{{h.date|date:"Y-m-d"}}&nbsp;<font style="color:#666666;">{{h.memo|default:""}}</font></div>{%endif%}
+<!--在线练习＊＊题-->
+{%if h.type == 5%}<div style="width:100%;min-height:40px;line-height:44px;vertical-align: middle;padding-left:40px;background:url('/go_static/img/go.png') no-repeat;">
+{{h.date|date:"Y-m-d"}}&nbsp;<font style="color:#666666;">{{h.memo|default:""}}</font></div>{%endif%}
+
+
+<!--证书-->
+{%if h.type == 3%}<div style="width:100％;min-height:60px;line-height:60px;vertical-align: middle;padding-left:20px;background:url('/go_static/img/{{h.memo|default:""}}.png') no-repeat;">
+{{h.date|date:"Y-m-d"}}<font style="color:#fe5f01;font-weight:bold;">荣获中国棋院业余{{h.memo|default:""}}级证书</font></div>{%endif%}
+
+{%endfor%}
+<div style="line-height:30px;vertical-align: middle;padding-left:40px;background:url('/go_static/img/begin.png') no-repeat;">
+</div>
+</div>
+
+<div style="clear:both;width:100%;text-align:center;padding-bottom:40px;"><a href="achievement?studentId={{user.student.id}}">{%if user.student.name2%}{{user.student.name2}}{%elif user.student.name%}{{user.student.name}}{%endif%}的{{title}}档案></a></div>
+
+
+
+
+
+
+
+</body>
+</html>
+<script>
+$("#tipVoucher").click(function(){$("#voucherModal").modal();});
+$(document).ready(function(){
+    if(mobileCheck()){
+        WIDTH = screen.width * 0.8
+        $("#userPic").load(function() {
+         pic_width = this.width;   // Note: $(this).width() will not
+         pic_height = this.height; // work for in memory images.
+         var wh = pic_width/pic_height;
+         var newHeight = screen.width * 0.8 / wh;
+         if(WIDTH < newHeight){
+           newHeight = WIDTH;
+           WIDTH = newHeight * wh;
+         }
+         $(this).css("width",WIDTH);
+         $(this).css("height",newHeight);
+
+     });
+    }
+
+});
+
+</script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+  /*
+   * 注意：
+   * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+   * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+   * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+   *
+   * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+   * 邮箱地址：weixin-open@qq.com
+   * 邮件主题：【微信JS-SDK反馈】具体问题
+   * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+   */
+  var ticket = '{{ticket}}'
+  var string1 = '{{string1}}'
+  var url = '{{url}}'
+  wx.config({
+    debug: false,
+    appId: '{{appId}}',
+    timestamp: '{{res.timestamp}}',
+    nonceStr: '{{res.nonceStr}}',
+    signature: '{{res.signature}}',
+    jsApiList: [
+      'checkJsApi',
+      'onMenuShareTimeline',
+      'onMenuShareAppMessage',
+      'onMenuShareQQ',
+      'onMenuShareWeibo',
+      'onMenuShareQZone'
+      // 所有要调用的 API 都要加到这个列表中
+    ]
+  });
+
+  wx.ready(function () {
+      wxOnShare();
+  });
+
+  function wxOnShare() {
+      var title = "{%if user.student.name2%}{{user.student.name2}}{%elif user.student.name%}{{user.student.name}}{%endif%}在真朴围棋挑战21天习惯养成,已坚持{{days}}天";
+      var desc = "{%if user.level %}{{user.level}}级证书，{%endif%}{%if user.star %}{{user.star}}星考证书，{%endif%}级别：{{user.rank|default:30}}K，做题：{{user.history_total_question_count}}，下棋：{{user.history_total_match_count}}，拥有钻石：{{user.diamonds}}，金币：{{user.coins}}";
+      var link = location.href.split('#')[0];
+
+      var imgUrl = "http://www.go2crm.cn{{userPic}}";
+      wx.onMenuShareAppMessage({
+          title: title,
+          desc: desc,
+          link: link,
+          imgUrl: imgUrl,
+          trigger: function (res) {
+          },
+          success: function (res) {
+          },
+          cancel: function (res) {
+          },
+          fail: function (res) {
+          }
+      });
+      wx.onMenuShareTimeline({
+          title: title,
+          link: link,
+          imgUrl: imgUrl,
+          trigger: function (res) {
+          },
+          success: function (res) {
+          },
+          cancel: function (res) {
+          },
+          fail: function (res) {
+          }
+      });
+    }
+</script>

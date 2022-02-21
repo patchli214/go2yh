@@ -1,0 +1,88 @@
+<style>
+.badge1 {
+   position:relative;
+   border-radius:5px;
+   border-width: 1px;
+   background-color: #eeeeee;
+}
+.badge1[data-badge]:after {
+   content:attr(data-badge);
+   position:absolute;
+   top:-1px;
+   right:-12px;
+   font-size:.7em;
+   background:red;
+   color:white;
+   width:18px;height:18px;
+   text-align:center;
+   line-height:18px;
+   border-radius:50%;
+   box-shadow:0 0 1px #333;
+}
+
+.badge2 {
+   position:relative;
+   border-radius:5px;
+   border-width: 1px;
+   background-color: #555555;
+}
+.badge2[data-badge]:after {
+   content:attr(data-badge);
+   position:absolute;
+   top:-1px;
+   right:-12px;
+   font-size:.7em;
+   background:red;
+   color:white;
+   width:18px;height:18px;
+   text-align:center;
+   line-height:18px;
+   border-radius:50%;
+   box-shadow:0 0 1px #333;
+}
+
+.badge3 {
+   position:relative;
+   border-radius:5px;
+   border-width: 1px;
+   background-color: #ffffff;
+}
+.badge3[data-badge]:after {
+   content:attr(data-badge);
+   position:absolute;
+   top:-1px;
+   right:-12px;
+   font-size:.7em;
+   background:red;
+   color:white;
+   width:18px;height:18px;
+   text-align:center;
+   line-height:18px;
+   border-radius:50%;
+   box-shadow:0 0 1px #333;
+}
+
+</style>
+<div align="left" style="float:left;width:50%">
+  <img src="/go_static/img/logo.png" width="30" style="cursor:pointer;" onclick="window.location.href='/'"/>
+  {{login_teacher.city}} <b>{{login_teacher.branchName}}</b>&nbsp;{{login_teacher.branchTel}}
+</div>
+<div align="right" style="float:left;width:50%">
+  <button id="messageNum" class="badge1">消息</button>
+  &nbsp;&nbsp;{{login_teacher.roleName}}-{{login_teacher.teacherName}}
+  &nbsp;&nbsp;<a href='/go2/logout'>退出</a>
+</div>
+<script>
+$("#messageNum").click(function(){
+  window.location.href="/go2/teacher/message"
+})
+$.post("{% url 'teacher:api_getMessage'%}", {
+}, function (res) {
+    if (res.error == 0) {
+        if(res.messageNum>0)
+            $("#messageNum").attr("data-badge",res.messageNum)
+    } else {
+        alert("失败");
+    }
+});
+</script>

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a>
+</div>
+
+<div>
+<div style="margin-left:20px;"><center><b>转化率表（{{login_teacher.branchName}}）</b>
+<select id="city">
+<option value="5867c05d3010a51fa4f5abe5">北京</option>
+</select>
+<select id="year">
+<option value="2021">2021</option>
+
+</select>
+<select id="month">
+<option value="">全部月份</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+</select>
+
+<button id="searchButton">查询</button>
+</center>
+</div>
+
+<br>
+<div id="table-container">
+<center>
+    <table  id="datatable" border="1">
+    <thead>
+        <tr style="background:#eeeeee;">
+        <th></th>
+        <th  align="center">有效咨询率</th>
+        <th  align="center">有效咨询预约率</th>
+        <th  align="center">到场率</th>
+        <th  align="center">到场成交率</th>
+        <th  align="center">预约成交率</th>
+        <th  align="center">咨询最终成交率</th>
+        <th  align="center">最终成交</th>
+        </tr>
+</thead>
+<tbody>
+{%for stat in res%}
+<tr>
+<td>{{stat.title}}</td>
+<td>{%if stat.regValidRatio > 0%}{{stat.regValidRatio}}%{%endif%}</td>
+<td>{%if stat.reserationRatio > 0%}{{stat.reserationRatio}}%{%endif%}</td>
+<td>{%if stat.showRatio > 0%}{{stat.showRatio}}%{%endif%}</td>
+<td>{%if stat.showDealRatio > 0%}{{stat.showDealRatio}}%{%endif%}</td>
+<td>{%if stat.dealRatio > 0%}{{stat.dealRatio}}%{%endif%}</td>
+<td>{%if stat.regValidDealRatio > 0%}{{stat.regValidDealRatio}}%{%endif%}</td>
+<td>{%if stat.dealPure > 0%}{{stat.dealPure}}{%endif%}</td>
+</tr>
+{%endfor%}
+
+</tbody>
+</table>
+</center>
+</div>
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#searchButton").click(function(){
+	if($("#year").val()==''){
+	    alert("请选年份")
+	    return
+    }
+	var url = "{%url 'statistic:statRatioBranch'%}?net=1&year="+$("#year").val()+"&month="+$("#month").val()+"&city="+$("#city").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+})
+
+$("#year").val('{{year}}')
+$("#year").css("color","red")
+$("#month").val('{{month}}')
+$("#month").css("color","red")
+$("#city").val('{{city}}')
+$("#city").css("color","red")
+
+$(document).ready(function() {
+    $('#datatable').DataTable( {
+    	"ordering": false,
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ]
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+
+    <link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+            <style>
+
+        .inactiveNam{background:#555555;color:white;}
+
+        .showMemo{cursor:pointer;}
+        .showMemo2{cursor:pointer;}
+        td,th{border-left:#dddddd solid 1px;}
+        th{text-align:center}
+        </style>
+    {% include 'subNav.html' %}
+
+    <div style="float:left;padding:10px;">
+    <input style="width:90px;" type="text" id="beginDate" name="beginDate" placeholder="起始日期">
+       <input style="width:90px;" type="text" id="endDate" name="endDate" placeholder="截至日期">
+
+       <select id="searchBranch" name="searchBranch">
+         <option value="">全部校区</option>
+         {%for b in branches%}
+         <option value="{{b.id}}">{{b.city.cityName}}-{{b.branchName}}</option>
+         {%endfor%}
+       </select>
+
+    <select id="searchStatus" name="searchStatus">
+      <option value="">全部状态</option>
+      <option value="2">已报</option>
+      <option value="3">驳回</option>
+    </select>
+
+    <button id="searchButton" onclick="search()">搜索</button>
+    </div>
+
+
+<div style="clear:both;">
+    <table  id="datatable"  class="table table-hover">
+      <thead>
+        <tr style="background:#eeeeee;">
+          <th nowrap>部门</th>
+          <th nowrap>类别</th>
+          <th nowrap>状态</th>
+          <th nowrap>申请人</th>
+          <th nowrap>申请人部门</th>
+          <th nowrap>预算内</th>
+          <th nowrap>发票</th>
+          <th nowrap>金额</th>
+          <th nowrap>申请日期</th>
+          <th nowrap>摘要</th>
+          <th nowrap>财务处理日期</th>
+          <th style="min-width:200px;">备注</th>
+
+          <th style="width:60px;">操作</th>
+
+
+</tr>
+</thead>
+<tbody>
+        {% for s in reimburses %}
+
+            <tr style="background:{%if s.status == 2%}#a5d2a6{%elif s.status == 3%}#f5b4b5{%endif%}">
+                <td>{{s.payBranch.branchName}}</td>
+                <td>{%if s.isBorrow and s.borrowId%}清借款{%elif s.isBorrow and not s.borrowId%}请款{%endif%}</td>
+                <td>{%if not s.isBorrow and s.status == 2%}已报{%elif s.isBorrow and s.status == 2 and s.borrowId%}已清{%elif s.isBorrow and s.status == 2 and not s.borrowId%}已借{%elif s.status == 3%}驳回{%endif%}</td>
+                <td >{{s.applicantName}}</td>
+                <td>{{s.branch.branchName}}</td>
+                <td >{%if s.budget%}是{%endif%}</td>
+                <td >{%if s.hasReceipt%}有{%else%}无{%endif%}</td>
+
+                <td >{{s.sum }}</td>
+                <td >{{s.appDate|date:"Y-m-d"}}</td>
+                <td>{{s.appmemo}}</td>
+                <td >{{s.paidDate|date:"Y-m-d"|default:""}}</td>
+                <td >{{s.finmemo|default:""}}</td>
+                <td>
+                <a href="{% url 'branch:reimburseShow' %}?id={{s.id}}">查看</a></td>
+
+            </tr>
+            {%endfor%}
+
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="picModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="info-body">
+
+                  <div>
+                     <span id="attach"></span>
+                  </div>
+
+            </div>
+
+        </div>
+    </div>
+  </center>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+{%if hasReceipt == '1'%}
+$("#subNav27").attr("class","activeNav");
+{%else%}
+$("#subNav28").attr("class","activeNav");
+{%endif%}
+{% include 'subNavJs.html' %}
+
+//日期控件
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+//查看附件图片
+$('.abutton').click(function(){
+  var imgSrc = $(this).attr('file');
+  var t = $(this).attr('cat');
+  $("#attach").html('<img src="'+imgSrc+'"/>')
+  $("#myModalLabel").html(t)
+
+  $("#picModal").modal();
+});
+
+//查询报销单
+function search(){
+  var searchStatus = $("#searchStatus").val();
+  var searchBranch = $("#searchBranch").val();
+  //alert(searchTeacher)
+  var y = $("#beginDate").val();
+  var m = $("#endDate").val();
+  search = '?hasReceipt={{hasReceipt}}';
+  if(y.length>0)search = search+'&beginDate='+y;
+  if(m.length>0)search = search+'&endDate='+m;
+  if(searchStatus.length>0){
+     search = search+'&searchStatus='+searchStatus;
+   }
+
+  if(searchBranch.length>0){
+     search = search+'&searchBranch='+searchBranch;
+   }
+
+  var url = "{% url 'workflow:reimburseDeals' %}"+search
+  window.location.href=url;
+}
+
+{%if searchStatus > -1%}$("#searchStatus").val('{{searchStatus}}'){%endif%}
+{%if searchBranch%}$("#searchBranch").val('{{searchBranch}}'){%endif%}
+{%if searchType%}$("#searchType").val('{{searchType}}'){%endif%}
+{%if beginDate%}$("#beginDate").val('{{beginDate}}'){%endif%}
+{%if endDate%}$("#endDate").val('{{endDate}}'){%endif%}
+</script>
+{% endblock %}

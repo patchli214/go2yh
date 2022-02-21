@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+
+            <center><h4 class="modal-title" id="myModalLabel">城市合同类型</h4>
+            <h3>{{city.cityName}}</h3></center>
+            <div class="modal-body" id="info-body">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <p><span>合同类型：</span><select id="type">
+                          <option value="0" {%if cityContract.type == 0%}selected="selected"{%endif%}>常规班</option>
+                          <option value="1" {%if cityContract.type == 1%}selected="selected"{%endif%}>集训班</option>
+                          <option value="2" {%if cityContract.type == 2%}selected="selected"{%endif%}>赠课</option>
+                          <option value="3" {%if cityContract.type == 3%}selected="selected"{%endif%}>会员费</option>
+                          <option value="4" {%if cityContract.type == 4%}selected="selected"{%endif%}>网课</option>
+                        </select>
+                        <p><span>合同小时数：</span><input type="text" id="duration" value="{{cityContract.duration}}">
+                        <p><span>标准价：</span><input type="text" id="fee" value="{{cityContract.fee}}">
+                        <p><span>优惠价：</span><input type="text" id="discountPrice"  value="{{cityContract.discountPrice|default:""}}">
+                          <p><span>季度学费：</span><input type="text" id="tuition"  value="{{cityContract.tuition|default:""}}">
+                        <p><span>备注：</span><input type="text" id="memo"  value="{{cityContract.memo|default:""}}">
+                        <p><span>排序编码：</span><input type="text" id="code"  value="{{cityContract.code|default:""}}">
+
+                        <p><span>删除（填“1”删除）：</span><input type="text" id="deleted" value="{{cityContract.deleted|default:''}}">
+                    </div>
+                </div>
+
+            </div>
+            <div >
+                <button class="btn btn-danger" onclick="saveContractType()" >保存</button>
+            </div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+function saveContractType(){
+
+	var url = "{% url 'branch:api_editContract' %}";
+	var duration = $("#duration").val();
+	var fee = $("#fee").val();
+  var tuition = $("#tuition").val();
+	var discountPrice = $("#discountPrice").val();
+	var memo = $("#memo").val();
+	var code = $("#code").val();
+  var type = $("#type").val();
+	var deleted = $("#deleted").val();
+
+
+	if(!duration){
+		alert('请填写周数');
+		return;
+	}
+	if(!fee){
+		alert('请填写标准价');
+		return;
+	}
+	$.post(url,{
+		{%if cityContract%}
+		"id":'{{cityContract.id}}',
+		{%endif%}
+    "csrfmiddlewaretoken": "{{ csrf_token }}",
+		"duration":duration,
+		"fee":fee,
+    "tuition":tuition,
+		"discountPrice":discountPrice,
+		"memo":memo,
+		"cityId":'{{city.id}}',
+		"code":code,
+    "type":type,
+		"deleted":deleted
+		},function(res){
+			alert(res.msg);
+			window.location.href='{%url 'branch:cityContract'%}?city={{city.id}}';
+			});
+}
+</script>
+{% endblock %}

@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+<link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+    <style>
+    td{padding:1px;}
+    </style>
+
+<div style="margin-left:0px;float:left;">
+<table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>姓名</th>
+        <th width="60">年龄</th>
+        <th>电话</th>
+        <th>老师</th>
+        <th width="100">班级</th>
+        <th>合同次数</th>
+        <th>已上</th>
+        <th>剩余</th>
+        <th>预计结课日</th>
+        <th>结束</th>
+        <th width="80"></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+            <tr>
+                <td><a href="{% url 'regUser:student_info' student.id %}" >{%if student.name%}{{student.name}}{%endif%}{%if student.name2%}({{student.name2}}){%endif%}{%if not student.name and not student.name2%}无{%endif%}</a></td>
+                <td width="60">{{student.yearMonth|default:""}}</td>
+                <td width="60">
+                  {{student.prt1mobile|default:""}}
+{%if student.siblingId or student.siblingName or student.siblingName2  or student.siblingName3%}{%if student.prt1mobile%}<br>{%endif%}{%if student.siblingId%}<a href="{% url 'regUser:student_info' student.siblingId %}">{%else%}<a href="{% url 'regUser:student_info' student.id %}">{%endif%}<font color="orange">共享</font></a>{%endif%}
+                </td>
+                <td width="60">{{student.teacherName|default:""}}</td>
+                <td width="60"><a href="{%url 'gradeClass:lessons'%}?type=1&id={{student.gradeClass}}">{{student.className|default:""}}</a></td>
+                <td><a style="{%if student.siblingId%}color:orange;{%endif%}"
+                  href="{%url 'contract:studentContracts'%}?student_oid={%if student.siblingId%}{{student.siblingId}}{%else%}{{student.id}}{%endif%}">
+                  {%if student.commonCheckin%}{{student.commonCheckin|add:student.lessonLeft|default:0}}
+                  {%else%}{{student.lessons|add:student.lessonLeft|default:0}}{%endif%}
+                  </a></td>
+
+                <td><a href="{%url 'gradeClass:studentLessons'%}?id={{student.id}}">{{student.lessons|default:"0"}}</a></td>
+                <td style="{%if student.siblingId%}color:orange;{%endif%}">
+                  <a href="{%url 'gradeClass:studentLessons'%}?id={{student.id}}">{%if student.lessons > 0%}{{student.lessonLeft}}{%else%}{{student.lessonLeft|default:""}}{%endif%}</a>
+                  </td>
+                <td nowrap>{%if not student.siblingId%}<input type="hidden" id="{{student.id}}" value="{%if student.contractDeadline%}{{student.contractDeadline|date:"Y-m-d"}}{%endif%}" />{%endif%}{%if student.siblingId%}<span id="{{student.id}}"></span><script>$('#{{student.id}}').html($('#{{student.siblingId}}').val())</script>{%else%}<a href="{%url 'gradeClass:studentLessons'%}?id={{student.id}}">{%if student.contractDeadline%}{{student.contractDeadline|date:"Y-m-d"}}{%else%}计算{%endif%}</a>{%endif%}</td>
+                <td>{%if not student.siblingId%}
+                  {%if student.lessons > 0 and student.lessonLeft <= 0%}
+                  <button class="endbutton" sname="{{student.name}}" sid="{{student.id}}" tname="{{student.teacherName|default:''}}"
+                  all="{{student.lessons|add:student.lessonLeft|default:0}}" has="{{student.lessons|default:"0"}}"
+                  enddate="{{student.contractDeadline|date:'Y-m-d'|default:''}}">
+                    结束
+                  </button>
+                    {%elif student.canStop%}
+                    <button class="endbutton" sname="{{student.name}}" sid="{{student.id}}" tname="{{student.teacherName|default:''}}"
+                    all="{{student.lessons|add:student.lessonLeft|default:0}}" has="{{student.lessons|default:"0"}}"
+                    enddate="{{student.contractDeadline|date:'Y-m-d'|default:''}}">
+                      结束
+                    </button>
+                    {%endif%}
+                    {%endif%}
+                </td>
+                <td>
+                  {%if a%}<a target="_blank" href="habit?studentId=student.id">
+            打卡页</a>{%endif%}
+                <a target="_blank" href="achievement?studentId={{student.id}}">
+                  <i class="glyphicon glyphicon-folder-open" title="学习档案"></i>
+              </a>&nbsp;&nbsp;
+                <a target="_blank" href="/web/pages?type=1&student_oid={{student.id}}" >
+                  <i class="glyphicon glyphicon-camera" title="相册"></i>
+                </a>&nbsp;&nbsp;
+          <a href="studentMemo?sid={{student.id}}">
+            <i class="glyphicon glyphicon-thumbs-up" title="记录成就"></i>
+            </a>
+
+
+
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+
+
+<div class="modal fade" id="endModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">课程结束</h4>
+            </div>
+            <div class="modal-body" id="info-body">
+                <div style="padding:10px">
+
+                    <div id="sname"></div>
+
+
+                    <div style="padding-top:20px;">实际结束日期：<input id="endDate" /></div>
+                    <input id="student_id" type="hidden" />
+                  </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button id="save_end" type="button" class="btn btn-default" data-dismiss="modal">确定结束</button>
+            </div>
+        </div>
+    </div>
+  </center>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+
+$(".endbutton").click(function(){
+    $("#sname").html('<div>学生姓名：' + $(this).attr("sname") + '，老师：'+$(this).attr("tname")+
+    '</div><div>合同次数：'+$(this).attr("all")+'，已上次数：'+$(this).attr("has")+'</div><div>预计结束日期：'+$(this).attr("enddate")+'</div>')
+
+
+    $("#student_id").val($(this).attr("sid"))
+
+    $("#endModal").modal();});
+
+$(document).ready(function() {
+    $("#nav9").css("color","red");
+	$('#datatable').DataTable({
+      fixedHeader: true,
+	    stateSave: true,
+	    "language": {
+            "lengthMenu": "每页显示 _MENU_ 学生",
+            "zeroRecords": "空空如也",
+            "sInfo":"从 _START_ 到 _END_， 共 _TOTAL_ 学生",
+            "infoEmpty": "没有找到哦",
+            "sSearch":"查询",
+            "oPaginate": {
+		        "sFirst":"首页",
+		        "sPrevious": 	"上一页",
+		        "sNext":     	"下一页",
+		        "sLast":     	"末页"
+	        },
+            "infoFiltered": "(从 _MAX_ 学生中搜索)"
+        },
+        "columns": [
+	            { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": true },
+              { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": true },
+              { "orderable": true },
+              { "orderable": true },
+	            { "orderable": false }
+	            ]
+	});
+  $('#datatable').DataTable().page.len(100).draw();
+});
+
+
+function click_contract(oid) {
+	//if(isZB()){
+	if(false){
+		alert("没有权限");
+		return;
+	}
+    var url = "{%url 'contract:studentContracts'%}?student_oid="+oid;
+    document.location.href=url;
+}
+
+$("#save_end").click(
+
+  function(){
+    var enddate = $("#endDate").val()
+    if(enddate==''){
+      alert('请填写结束日期')
+      return
+    }
+    if(!confirm('确认结束？')){
+      return
+    }
+    var sid = $("#student_id").val()
+
+    $.post("{% url 'student:api_end' %}", {
+      "endDate":enddate,
+      "sid":sid
+    }, function (res) {
+      if (res["error"] == 0) {
+         alert("结束成功")
+      } else {
+         alert("失败:" + res["msg"])
+      }
+      window.location.reload();
+   });
+});
+
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+</script>
+{% endblock %}

@@ -1,0 +1,869 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <style>
+    </style>
+{% endblock %}
+{% block content %}
+
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%if contractFrom%}{{contractFrom}}{%else%}/{%endif%}"><返回</a>
+</div>
+
+{%if not canSign%}
+<font color="red">已在其他校区签约</font>
+
+  {%for c in otherCS%}
+      <br>{{c.branch.city.cityName}}［{{c.branch.branchName}}校区］{{c.weeks}}周 {{c.paid}}元
+  {%endfor%}
+  <br>签约学生姓名：{{student.name}}, 电话：{{student.prt1mobile}}
+{%else%}
+ <div style="padding-bottom:4px;float:left;">
+学费总金额：{{sum}}，已开票：{%if sumPrinted > 0%}<button class="receiptHis">{%endif%}{{sumPrinted}}{%if sumPrinted > 0%}</button>{%endif%}，可开票：{{sumAvail}}{%if requireSum > 0%}，申请开票：{{requireSum}}{%endif%}{%if sumAvailNow > 0%} <button onclick="goApp(1)">学费申请开票</button>{%endif%}
+&nbsp;&nbsp;|&nbsp;&nbsp;会员费总金额：{{sum2}}，已开票：{%if sumPrinted2 > 0%}<button class="receiptHis">{%endif%}{{sumPrinted2}}{%if sumPrinted2 > 0%}</button>{%endif%}，可开票：{{sumAvail2}}{%if requireSum2 > 0%}，申请开票：{{requireSum2}}{%endif%}{%if sumAvailNow2 > 0%} <button id="tipApp2" onclick="goApp(2)">会员费申请开票</button>{%endif%}
+</div>
+
+<div style="float:right;padding:0 20px 6px 0;"><span onclick="income()" class="btn btn-default" style="padding:2px 10px 2px 10px;">其他收入</span></div>
+{% if num > 0 %}
+  {% for contract in contracts %}
+    <div style="clear:both;background:#{%if contract.status == 0%}158127{%elif contract.multi == 3 and not contract.singDate%}73cbce{%else%}999826{%endif%};color:white;padding:10px;font-size:16px;">{%if contract.multi == 3 and not contract.singDate%}应收学费{%elif contract.multi == 3 and contract.singDate%}已收学费{%else%}学籍{{forloop.counter}}{%endif%}</div>
+    <form id="form{{forloop.counter}}">
+    <input type="hidden" id="contract_oid" value="{{contract.id}}">
+    <div id="edit-body-info" style="background:#{%if contract.status == 0%}caf3b6{%elif contract.multi == 3 and not contract.singDate%}c4feff{%else%}f7f6c0{%endif%};padding:10px;">
+    <table id="tip3">
+            <tr>
+                <td align="right" width="160px"><a target="_blank" href="/go2/regUser/studentInfo/{{student.id}}">学生</a>：</td>
+                <td>
+                    {%if student%}{{ student.name }}{%else%}{{contract.student_name}}{%endif%}
+                </td>
+            </tr>
+            {%if contract.multi == 3%}
+            <tr>
+                <td align="right">应缴费日期：</td>
+                <td>
+
+                    <input id="dueDate" class="form-control" type="text" style="width: 300px"
+                           value='{{ contract.dueDate|date:"Y-m-d" }}'>
+                </td>
+            </tr>
+            {%endif%}
+            <tr><td>老师</td>
+              <td>
+                <input type="hidden" id="regTeacher" name="regTeacher" value="{{contract.teacher.id|default:''}}" />
+                <input type="text" id="regTeacherName" name="regTeacherName" value="{{contract.teacher.name|default:''}}" readonly="readonly" />
+                <button onclick="clickRegT('form{{forloop.counter}}')" id="searchRegTeacher" type="button" class="btn btn-default" aria-label="search">
+                                       <span class="glyphicon glyphicon-search" aria-hidden="false"></span>选择老师
+                                    </button>
+
+              </td>
+              </tr>
+              <tr><td>助教老师</td>
+                <td>
+                  <input type="hidden" id="assistTeacher" name="assistTeacher" value="{{contract.assistant.id|default:''}}" />
+                  <input type="text" id="assistTeacherName" name="TeacherName" value="{{contract.assistant.name|default:''}}" readonly="readonly" />
+                  <button onclick="clickAssT('form{{forloop.counter}}')"  id="searchAssistTeacher" type="button" class="btn btn-default" aria-label="search">
+                                         <span class="glyphicon glyphicon-search" aria-hidden="false"></span>选择助教老师
+                                      </button>
+
+                </td>
+                </tr>
+            <tr>
+                <td align="right">{%if contract.multi == 3%}缴费日期：{%else%}签约日期：{%endif%}</td>
+                <td>
+
+                    <input id="signDate" class="form-control" type="text" style="width: 300px"
+                           value='{{ contract.singDate|date:"Y-m-d" }}'>
+                </td>
+            </tr>
+            {%if contract.multi != 3%}
+            <tr>
+                <td align="right">开课日期：</td>
+                <td>
+
+                    <input id="beginDate" class="form-control" type="text" style="width: 300px"
+                           value="{{ contract.beginDate|date:"Y-m-d" }}">
+                </td>
+            </tr>
+
+
+            <tr style="height:30px;">
+                <td align="right">合同类型：</td>
+                <td>
+                <select id="ct_oid">
+                    {% for contractType in contractTypes %}
+                        {% if contract.contractType.id|stringformat:"s" == contractType.id|stringformat:"s" %}
+                            <option selected='selected' value='{{ contractType.id }}'>{{ contractType.duration }}小时，{%if contractType.discountPrice%}{{ contractType.discountPrice }}{%else%}{{contractType.fee}}{%endif%}元{%if contractType.memo%}({{contractType.memo}}){%endif%}</option>
+                        {% else %}
+                            <option value='{{ contractType.id }}'>{{ contractType.duration }}小时，{%if contractType.discountPrice%}{{ contractType.discountPrice }}{%else%}{{contractType.fee}}{%endif%}元{%if contractType.memo%}({{contractType.memo}}){%endif%}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </select></td>
+            </tr>
+
+            <tr style="height:30px;">
+              <td align="right">是续费合同？</td>
+              <td>
+                <select id="multi" >
+                  <option value="1" {%if contract.multi == 1%}selected="selected"{%endif%}>新生续费</option>
+                  <option value="2"{%if contract.multi == 2%}selected="selected"{%endif%}>老生续费</option>
+                  <option value="0"{%if contract.multi != 1 and contract.multi != 2%}selected="selected"{%endif%}>新招生</option>
+                  <!--option value="3" {%if contract.multi == 3%}selected="selected"{%endif%}>会员学费</option-->
+                </select>
+              </td>
+            </tr>
+            {%else%}
+            <input type="hidden" id="multi" value="{{contract.multi}}" />
+            <input type="hidden" id="beginDate" value="{{contract.beginDate}}" />
+            <input type="hidden" id="ct_oid" value="5c1c8947e5c5e6fe6153031b" />
+
+            {%endif%}
+
+            <tr>
+                <td align="right" width="160px">实际周数：</td>
+                <td>
+                    <input type="text" id="weeks" value="{{ contract.weeks|default:'' }}" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right" width="160px">实付金额：</td>
+                <td>
+                    <input type="text" id="paid" value="{%if contract.multi == 3 and not contract.paid%}{{contract.shouldPay|default:''}}{%else%}{{ contract.paid|default:'' }}{%endif%}" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right" width="160px">付款方式：</td>
+                <td>
+                    <select id="paymethod">
+                      <option value="">请选择</option>
+                      {%for key,value in paymethods.items%}
+                      <option value="{{key}}" {%if contract.paymethod == key%}selected="selected"{%endif%}>{{value}}</option>
+                      {%endfor%}
+                </td>
+            </tr>
+            {%if contract.multi != 3%}
+            <tr>
+                <td align="right" width="160px">学籍号：</td>
+                <td>
+                    <input type="text" id="cid" value="{{ contract.cid|default:'' }}" />
+                </td>
+            <tr>
+              {%else%}
+              <input type="hidden" id="cid" value="{{ contract.cid|default:'' }}" />
+              {%endif%}
+                <td align="right" width="160px">备注：</td>
+                <td>
+                    <textarea id="memo" style="width:100%;height:60px;">{{ contract.memo|default:'' }}</textarea></td>
+            </tr>
+            <tr id="tip2" style="height:30px;">
+                <td align="right" width="160px">合同状态：</td>
+                <td id='{{forloop.counter}}'>
+                    <select id="status" class="statusSelect">
+                      <option value="0" {%if contract.status == 0%}selected="selected"{%endif%}>正常</option>
+                      {%if contract.status == 1 or contract.status == 3%}
+                      <option value="1" {%if contract.status == 1 or contract.status == 3%}selected="selected"{%endif%}>结束</option>
+                      {%endif%}
+                      {%if contract.status == 2%}<option value="2" selected="selected">退费</option>{%endif%}
+                      <option value="-1"{%if contract.status == -1 and refundId == contract.id|stringformat:"s"%} selected="selected"{%endif%}>申请退费</option>
+                      <option value="4" {%if contract.status == 4%}selected="selected"{%endif%}>作废</option>
+                    </select>
+                </td>
+            </tr>
+{%if contract.endDate%}
+            <tr>
+                <td align="right" width="160px">结束日期：</td>
+                <td>
+                    <input id="endDate" class="form-control" type="text" style="width: 300px" readonly="readonly"
+                           value='{{ contract.endDate|date:"Y-m-d"|default:"" }}'>
+                </td>
+            </tr>
+            {%endif%}
+            <tr >
+
+
+                <td colspan="2" >
+                  <div id="{{forloop.counter}}_refundMemo2" {%if contract.status != -1 and  contract.status != 2 %}style="display:none;"{%elif refundId != contract.id|stringformat:"s"%}style="display:none"{%else%}style="display:block"{%endif%}>
+
+                    退费理由 <font color="red">*</font>：<input id="memo2"  type="text" style="width: 200px"
+                           value='{%if contract.memo2%}{{ contract.memo2|default:"" }}{%elif refundMemo != ''%}{{refundMemo}}{%endif%}'/>
+                    退费金额 <font color="red">*</font>：<input id="refund" type="text" style="width:100px;" value="{%if contract.refund%}{{contract.refund}}{%elif refund != ''%}{{refund}}{%endif%}" /><br>
+                    退费申请单：
+                    {%for f in contractFiles%}
+                      {%if f.fileType == 4 and f.contractId == contract.id|stringformat:"s"%}
+                      <input type="hidden" name="hasRefundPic" id="hasRefundPic" value="1" />
+                    <img src="/go_static/users/{{f.filepath}}{{f.filename}}?ver={{millis}}" />
+
+                      {%endif%}
+                    {%endfor%}
+                    <br>
+                     {%if contract.status != 2%}<a href="javascript:goUploadRefundPic('{{forloop.counter}}','{{contract.id}}','4')">上传退费申请单照片</a>{%endif%}
+                  </div>
+{%if contract.multi != 3%}
+                  <div>
+                    {%for f in contractFiles%}
+                      {%if f.fileType == 9 and f.contractId == contract.id|stringformat:"s"%}
+                    <img onclick="showPic('/go_static/users/{{f.filepath}}{{f.filename}}?ver={{millis}}','9')"
+                    style="width:200px;" src="/go_static/users/{{f.filepath}}{{f.filename}}?ver={{millis}}" />
+                      {%endif%}
+                    {%endfor%}
+                    <a href="javascript:goUploadRefundPic('{{forloop.counter}}','{{contract.id}}','9')">上传合同照片</a>，
+                    {%for f in contractFiles%}
+                      {%if f.fileType == 10 and f.contractId == contract.id|stringformat:"s"%}
+                    <img onclick="showPic('/go_static/users/{{f.filepath}}{{f.filename}}?ver={{millis}}','10')"
+                     style="width:200px;" src="/go_static/users/{{f.filepath}}{{f.filename}}?ver={{millis}}" />
+                      {%endif%}
+                    {%endfor%}
+                    <a href="javascript:goUploadRefundPic('{{forloop.counter}}','{{contract.id}}','10')">上传收据照片</a>
+                  </div>
+              {%endif%}
+              {%if contract.multi != 3%}
+                  <div>
+                    元十九手机号<input id="mobile" value="{%if contract.mobile%}{{contract.mobile|default:''}}{%endif%}" />(联系号码：{{student.prt1mobile|default:''}}),元十九注册名<input id="regName" value="{%if contract.regName%}{{contract.regName|default:''}}{%endif%}" />
+                  </div>
+                  <div>季度学费<input id="shouldPay" value="{{contract.shouldPay|default:''}}" /></div>
+
+{%endif%}
+                </td>
+
+            </tr>
+
+
+        </table>
+    </div>
+    {%if login_teacher.role > 3 and contract.status != 2 and contract.status != -1%}
+    <button type="button" class="btn btn-danger" data-dismiss="modal"
+            onclick="clickSaveBtn('form{{forloop.counter}}')">修改
+    </button>
+    {%endif%}
+    </form>
+
+    {%endfor%}
+
+
+    <p><br>
+    {%endif%}
+    <div style="background:#999999;color:white;padding:10px;font-size:16px;">新学籍</div>
+    <form id="newForm">
+    <div id="edit-body-info" style="background:#eeeeee;padding:10px;">
+        <table >
+            <tr>
+                <td align="right" width="160px">学生：</td>
+                <td>
+                    {%if student%}{{ student.name }}{%endif%}
+                </td>
+            </tr>
+
+
+            <tr><td>老师</td>
+              <td>
+                <input type="hidden" id="regTeacher" name="regTeacher" value="{{student.regTeacher.id|default:''}}" />
+                <input type="text" id="regTeacherName" name="regTeacherName" value="{{student.regTeacher.name|default:''}}" readonly="readonly" />
+                <button onclick="clickRegT('newForm')" id="searchRegTeacher" type="button" class="btn btn-default" aria-label="search">
+                                       <span class="glyphicon glyphicon-search" aria-hidden="false"></span>选择老师
+                                    </button>
+
+              </td>
+              </tr>
+              <tr><td>助教老师</td>
+                <td>
+                  <input type="hidden" id="assistTeacher" name="assistTeacher" value="" />
+                  <input type="text" id="assistTeacherName" name="TeacherName" value="" readonly="readonly" />
+                  <button onclick="clickAssT('newForm')"  id="searchAssistTeacher" type="button" class="btn btn-default" aria-label="search">
+                                         <span class="glyphicon glyphicon-search" aria-hidden="false"></span>选择助教老师
+                                      </button>
+
+                </td>
+                </tr>
+
+
+
+            <tr>
+                <td align="right">签约日期：</td>
+                <td>
+
+                    <input id="signDate" class="form-control" type="text" style="width: 300px"
+                           value="">
+                </td>
+            </tr>
+
+            <tr>
+                <td align="right">开始消课日期：</td>
+                <td>
+                    <input id="beginDate" class="form-control" type="text" style="width: 300px">
+                </td>
+            </tr>
+
+
+
+            <tr style="height:20px;">
+                <td align="right">合同类型：</td>
+                <td>
+                <select id="ct_oid">
+                    {% for contractType in contractTypes %}
+                        <option value='{{ contractType.id }}'>{{ contractType.duration }}小时{%if contractType.discountPrice%}{{ contractType.discountPrice }}{%else%}{{contractType.fee}}{%endif%}元{%if contractType.memo%}({{contractType.memo}}){%endif%}</option>
+                    {% endfor %}
+                    </select>
+                </td>
+            </tr>
+
+            <tr style="height:30px;">
+              <td align="right">是续费合同？</td>
+              <td>
+                <select id="multi" >
+                  <option value="1" {%if isNewRedeal%}selected=selected{%endif%}>新生续费</option>
+                  <option value="2"{%if isOldRedeal%}selected=selected{%endif%}>老生续费</option>
+                  <option value="0"{%if isNew%}selected=selected{%endif%}>新招生</option>
+                  <!--option value="3">会员学费</option-->
+                </select>
+              </td>
+            </tr>
+            <tr>
+                <td align="right" width="160px">实际周数：</td>
+                <td>
+                    <input type="text" id="weeks" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right" width="160px">实付金额：</td>
+                <td>
+                    <input type="text" id="paid"  />
+                </td>
+            </tr>
+            <tr>
+                <td align="right" width="160px">付款方式：</td>
+                <td>
+                    <select id="paymethod">
+                      <option value="">请选择</option>
+                      {%for key,value in paymethods.items%}
+                      <option value="{{key}}">{{value}}</option>
+                      {%endfor%}
+                </td>
+            </tr>
+            <tr>
+                <td align="right" width="160px">学籍号：</td>
+                <td>
+                    <input type="text" id="cid"  />
+                </td>
+            </tr>
+            <tr>
+                <td align="right" width="160px">备注：</td>
+                <td>
+                    <textarea id="memo" style="width:100%;height:60px;"></textarea>
+                </td>
+            </tr>
+            <tr style="height:30px;">
+                <td  align="right" width="160px">合同状态：</td>
+                <td>
+                    <select id="status">
+                      <option value="0" >正常</option>
+                      <option value="1" >结束</option>
+                      <!--option value="2" >退费</option>
+
+                      <option value="4">作废</option-->
+
+                    </select>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+    </form>
+    {%if login_teacher.role > 3%}
+    <button type="button" class="btn btn-danger" data-dismiss="modal"
+            onclick="clickSaveBtn('newForm')">保存
+    </button>
+    {%endif%}
+{%endif%}
+
+
+<div class="modal fade" id="appModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="min-width:300px;max-width:500px;margin:0 auto;">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><input id="atitle" style="width:60px;border:0" readonly/>申请开发票</h4>
+
+            </div>
+            <div class="modal-body" id="info-body">
+                <div style="padding:10px">
+                  <table style="padding:2px;">
+
+                    <tr><td style="text-align:right;">学生：{{student.name|default:"无"}}，</td><td>可开票金额：<input id="asum" style="width:60px;border:0" readonly/></td></tr>
+                    <tr><td style="text-align:right;">申请日期：</td><td style="padding-top:6px;"><input id="appDate" value="a"/></td></tr>
+                    <tr><td style="text-align:right;">开票金额：</td><td style="padding-top:6px;"><input id="sum" value="{{sumAvailNow}}" /></td></tr>
+                    <tr><td style="text-align:right;">发票类型：</td><td style="padding-top:6px;">
+                      <select id="rType">
+                        <option value="1">普通发票</option>
+                        <option value="2">增值税专用发票</option>
+                      </select>
+                    </td></tr>
+                    <tr><td style="text-align:right;">发票抬头：</td><td style="padding-top:6px;"><input id="title"  style="width:220px;"/></td></tr>
+                    <tr><td style="text-align:right;">纳税人识别号：</td><td style="padding-top:6px;"><input id="taxNo" style="width:220px;" /></td></tr>
+                    <tr><td style="text-align:right;">地址、电话：</td><td style="padding-top:6px;"><input id="address"  style="width:220px;"/></td></tr>
+                    <tr><td style="text-align:right;">开户行及帐号：</td><td style="padding-top:6px;"><input id="bank"  style="width:220px;"/></td></tr>
+
+                  </table>
+                  </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button id="saveApp" type="button" class="btn btn-success" data-dismiss="modal" onclick="saveApp()">提交开票申请</button>
+            </div>
+        </div>
+    </div>
+  </center>
+</div>
+
+
+<div class="modal fade" id="printedModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="min-width:300px;max-width:800px;margin:0 auto;">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">已开发票列表</h4>
+            </div>
+            <div class="modal-body" id="info-body">
+                <div style="padding:10px">
+                  <table style="padding:2px;" border="1">
+                    <tr>
+                      <td>收费类型</td>
+                      <td>发票类型</td>
+                      <td>发票抬头</td>
+                      <td>金额</td>
+
+                      <td>纳税人识别号</td>
+                      <td>地址电话</td>
+                      <td>银行帐号</td>
+                      <td>开票日期</td>
+                    </tr>
+                    {%for r in receipts%}
+                    <tr>
+                      <td nowrap>{%if r.isMemberFee%}会员费{%else%}学费{%endif%}
+                      <td nowrap>{%if r.rType == 1%}普票{%elif r.rType == 2%}专票{%endif%}</td>
+                      <td>{{r.title}}</td>
+                      <td>{{r.sum}}</td>
+
+                      <td>{{r.taxNo|default:""}}</td>
+                      <td>{{r.address|default:""}}</td>
+                      <td>{{r.bank|default:""}}</td>
+                      <td>{{r.printDate|date:"Y-m-d"}}</td>
+                    </tr>
+                    {%endfor%}
+
+                  </table>
+                  </div>
+
+
+            </div>
+
+        </div>
+    </div>
+  </center>
+</div>
+
+<div class="modal fade" id="picModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="info-body">
+
+                  <div>
+                     <span id="attach"></span>
+                  </div>
+
+            </div>
+
+        </div>
+    </div>
+  </center>
+</div>
+<input type="hidden" id="formNow" />
+{% include 'referTeacherModel.html' %}
+{% include 'assistTeacherModel.html' %}
+{% endblock %}
+{% block scripts %}
+    <script>
+      //查看附件图片
+      function showPic(imgSrc,t){
+
+        $("#attach").html('<img src="'+imgSrc+'"/>')
+        $("#myModalLabel").html(t)
+
+        $("#picModal").modal();
+      }
+
+        var Request = new QueryString();
+        var long_userid = Request['userid'];
+        var teacherIds = [];
+        function clickRegT(formId){
+          $("#formNow").val(formId)
+          $("#searchName").val('')
+          $("#referTeachers").html('')
+          {% for t in teachers %}
+             $("#referTeachers").append("<option value='{{t.id}}'>{{t.name}}</option>");
+          {% endfor %}
+          $("#referTeacherModal").modal();
+        }
+
+        function clickAssT(formId){
+          $("#formNow").val(formId)
+          $("#searchAssistName").val('')
+          $("#assistTeachers").html('')
+          {% for t in teachers %}
+             $("#assistTeachers").append("<option value='{{t.id}}'>{{t.name}}</option>");
+          {% endfor %}
+          $("#assistTeacherModal").modal();
+        }
+
+
+        $(document).ready(function () {
+            //时间
+
+            $("#doSearchReferTeacher").click(function(){
+                    $.post("{% url 'regUser:searchReferTeacher' %}", {
+                      "csrfmiddlewaretoken": "{{ csrf_token }}",
+                        "searchName": $("#searchName").val()
+                    }, function (res) {
+                        if (res["error"] == 0) {
+                            var teachers = res["teachers"]
+                            $("#referTeachers").html('')
+                            for(var i = 0;i<teachers.length;i++){
+                                  $("#referTeachers").append("<option value='"+teachers[i]["id"]+"'>"+teachers[i]["name"]+"</option>");
+                              }
+                        } else {
+                            alert(res["msg"])
+                        }
+                    });
+                });
+
+                $("#referTeachers").change(function(){
+                   var rname = $("#referTeachers")[0].options[$("#referTeachers")[0].selectedIndex].innerHTML
+
+                   $('form[id='+$('#formNow').val()+'] input[id=regTeacherName]').val(rname)
+                   $('form[id='+$('#formNow').val()+'] input[id=regTeacher]').val($("#referTeachers").val())
+                   $("#referTeacherModal").modal("hide")
+                   console.log('referTeacher--'+$("#regTeacher").val())
+                   console.log('referTeacherName--'+$("#regTeacherName").val())
+                });
+
+                $("#doSearchAssistTeacher").click(function(){
+                        $.post("{% url 'regUser:searchReferTeacher' %}", {
+                          "csrfmiddlewaretoken": "{{ csrf_token }}",
+                            "searchName": $("#searchAssistName").val()
+                        }, function (res) {
+                            if (res["error"] == 0) {
+                                var teachers = res["teachers"]
+                                $("#assistTeachers").html('')
+                                for(var i = 0;i<teachers.length;i++){
+                                      $("#assistTeachers").append("<option value='"+teachers[i]["id"]+"'>"+teachers[i]["name"]+"</option>");
+                                  }
+                            } else {
+                                alert(res["msg"])
+                            }
+                        });
+                    });
+
+                    $("#assistTeachers").change(function(){
+                       var rname = $("#assistTeachers")[0].options[$("#assistTeachers")[0].selectedIndex].innerHTML
+                       //alert(rname)
+                       $('form[id='+$('#formNow').val()+'] input[id=assistTeacherName]').val(rname)
+                       $('form[id='+$('#formNow').val()+'] input[id=assistTeacher]').val($("#assistTeachers").val())
+
+                       $("#assistTeacherModal").modal("hide")
+                       console.log('assistTeacher--'+$("#assistTeacher").val())
+                       console.log('assistTeacherName--'+$("#assistTeacherName").val())
+                    });
+
+
+            $('form[id=newForm] input[id=beginDate]').datetimepicker({
+            	timepicker: false,
+            	language: 'ch',
+                format: 'Y-m-d'
+            });
+            $('form[id=newForm] input[id=signDate]').datetimepicker({
+            	timepicker: false,
+            	language: 'ch',
+                format: 'Y-m-d'
+            });
+            $('form[id=newForm] input[id=endDate]').datetimepicker({
+            	timepicker: false,
+            	language: 'ch',
+                format: 'Y-m-d'
+            });
+            {% if num > 0 %}
+            {% for contract in contracts %}
+
+            $('form[id=form{{forloop.counter}}] input[id=beginDate]').datetimepicker({
+            	timepicker: false,
+            	language: 'ch',
+                format: 'Y-m-d'
+            });
+
+            $('form[id=form{{forloop.counter}}] input[id=signDate]').datetimepicker({
+            	timepicker: false,
+            	language: 'ch',
+                format: 'Y-m-d'
+            });
+            $('form[id=form{{forloop.counter}}] input[id=endDate]').datetimepicker({
+            	timepicker: false,
+            	language: 'ch',
+                format: 'Y-m-d'
+            });
+            $('form[id=form{{forloop.counter}}] input[id=ct_oid]').change(function(){
+              console.log('IN-------')
+              console.log($(this).closest('form').attr('id'))
+
+            })
+            {%endfor%}
+            {%endif%}
+
+
+
+
+            $("#appDate").val('{{dateNowStr}}')
+
+        });
+
+       $(".statusSelect").change(function(){
+         var p = $(this).parent("td").attr("id")
+         var statusval = $(this).val()
+         var divid = "#"+p+"_refundMemo"
+         console.log(divid)
+         if(statusval.indexOf("-1")>-1){
+             //$(divid+'1').css("display","inline")
+             $(divid+'2').css("display","inline")
+         }
+
+         else {
+           //$(divid+'1').css("display","none")
+           $(divid+'2').css("display","none")
+         }
+       })
+
+        function clickSaveBtn(formId) {
+            var hasRefundPic = $("form[id="+formId+"] input[id='hasRefundPic']").val();
+            var status = $("form[id="+formId+"] select[id='status']").val();
+            if(hasRefundPic!="1"&&status=="-1"){
+              alert("请先上传退费单照片！");
+              return false;
+            }
+
+
+            var beginDate = $("form[id="+formId+"] input[id='beginDate']").val();
+            var endDate = $("form[id="+formId+"] input[id='endDate']").val();
+            var signDate = $("form[id="+formId+"] input[id='signDate']").val();
+var shouldPay = $("form[id="+formId+"] input[id='shouldPay']").val();
+            var dueDate = $("form[id="+formId+"] input[id='dueDate']").val();
+            console.log('dueDate:')
+            console.log(dueDate)
+            var ct_oid = $("form[id="+formId+"] select[id='ct_oid']").val();
+            if(ct_oid==undefined){
+              ct_oid = $("form[id="+formId+"] input[id='ct_oid']").val();
+            }
+            console.log($("form[id="+formId+"] input[id='ct_oid']").val())
+            console.log('ct_oid')
+            console.log(ct_oid)
+            var paid = $("form[id="+formId+"] input[id='paid']").val();
+            var paymethod = $("form[id="+formId+"] select[id='paymethod']").val();
+            var cid = $("form[id="+formId+"] input[id='cid']").val();
+            var ctnameId = "form[id="+formId+"] select[id='ct_oid'] option:selected";
+            //alert(ctnameId);
+            var ctName = $(ctnameId).text();
+            //alert(ctName);
+            if(ctName=='假期集训')cid='假期集训';
+            if(ctName=='假期班')cid='假期班';
+            if(ctName=='集训班')cid='集训班';
+            var weeks = $("form[id="+formId+"] input[id='weeks']").val();
+            var memo = $("form[id="+formId+"] textarea[id='memo']").val();
+            var multi = $("form[id="+formId+"] select[id='multi']").val();
+            if(multi==undefined){
+              multi = $("form[id="+formId+"] input[id='multi']").val();
+            }
+            var memo2 = $("form[id="+formId+"] input[id='memo2']").val();
+            var contract_oid = $("form[id="+formId+"] input[id='contract_oid']").val();
+            var refund = $("form[id="+formId+"] input[id='refund']").val();
+
+            var mobile = $("form[id="+formId+"] input[id='mobile']").val();
+            var regName = $("form[id="+formId+"] input[id='regName']").val();
+            var signTeacher = $("form[id="+formId+"] input[id='regTeacher']").val();
+            var assistId = $("form[id="+formId+"] input[id='assistTeacher']").val();
+            if(status=="-1"&&!memo2){
+              alert("请填写退费理由");
+                return;
+            }
+            if (!cid||cid==''){
+            	alert("请填写学籍号");
+                return;
+            }
+            if (!paymethod||paymethod==''){
+            	alert("请选择付款方式");
+                return;
+            }
+            if (!beginDate){
+            	alert("请填写合同开始日期");
+                return;
+            }
+            if(!ct_oid){
+            	alert("请选择合同类型");
+                return;
+            }
+            if(!signDate) {
+            	alert("请填写签约日期");
+                return;
+            }
+            if(!endDate&&status=="1"){
+            	alert("请填写合同结束日期")
+            	return
+            }
+            var voucher = '{{voucher}}'
+
+            $.post("{% url 'contract:saveContract_api'%}", {
+              "csrfmiddlewaretoken": "{{ csrf_token }}",
+            	'contract_oid':contract_oid,
+                'student_oid':'{%if student%}{{student.id}}{%endif%}',
+                'beginDate': beginDate,
+                'signDate': signDate,
+                'endDate': endDate,
+                'dueDate': dueDate,
+                'ct_oid': ct_oid,
+                'paid': paid,
+                'paymethod':paymethod,
+                'cid':cid,
+                'multi': multi,
+                'weeks': weeks,
+                'memo': memo,
+                'memo2': memo2,
+                'refund': refund,
+                'voucher':voucher,
+                'mobile':mobile,
+                'regName':regName,
+                'signTeacher':signTeacher,
+                'assistId':assistId,
+'shouldPay':shouldPay,
+                'status': status
+            }, function (res) {
+                if (res.error == 0) {
+                    var first= '退费申请';
+                    var date = new Date();
+                    var keyword4= date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes();
+                    inform(first,res.openId,'{{student.name}}','{{student.prt1mobile}}',keyword4,'{{student.branchName}}');
+                    alert(res.msg);
+                    location.reload(true);
+                } else {
+                    alert(res.msg);
+                }
+            });
+        }
+
+        $("#nav1").css("color","red");
+        $("#nav1").css("font-weight","bold");
+
+    function goUploadRefundPic(formId,contractId,type){
+      var memo = $('form[id=form'+formId+'] input[id=memo2]').val()
+      var refund = $('form[id=form'+formId+'] input[id=refund]').val()
+      var url = 'uploadFile?student_oid={{student.id}}&teacher_oid={{login_teacher.id}}&contractId='+contractId+'&refundMemo='+'&refund='+refund+'&type='+type
+      document.location.href=url
+
+    }
+
+    function goApp(appId){
+      console.log(appId)
+        var atitle = '学费'
+        var asum = '{{sumAvail}}'
+        $("#sum").val('{{sumAvailNow}}')
+        if(appId==2){
+          atitle = '会员费'
+          asum = '{{sumAvail2}}'
+          $("#sum").val('{{sumAvailNow2}}')
+        }
+        $("#atitle").val(atitle)
+        $("#asum").val(asum)
+        $("#appModal").modal();
+
+    }
+
+    $(".receiptHis").click(function(){
+        $("#printedModal").modal();
+      });
+    function saveApp() {
+      var isMemberFee = 0
+      if ($("#atitle").val() == '会员费')
+        isMemberFee = 1
+            var appDate = $("#appDate").val();
+            var sum = $("#sum").val();
+            console.log('sum---'+sum)
+            var title = $("#title").val();
+            var taxNo = $("#taxNo").val();
+            var address = $("#address").val();
+            var bank = $("#bank").val();
+            var rType = $("#rType").val();
+            if(!appDate){
+              alert("请填写申请开票日期");
+                return;
+            }
+
+            if (!sum){
+              alert("请填写开票金额");
+                return;
+            }
+            if(!title){
+              alert("请填写发票抬头");
+                return;
+            }
+            if(!rType) {
+              alert("请填写发票类型");
+                return;
+            }
+            if(rType=="2"&&!taxNo){
+              alert("请填写纳税人识别号")
+              return
+            }
+
+            $.post("{% url 'workflow:receiptApp_api'%}", {
+              "csrfmiddlewaretoken": "{{ csrf_token }}",
+                'student_oid':'{%if student%}{{student.id}}{%endif%}',
+                'appDate': appDate,
+                'title': title,
+                'rType': rType,
+                'sum': sum,
+                'taxNo': taxNo,
+                'address': address,
+                'isMemberFee':isMemberFee,
+                'bank': bank
+
+            }, function (res) {
+                if (res.error == 0) {
+                    var openId = res.openId;
+                    var first= '发票申请';
+                    var date = new Date();
+                    var keyword4= date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes();
+
+                    inform(first,openId,'{{student.name}}','{{student.prt1mobile}}',keyword4,'{{student.branchName}}');
+                    alert("成功");
+                    location.reload(true);
+                } else {
+                    alert("失败");
+                }
+            });
+        }
+
+        $('#appDate').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d'
+        });
+        function income(){
+          var url = "{%url 'contract:incomes'%}?studentId={{student.id}}"
+          document.location.href=url
+        }
+    </script>
+{% endblock %}

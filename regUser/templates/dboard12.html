@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+    <style>
+    #classes td{width:80px;}
+    #subNav{position:relative;top:-12px;background:#555555;color:white;border:1px solid #555555;}
+    span{border:1px solid #555555;}
+    .activeNav{
+        background:white;
+        color:black;
+        border:1px solid #555555;
+        
+        }
+    .inactiveNam{background:#555555;color:white;}
+    </style>
+{% include 'subNav.html' %}
+
+
+<table class="table  table-hover">
+        <tbody>
+        <tr  style="background:#eeeeee;">
+        <td></td>
+        
+        <td>孩子</td>
+        
+        <td>生日</td>
+        <td>电话</td>
+        <td>班级</td>
+        
+        
+        <td width="40%" colspan="2">学籍</td>
+        </tr>
+        {% for student in students %}
+            <tr>
+            <td>{{forloop.counter}}</td>
+
+                <td><a href="{% url 'regUser:student_info' student.id %}" >{%if student.name%}{{student.name}}{%elif student.name2%}{{student.name2}}{%else%}无{%endif%}</a></td>
+                <td>{{student.birthday|date:"Y-m-d"}}</td>
+                <td>{{student.prt1mobile}}</td>
+                <td>{{student.teacherName|default:""}}&nbsp;|&nbsp;{{student.classTime|default:"未分班"}}</td>
+                
+                <td>
+                    {% if student.contract%}
+            {% for contract in student.contract %}
+                <div>{{ contract.singDate|date:"Y-m-d"|default:"" }}签约 {{ contract.beginDate|date:"Y-m-d"|default:"" }}开课 {{ contract.contractType.duration|default:"" }}周 {{contract.paid|default:""}}元 {{contract.classType.name|default:""}}</div>
+            {% endfor %}
+            {% endif %}
+                    
+                </td>
+                <td>
+                    <button class="btn btn-success" onclick="click_contract('{{ student.id }}');">合同</button>
+                </td>
+                
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+$("#subNav12").attr("class","activeNav");
+
+
+function click_contract(oid) {
+    var url = "{%url 'contract:studentContracts'%}?student_oid="+oid;
+    document.location.href=url;
+}
+function go_deposit(oid) {
+    var url = "{% url 'regUser:student_deposit' %}";
+    url = url+"?student_oid="+oid;
+    document.location.href=url;
+}
+{% include 'subNavJs.html' %}
+</script>
+{% endblock %}

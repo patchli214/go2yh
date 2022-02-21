@@ -1,0 +1,25 @@
+body {
+    margin: 0 auto;
+    font-family:微软雅黑;
+    overflow:scroll;
+}
+tr{font-size:13px;}
+input[type=checkbox]{height:1.2em;width:1.2em;}
+#subNav{padding:3px;position:relative;top:-12px;background:#555555;color:white;border:1px solid #555555;}
+#subNav span{cursor:pointer;border:1px solid #555555;}
+.activeNav{
+    background:white;
+    color:black;
+    border:1px solid #555555;
+}
+.A{color:#000000;}
+.B{color:#000000;}
+.C{color:#aaaaaa;}
+.sorted{color:#000000}
+.sort{color:#bbbbbb;cursor:pointer;}
+.extraLesson{background:#f6eee4;}
+.textTitle{padding-left:40px;font-size:20px;}
+.btn-danger{background: #b47f7f;border-color: #b47f7f}
+.btn-success{background: #79ad7a;border-color: #79ad7a}
+.btn-warning{background: #d0c75f;border-color: #d0c75f}
+.demopicDiv{margin:20px;border:60px solid #dddddd;}

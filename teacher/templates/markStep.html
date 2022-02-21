@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{% url 'teacher:teacher_list' %}"><返回</a>
+&nbsp;
+<a href="{% url 'teacher:teacherSteps' %}">浏览全部档案></a>
+</div>
+<style>
+  body{padding:0;margin:0;}
+
+  optgroup{font-size:20px;}
+  .container{margin:0;}
+.column{
+  float:left;border-right: 0px solid; width:280px;text-align: left;
+}
+
+td{padding: 4px;white-space: nowrap;text-align: center;border:1px solid;}
+table{margin: 10px 0 20px 0;}
+#targetTable td{border-color:#ec8d12;}
+input[type=text]{width:60px;margin:0 10px 0 10px;}
+select{font-size:16px;}
+button{margin:8px 0 6px 0;}
+</style>
+
+<div class="column" style="max-width:700px;min-width:540px;">
+  <span style="font-weight:bold;padding-left:10px;color:red;">棋力目标</span>
+  <table id="targetTable">
+    <thead>
+      <tr>
+        <td></td>
+        <td>开始日期</td>
+        <td>起点</td>
+        <td>季度目标</td>
+        <td>半年目标</td>
+        <td>一年目标</td>
+      </tr>
+    </thead>
+    <tbody>
+      {%for t in teachers%}
+      <tr>
+        <td>{{t.name}}</td>
+        <td><input class="targetInput"  type="text" id="{{t.id}}-beginDate" value="{%if t.targetBeginDate%}{{t.targetBeginDate|date:'Y-m-d'}}{%endif%}" style="width:90px;"></td>
+        <td><select class="targetInput"  id="{{t.id}}-beginLevel">
+          <optgroup>
+          <option value="">请选择</option>
+          {%for key,value in GO_LEVEL.items%}
+          <option value="{{key}}" {%if t.beginLevel == key%}selected="selected"{%endif%}>{{key}}</option>
+          {%endfor%}
+          </optgroup>
+          </select></td>
+        <td><select  class="targetInput" id="{{t.id}}-quarterTarget">
+          <option value="">请选择</option>
+          {%for key,value in GO_LEVEL.items%}
+          <option value="{{key}}" {%if t.targetLevel1 == key%}selected="selected"{%endif%}>{{key}}</option>
+          {%endfor%}
+          </select></td>
+        <td><select class="targetInput"  id="{{t.id}}-halfyearTarget">
+          <option value="">请选择</option>
+          {%for key,value in GO_LEVEL.items%}
+          <option value="{{key}}" {%if t.targetLevel2 == key%}selected="selected"{%endif%}>{{key}}</option>
+          {%endfor%}
+          </select></td>
+        <td><select class="targetInput"  id="{{t.id}}-yearTarget">
+          <option value="">请选择</option>
+          {%for key,value in GO_LEVEL.items%}
+          <<option value="{{key}}" {%if t.targetLevel3 == key%}selected="selected"{%endif%}>{{key}}</option>
+          {%endfor%}
+          </select></td>
+      </tr>
+{%endfor%}
+      <tr><td colspan="8"><button onclick="saveTarget()">保存目标</button></td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="column" style="max-width:600px;min-width:400px;">
+
+    周记录
+  <select id="week-beginDate">
+    {%for week in weeks%}
+    <option value="{{week.begin}}">{{week.begin}}到{{week.end}}</option>
+    {%endfor%}
+  </select>
+
+  <table>
+    <tr>
+      <td></td>
+      <td>正课试讲<br>至少一次</td>
+      <td>成交演练<br>至少一次</td>
+      <td>班级群反馈<br>每周都有</td>
+      <td>对弈<br>至少30盘</td>
+      <td>棋力</td>
+    </tr>
+    {%for t in teachers%}
+    <tr>
+      <td>{{t.name}}</td>
+      <td><input class="weekInput" id='{{t.id}}-正课试讲' type="checkbox" /></td>
+      <td><input class="weekInput" id='{{t.id}}-成交演练' type="checkbox" /></td>
+      <td><input class="weekInput" id='{{t.id}}-班级群反馈' type="checkbox" /></td>
+      <td><input class="weekInput" id='{{t.id}}-对弈' type="checkbox" /></td>
+      <td><select class="weekInput" id='{{t.id}}-棋力'>
+        {%for key,value in GO_LEVEL.items%}
+        <option value="{{key}}">{{key}}</option>
+        {%endfor%}
+        </select>
+    </tr>
+    {%endfor%}
+    <tr><td colspan="6"><button class="stepButton"  id="week">保存周记录</button>
+    </td></tr>
+  </table>
+
+</div>
+
+<div class="column" style="max-width:300px;min-width:140px;">
+
+    月记录
+  <select id="month-beginDate">
+    {%for month in months%}
+    <option value="{{month}}">{{month}}</option>
+    {%endfor%}
+  </select>
+
+  <table>
+  <tr>
+    <td></td>
+    <td>棋力月赛分数</td>
+
+    <td>朋友圈<br>至少4次</td>
+  </tr>
+  {%for t in teachers%}
+  <tr>
+    <td>{{t.name}}</td>
+    <td><select  class="monthInput"  id="{{t.id}}-棋力月赛">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+    </td>
+
+    <td><input class="monthInput" id='{{t.id}}-朋友圈' type="checkbox" /></td>
+  </tr>
+  {%endfor%}
+
+  <tr><td colspan="4"><button class="stepButton"  id="month">保存月记录</button>
+  </td></tr>
+</table>
+
+</div>
+
+<div class="column" style="max-width:300px;min-width:200px;">
+
+    季度记录
+
+  <select id="month3-beginDate">
+    {%for m3 in month3%}
+    <option value="{{m3.begin}}">{{m3.begin}}到{{m3.end}}</option>
+    {%endfor%}
+  </select>
+
+  <table>
+  <tr>
+    <td></td>
+    <td>家长课堂次数</td>
+
+
+  </tr>
+  {%for t in teachers%}
+  <tr>
+    <td>{{t.name}}</td>
+
+    <td><select class="month3Input" id="{{t.id}}-家长课堂" style="">
+    <option value="0">0次</option>
+    <option value="1">1次</option>
+    <option value="2">2次</option>
+    <option value="3">3次</option>
+    <option value="4">4次及以上</option>
+    </select>
+    </td>
+  </tr>
+  {%endfor%}
+  <tr><td colspan="2"><button class="stepButton"  id="month3">保存季度记录</button>
+  </td></tr>
+</table>
+
+</div>
+
+<div class="column"  style="max-width:300px;min-width:200px;">
+
+    年度记录
+  <select id="year-beginDate">
+    {%for year in years%}
+    <option value="{{year.begin}}">{{year.begin}}到{{year.end}}</option>
+    {%endfor%}
+  </select>
+
+  <table>
+  <tr>
+    <td></td>
+    <td>集体活动</td>
+    <td>主任分</td>
+
+  </tr>
+  {%for t in teachers%}
+  <tr>
+    <td>{{t.name}}</td>
+    <td><input class="yearInput" id="{{t.id}}-集体活动" type="text" />分
+    </td>
+    <td><input class="yearInput" id="{{t.id}}-主任分" type="text"/>分</td>
+  </tr>
+  {%endfor%}
+
+  <tr><td colspan="4"><button class="stepButton" id="year">保存年度记录</button>
+  </td></tr>
+</table>
+
+</div>
+
+<div style="clear:both;">
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+{%for step in searchWeekSteps%}
+    {%if step.valid%}
+      $("#{{step.teacherId}}-{{step.item}}").prop('checked', true);
+    {%endif%}
+    {%if step.item == '棋力'%}
+      $("#{{step.teacherId}}-{{step.item}}").val('{{step.value}}')
+    {%endif%}
+{%endfor%}
+
+{%for step in searchMonthSteps%}
+  {%if step.item == '棋力月赛'%}
+  $("#{{step.teacherId}}-{{step.item}}").val('{{step.value}}')
+  {%endif%}
+  {%if step.item == '对弈' and step.valid%}
+  $("#{{step.teacherId}}-{{step.item}}").prop('checked', true);
+  {%endif%}
+  {%if step.item == '朋友圈' and step.valid%}
+  $("#{{step.teacherId}}-{{step.item}}").prop('checked', true);
+  {%endif%}
+{%endfor%}
+
+{%for step in month3Steps%}
+  $("#{{step.teacherId}}-{{step.item}}").val('{{step.value}}')
+{%endfor%}
+
+{%for step in yearSteps%}
+  $("#{{step.teacherId}}-{{step.item}}").val('{{step.value}}')
+{%endfor%}
+
+$(".stepButton").click(function(){
+  var items = ''
+    var dateType = $(this).attr("id")
+    $("."+dateType+"Input").each(function(){
+      var tags = $(this).attr("id").split("-")
+      items = items + tags[0] + '-' + tags[1]
+      var value = ''
+      var valid = ''
+      var score = 0
+      if($(this).attr("type")=='checkbox'){
+        if($(this).prop("checked"))
+          valid = 'true'
+      }
+      else if($(this).attr("type")=='text'){
+        value = $(this).val()
+      }
+      else{
+        value = $(this).val()
+      }
+
+      items = items + '-' + value + '-' + valid + '-' + score + '|'
+    })
+    console.log(items)
+    items = items.substring(0,items.length-1)
+    var beginDate = $("#"+dateType+"-beginDate").val()
+    //return
+		$.post("{% url 'teacher:api_markStep' %}", {
+      "csrfmiddlewaretoken": "{{ csrf_token }}",
+        	"branchId":'{{login_teacher.branch}}',
+          "beginDateStr":beginDate,
+          "dateType":dateType,
+          "itemStr":items
+        }, function (res) {
+
+          alert(res.msg)
+          location.reload();
+        });
+
+});
+$("#week-beginDate").change(function(){
+  var week = $(this).val()
+  var url = "{% url 'teacher:markStep' %}?week="+week+"&month={{searchMonthBegin|date:"Y-m"}}";
+  window.location.href=url;
+})
+
+$("#month-beginDate").change(function(){
+  var month = $(this).val()
+  var url = "{% url 'teacher:markStep' %}?month="+month+"&week={{searchWeekBegin|date:"Y-m-d"}}";
+  window.location.href=url;
+})
+{%if searchWeekBegin%}
+$("#week-beginDate").val('{{searchWeekBegin|date:"Y-m-d"}}')
+{%endif%}
+
+{%if searchMonthBegin%}
+$("#month-beginDate").val('{{searchMonthBegin|date:"Y-m"}}')
+{%endif%}
+
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+
+function saveTarget(){
+  var items = ''
+
+    $(".targetInput").each(function(){
+      var tags = $(this).attr("id").split("-")
+      items = items + tags[0] + '_' + tags[1]
+      var value = ''
+      value = $(this).val()
+      items = items + '_' + value + '|'
+    })
+    console.log(items)
+    items = items.substring(0,items.length-1)
+
+
+  $.post("{% url 'teacher:api_editTarget' %}", {
+      "items": items
+  }, function (res) {
+      if (res["error"] == 0) {
+          alert("成功")
+          window.location.reload();
+      } else {
+          alert("失败:" + res["msg"])
+      }
+  });
+}
+$('input.targetInput').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+</script>
+{% endblock %}

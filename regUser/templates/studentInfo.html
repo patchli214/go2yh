@@ -1,0 +1,476 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="javascript:goback('{{mainurl}}')"><返回</a>&nbsp;&nbsp;<span id="tip"></span>
+</div>
+<hr style="margin-top:2px;margin-bottom:10px"/>
+<div class="row">
+<div class="col-sm-6">
+<div style="float:left;"><h3>孩子详情</h3></div>
+{%if student.status > 0%}
+<div style="float:left;padding-top:18px;padding-left:10px;"><a target="_blank" href="/go2/student/achievement?studentId={{student.id}}"><button>学习档案</button></a></div>
+
+<div style="float:left;padding-top:18px;padding-left:10px;"><button id="checkinButton">签到表</button></div>
+{%endif%}
+{%if not readonly%}
+
+<div style="float:left;padding-top:18px;padding-left:10px;"><button id="uploadButton">编辑相册</button></div>
+{%if not student.siblingId%}<div style="float:right;padding-top:18px;padding-left:10px;"><button id="editButton" class="btn btn-success">修改孩子信息</button></div>
+
+
+<div style="float:left;padding-top:18px;padding-right:10px;padding-left:6px;"><a target="_blank" href="{% url 'regUser:referPages' %}?rid={{student.id}}"><button style="color:black;">转介报名页</button></a></div>
+{%endif%}
+{%endif%}
+{%if dup%}
+<div style="float:right;padding-top:18px;color:red"><a target="_blank" href="/go2/regUser/studentInfo/{{dupStudent.id}}/">查看重复号码信息</a>&nbsp;</div>
+{%endif%}
+
+
+
+    <table class="table  table-hover" style="margin:0">
+        <tbody>
+        <tr>
+            <td width="30%">姓名:</td>
+            <td>
+                {{ student.name|default:"" }}&nbsp;{{ student.name2|default:"" }}
+                (级别：{{ student.probability|default:"无" }}{%if login_teacher.branchType == '1' and student.netStatus == -1%}|无效{%endif%})&nbsp;{{student.gender|default:""}}&nbsp;{{student.yearMonth|default:""}}
+                &nbsp;{%if student.deposit and student.deposit > 0%}[<a href="/go2/regUser/studentDeposit?student_oid={{student.id}}">定金{{student.deposit}}{%if student.depositStatus == 1%}已转合同款{%endif%}{%if student.depositStatus == 2%}已退{%endif%}</a>]{%endif%}
+            </td>
+        </tr>
+
+        {%if student.kindergarten or student.school%}
+        <tr>
+          <td>幼儿园/学校：</td>
+          <td>{{student.kindergarten|default:""}} {{student.school|default:""}}</td>
+        </tr>
+        {%endif%}
+        <tr>
+            <td>
+                家长电话:
+            </td>
+            <td>
+                {{ student.prt1|default:"" }}&nbsp;{{ student.prt1mobile|default:"" }}&nbsp;
+                {{ student.prt2|default:"" }} {{ student.prt2mobile|default:"" }}&nbsp;<button id="smsButton">短信模版</button>
+            </td>
+        </tr>
+        {%if student.siblingName or student.siblingName2  or student.siblingName3%}
+        <tr>
+            <td>
+                兄弟姐妹:
+            </td>
+            <td>
+                {%if student.siblingId%}<a href="{% url 'regUser:student_info' student.siblingId %}">{%endif%}{{ student.siblingName|default:"" }} {{ student.siblingName2|default:"" }} {{ student.siblingName3|default:"" }}{%if student.siblingId%}</a>{%endif%}
+            </td>
+        </tr>
+        {%endif%}
+        <tr>
+            <td>
+                备注:
+            </td>
+            <td>
+                {{ student.memo|default:"" }}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+<div><font style="font-size:26px">意向校区</font>&nbsp;&nbsp;&nbsp;&nbsp;【{{ student.branch.branchName|default:"" }}
+                {%if student.branch2 or student.branch3 or student.branch4%}
+                ({{student.branch2name|default:""}}&nbsp;{{student.branch3name|default:""}}&nbsp;{{student.branch4name|default:""}})
+                {%endif%}】
+      {% if student.code %}
+                &nbsp;编号:{{ student.code|default:"" }}
+                {% endif %}
+                </div>
+<table class="table  table-hover" style="margin:0">
+        <tbody>
+
+        <tr>
+            <td width="30%">拜访（接单）:</td>
+            <td>{{ student.regBranch.branchName|default:"" }}&nbsp;
+                {{ student.regTeacher.name|default:"" }}
+                {% if student.co_teacher %}
+                  {% for t in  student.co_teacher %}
+                    {{t.name}}&nbsp;
+                  {% endfor %}
+                {% endif %}
+                ({% if student.callInTime %}{{ student.callInTime|date:"Y-m-d"|default:"" }}{% else %}{{ student.regTime|date:"Y-m-d"|default:"" }}{% endif %})
+            </td>
+        </tr>
+
+
+        <tr>
+            <td width="30%">来源及班型:</td>
+            <td>
+                {%if student.sourceType == 'C'%}{%if sourceName%}{{sourceName}},{%endif%}转介人:{{ student.referrerName|default:"" }}{%endif%}
+                {%if student.sourceType == 'A'%}{%if student.regBranch.type == 1%}网络：&nbsp;{%endif%}{{student.sourceCategory.categoryName|default:""}}-{{sourceName|default:""}}{%if student.referrerName%}(转介人:{{ student.referrerName|default:"" }}){%endif%}{%endif%}
+                {%if student.sourceType == 'B'%}{%if student.Bsub%}{{student.Bsub|default:""}}{%endif%}拜访：&nbsp;{{student.source.sourceName|default:""}}{%endif%}
+                {%if student.sourceType == 'D'%}社会{%endif%}
+                {%if student.sourceType == 'E'%}市场{%endif%}-{{student.source.sourceName}}
+                &nbsp;|&nbsp;
+                {% if student.wantClass == '1' %}
+                常规班
+                {% endif %}
+                {% if student.wantClass == '21' %}
+                集训班
+                {% endif %}
+            </td>
+        </tr>
+
+     </tbody>
+ </table>
+
+<div><h3>试听及签约</h3></div>
+<table class="table  table-hover"  style="margin:0">
+        <tbody>
+        <tr>
+            <td>
+                试听课:
+            </td>
+            <td>{% if demos%}
+            {% for demo in demos %}
+
+                {{ demo.start_date|date:"Y-m-d"|default:"" }} {{ demo.school_time|default:"" }} {{demo.classroom}} 老师：{{demo.teacher.name}}[{%if demo.demoIsFinish == -1%}取消{%elif demo.demoIsFinish == 1%}已上{%else%}未上{%endif%}]
+                {{demo.info}}<br>
+            {% endfor %}
+            {% endif %}
+            </td>
+            <td>
+            {%if not student.siblingId%}
+            {%if not readonly%}
+           <button
+                       {%if student.demo%}
+                            {% if student.isDemo == 1 %}
+                                class="btn btn-success" onclick="click_demo('{{ student.id }}');"
+                            {% elif student.isDemo == -1 %}
+                                class="btn btn-warning" onclick="click_demo('{{ student.id }}');"
+                            {% else %}
+                                class="btn btn-danger" onclick="click_demo('{{ student.id }}');"
+                            {% endif %}
+                      {% else %}
+                                class="btn btn-default" onclick = "addDemo('{{ student.id }}');"
+                      {% endif %}
+                                >试听课
+                    </button>
+                    {%endif%}
+             {%endif%}
+             </td>
+        </tr>
+        {%if not student.siblingId%}
+                <tr>
+            <td>
+                合同:
+            </td>
+            <td>{% if student.contract%}
+            {% for contract in student.contract %}
+                {%if contract.status != 4%}
+                  {{ contract.singDate|date:"Y-m-d"|default:"" }}签约 {{ contract.beginDate|date:"Y-m-d"|default:"" }}开课 {{ contract.weeks|default:"" }}周 {{contract.paid|default:""}}元 {{contract.classType.name|default:""}}
+                  <font style="color:{%if contract.status == 0 or not contract.status%}green{%else%}orange{%endif%}">
+                  {%if contract.status == 0 or not contract.status%}有效
+                  {%elif contract.status == 1%}结束
+                  {%elif contract.status == 2%}退费
+                  {%elif contract.status == 3%}流失
+                  {%elif contract.status == 5%}结束
+                  {%endif%}</font><br>
+                {%endif%}
+            {% endfor %}
+            {%if student.teacherName%}授课老师：{{student.teacherName}}{%endif%}
+            {% endif %}
+
+            </td>
+            <td>
+            {%if not readonly%}
+            {% if student.status == 1 %}
+                    <button class="btn btn-success" onclick="click_contract('{{ student.id }}',0);">合同</button>
+                {%  endif %}
+                {% if student.status == 0 %}
+                    <button class="btn btn-default" onclick="click_contract('{{ student.id }}',1);">合同</button>
+                {%  endif %}
+                {% if student.status != 0 and student.status != 1 %}
+                    <button class="btn btn-warning" onclick="click_contract('{{ student.id }}',1);">合同</button>
+                {%  endif %}
+                {%endif%}
+
+            </td>
+        </tr>
+        {%endif%}
+        </tbody>
+    </table>
+   </div>
+   {%if not student.siblingId%}
+   <a name="track_pos-"></a>
+   <div class="col-sm-6">
+     <div class="raw">
+     <div class="col-xs-8 col-sm-6">
+
+      </div>
+      </div>
+
+      <div class="raw">
+      <table class="table0">
+            <tr>
+                <td style="width:40%;padding-left:5px">
+                    下次跟进事项<input type="text" id="remind_txt" value="{{teacherRemind.remind_txt}}" style="width:220px;"></td>
+                <td style="width:100px;padding-left:5px">下次跟进日期<input id="remindTime" style="width:80px;" type="text" value="{{ teacherRemind.remindTime|date:'Y-m-d'|default:'' }}"></td>
+                <td style="width:100px;">提醒谁<select id="remindTeacherIds">
+                {%for t in remindTeachers%}
+                <option value="{{t.id}}"
+                {%for rt in teacherRemind.remindTeachers%}
+                    {%if rt.id == t.id%}selected{%endif%}
+                {%endfor%}
+                {%if not ownBranchRemind and t.id|stringformat:"s" == login_teacher.id%}
+                selected
+                {%endif%}
+
+                >{{t.name}}</option>
+                {%endfor%}
+                </select>
+                <td nowrap  style="width:100px;">
+                {%if not readonly%}
+                <input id="isDone" type="checkbox" onclick="done('{{teacherRemind.id}}','{{teacherRemind.remind_txt}}')" {% if teacherRemind.isDone == 1%}checked="checked" {%endif%}/>已完成
+                {%endif%}
+                </td>
+
+                <td>
+
+                    <div style="padding-left:10px;" class="text-right">
+{%if not readonly%}
+                        <button id="addRemindBtn_{{ student.id }}" type="button" class="btn btn-success"
+                             onclick="clickSaveBtn()">保存
+                        </button>
+                        {%endif%}
+                    </div>
+                </td>
+            </tr>
+    </table>
+      </div>
+
+      <div class="raw" style="padding-top:6px;">
+
+      <table>
+         <tr><td width="68%" style="padding-left:5px">
+      <textarea style="width:100%;height:70px;" id="track_txt" placeholder="填写联络记录"></textarea>
+      </td>
+      <td  style="padding-left:5px" valign="top" align="left" width="31%">
+      联络时间
+      <input id="trackTime" type="text" style="width:90%" placeholder="填写联络时间">
+      <BR><BR>
+
+      </td></tr>
+      </table>
+      </div>
+      <div class="raw">
+    <table class="table">
+        <tbody>
+        <th>联络时间</th>
+        <th>联络记录</th>
+        <th>联络人</th>
+        <th>
+
+        </th>
+        </tbody>
+        {% for record in tracks %}
+            <tr {%if record.important == 1%}style="color:red;"{%endif%}>
+                <td title='录入时间{{record.recordTime|date:"Y-m-d H:i"|default:"无"}}'>{{ record.trackTime|date:"Y-m-d H:i"|default:"" }}</td>
+                <td>{{ record.track_txt|default:"" }}</td>
+                <td>{%if record.teacher and record.teacher.name%}{{ record.teacher.name|default:"" }}{%endif%}</td>
+                <td nowrap>
+                {% if record.recordTime|date:"Y-m-d" == datenow|date:"Y-m-d" %}
+                    <a href="javascript:removeTrack('{{record.id}}','{{record.track_txt}}')">
+                    {% if login_teacher.branch|stringformat:"s" == record.teacher.branch.id|stringformat:"s" and login_teacher.role > 5 %}
+                                                               删除
+                    {% elif login_teacher.id|stringformat:"s" == record.teacher.id|stringformat:"s" %}
+                                                               删除
+                    {%endif%}
+                    </a>
+                {%endif%}
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+      </div>
+   </div>
+   {%endif%}
+   <div>
+   {% for image in studentFiles %}
+
+   <img class="pics" onclick="goRefer('{{image.id}}')" style="max-width:580px;" src='{{imagePath}}{{image.filepath}}{{image.filename}}'>
+
+   <br><br>
+   {% endfor %}
+   </div>
+   </div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+
+var max_width = $(window).width();
+if(mobileCheck())
+    $(".pics").css("max-width",max_width+"px");
+
+$("#checkinButton").click(function(){
+	window.location.href = '{% url 'gradeClass:studentLessons' %}'+'?id={{student.id}}';
+});
+$("#checkDup").click(function(){
+	window.location.href = '{% url 'regUser:student_list' %}';
+});
+
+function goRefer(id){
+	  var url = '{% url 'regUser:userShare' %}'+'?id={{student.id}}'+'&file_oid='+id;
+	  window.open(url);
+}
+$("#uploadButton").click(function(){
+	//window.location.href = '{% url 'regUser:uploadPic' %}'+'?student_oid={{student.id}}';
+	window.location.href = '{% url 'web:pages' %}?type=1&student_oid={{student.id}}';
+});
+{%if not student.siblingId%}
+
+$("#editButton").click(function(){
+	window.location.href='{% url 'regUser:reg' %}'+'?student_oid={{student.id}}'
+
+});
+
+function addDemo(studentId) {
+	var url = '{% url 'gradeClass:studentDemo' '111111111111111111111111'%}';
+	url = url.replace("111111111111111111111111", studentId);
+    document.location.href=url;
+}
+
+function click_demo(oid) {
+	    var url = '{% url 'gradeClass:studentDemo' '111111111111111111111111'%}';
+        url = url.replace("111111111111111111111111", oid);
+        document.location.href=url;
+}
+
+function clickAddRemindBtn() {
+	window.location.href = '/go2/regUser/editUserRemind/{{student.id}}/?isAdd=1';
+}
+$("#addTrackBtn").click(function(){
+	window.location.href = '/go2/regUser/editUserTrack/{{student.id}}/?isAdd=1';
+});
+
+$("#editRemindBtn").click(function(){
+	window.location.href = '/go2/regUser/editUserRemind/{{student.id}}/?teacherRemindId={{teacherRemind.id}}';
+});
+
+
+
+$("#smsButton").click(function(){
+	document.location.href = '{% url 'regUser:sms' %}'+'?student_oid={{student.id}}';
+});
+
+
+function removePic(id){
+	if(confirm('确定删除图片?')){
+	  var url = '{% url 'regUser:removePic' %}'+'?student_oid={{student.id}}'+'&file_oid='+id;
+	  window.location.href = url;
+	}
+}
+
+function removeTrack(oid,msg) {
+	if(confirm('确定删除联络记录【'+msg+'】吗？')){
+      $.post("{% url 'regUser:removeTrack'%}", {
+        "csrfmiddlewaretoken": "{{ csrf_token }}",
+    	  'oid':oid
+      }, function (res) {
+        if (res.error == 0) {
+            alert("成功");
+            location.reload(true);
+        } else {
+            alert(res.msg);
+        }
+      });
+	}
+}
+function picMemo(id){
+	var memo = $("#"+id).val();
+	var order = $("#"+id+"order").val();
+	$.post("{% url 'regUser:picMemo'%}", {
+    "csrfmiddlewaretoken": "{{ csrf_token }}",
+  	  'id':id,
+  	  'order':order,
+  	  'memo':memo
+    }, function (res) {
+      if (res.error == 0) {
+          alert("成功");
+          location.reload(true);
+      } else {
+          alert(res.msg);
+      }
+    });
+}
+
+function click_contract(oid) {
+    var url = "{%url 'contract:studentContracts'%}?student_oid="+oid;
+    document.location.href=url;
+}
+function goback(url){
+	$("#tip").html("<font style='color:red;'>返回查询结果页，请稍候...</font>")
+	window.location.href=url
+}
+
+
+$('#remindTime').datetimepicker({
+    format: 'Y-m-d',
+    timepicker: false,
+});
+
+function clickSaveBtn() {
+    var teacherRemindId = '{{teacherRemind.id}}';
+    var remindTime = $("#remindTime").val();
+    var remindTeacherIds = $("#remindTeacherIds").val();
+    var remind_txt = $("#remind_txt").val();
+
+    var isDoneCheckbox = document.getElementById("isDone").checked;
+	var isDone = 0;
+	if(isDoneCheckbox) isDone = 1;
+
+    var track_txt = $("#track_txt").val();
+    var trackTime = $("#trackTime").val();
+
+    if (!remindTime ) {
+        alert("请补全信息");
+        return;
+    }
+
+    $.post("{%url 'regUser:save_user_remind'%}", {
+      "csrfmiddlewaretoken": "{{ csrf_token }}",
+        'student_oid': '{{student.id}}',
+        'remindTime': remindTime,
+        'remindTeacherIds': remindTeacherIds,
+        'teacherRemindId': teacherRemindId,
+        'isDone': isDone,
+        'track_txt': track_txt,
+        'trackTime': trackTime,
+        'remind_txt': remind_txt
+    }, function (res) {
+        if (res.error == 0) {
+            alert("成功");
+            var url ="{% url 'regUser:student_info' student.id %}"
+            if(res.backurl)
+            	url = res.backurl
+            location.href = url;
+        } else {
+            alert("失败:"+res.msg);
+        }
+    });
+}
+
+
+var fmt = "yyyy-MM-dd hh:mm";
+var date = new Date();
+var datestring = date.Format(fmt);
+$(document).ready(function () {
+        $('#trackTime').datetimepicker({
+            format: 'Y-m-d H:i',
+            step:5,
+            timepicker: true,
+            maxDate:datestring
+        });
+    });
+
+$("#trackTime").val(datestring);
+{%endif%}
+</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+body {
+	font-family: 微软雅黑, Arial;
+	background:linear-gradient(to bottom,#fd8e01,#fe4a1f);
+}
+div {
+	padding: 10px 10px 10px 10px;text-align:center;
+	color:#000000;
+}
+.container{margin:0;padding:0;}
+</style>
+
+</head>
+<body>
+<div style="margin:0;padding-top:25px;font-size:20px;">
+{%if msg != '请勿多次抽奖'%}
+	<img src="/go_static/img/luck01.png"  width="200"/>
+{%endif%}
+</div>
+{%if msg%}
+{{msg}}
+{%endif%}
+{%if msg != '请勿多次抽奖'%}
+<div style="font-size:16px;">
+
+恭喜 <font style="font-size:26px;">{{reg.name}}</font> 小朋友获得
+</div>
+<div style="text-align:left;background-image: url(/go_static/img/voucher.png);background-size:100%;padding:40px 0 50px 20px;">
+ <font style="font-size:40px;font-weight:bold;color:red;">{{reg.memo}}</font><font style="font-weight:bold;"> 元</font>
+</div>
+<div>可用于新生报名、续费、集训抵学费，不兑换现金</div>
+<div style="color:white;font-size:20px;">截图分享到朋友圈可再获围棋正课1次</div>
+<div><img src="/go_static/users/{{reg.branch}}/20181111qrcode{{reg.teacher}}.jpg" style="width:30%"/></div>
+<div style="color:white;">邀请朋友扫码抽奖</div>
+{%endif%}
+{% endblock %}
+{% block scripts %}
+<script>
+
+</script>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+th{background:yellow}
+</style>
+<h4 style="width:100%;text-align:center;">{{branchName}}校区学生满意度调查</h4>
+<div style="padding-bottom:12px;">学生满意度问卷地址：<input style="width:350px;" value='{{qrcode}}' />
+  <br>请复制上面地址，然后点右面链接进入二维码生成页面，生成二维码并打印，方便家长扫描填写问卷：<a target="_blank" href="https://cli.im">生成二维码</a>
+
+</div>
+<table id="datatable" class="table table-striped table-bordered">
+  <thead>
+<tr>
+  <th>提交时间</th>
+	<th>学生</th>
+	<th>老师</th>
+	<th>学棋多久</th>
+	<th>喜欢围棋课吗</th>
+	<th>对老师满意吗</th>
+	<th>多久开一次家长会</th>
+	<th>老师怎么跟您沟通</th>
+	<th>老师每次有课后反馈吗</th>
+	<th>知道课程规划吗</th>
+	<th>孩子的改变</th>
+	<th>对校区的感觉</th>
+	<th>对前台老师满意吗</th>
+	<th>会推荐我们吗</th>
+	<th>意见和建议</th>
+</tr>
+</thead>
+{%for q in quests%}
+<tr>
+  <td>{{q.appDate|date:"Y-m-d H:i"}}</td>
+<td nowrap>{{q.studentName}}</td>
+<td nowrap>{{q.teacher.name}}</td>
+<td>{{q.length}}</td>
+<td>{{q.a1}}</td>
+<td>{{q.a2}}</td>
+<td>{{q.a3}}</td>
+<td>{{q.a4}}</td>
+<td>{{q.a5}}</td>
+<td>{{q.a6}}</td>
+<td>{{q.a7}}</td>
+<td>{{q.b1}}</td>
+<td>{{q.b2}}</td>
+<td>{{q.b3}}</td>
+<td>{{q.b4}}</td>
+
+</tr>
+{%endfor%}
+</table>
+{% endblock %}
+{% block scripts %}
+<script>
+
+$('#qform').validate({
+    rules: {
+			teacher:{
+	        required: true
+	    },
+    	name: {
+	        required: true
+	    },
+        length: {
+            required: true
+        },
+        a1: {
+            required: true
+        },
+				a2: {
+            required: true
+        },
+				a3: {
+            required: true
+        },
+				a4: {
+            required: true
+        },
+				a5: {
+            required: true
+        },
+				a6: {
+            required: true
+        },
+				b1: {
+            required: true
+        },
+				b2: {
+            required: true
+        },
+				b3: {
+            required: true
+        }
+    }
+});
+
+$(document).ready(function() {
+  $("title").html('真朴围棋调查问卷')
+
+	$('#datatable').DataTable({
+	    stateSave: true,
+	    "language": {
+            "lengthMenu": "每页显示 _MENU_ 问卷",
+            "zeroRecords": "空空如也",
+            "sInfo":"从 _START_ 到 _END_， 共 _TOTAL_ 学生",
+            "infoEmpty": "没有找到哦",
+            "sSearch":"查询",
+            "oPaginate": {
+		        "sFirst":"首页",
+		        "sPrevious": 	"上一页",
+		        "sNext":     	"下一页",
+		        "sLast":     	"末页"
+	        },
+            "infoFiltered": "(从 _MAX_ 问卷中搜索)"
+        },
+        "columns": [
+	            { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": true },
+              { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": true },
+              { "orderable": true },
+              { "orderable": true },
+              { "orderable": false },
+	            { "orderable": true },
+              { "orderable": true },
+              { "orderable": true },
+	            { "orderable": false }
+	            ]
+	});
+  $('#datatable').DataTable().page.len(100).draw();
+});
+
+</script>
+{% endblock %}

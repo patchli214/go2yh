@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+{% block content %}
+	<style>
+	body{font-family:微软雅黑,Arial;max-width:800px;margin:0 auto}
+	h3{margin-top:5px;margin-bottom:5px;}
+	h5{font-weight: bold;}
+	div{padding:5px 0px 0px 5px;}
+	#submitBtn{padding:10px 40px 10px 40px;font-size:16px;}
+    label.valid {
+	  width: 24px;
+	  height: 24px;
+	  background: url(assets/img/valid.png) center center no-repeat;
+	  display: inline-block;
+	  text-indent: -9999px;
+    }
+    label.error {
+	  font-weight: bold;
+	  color: red;
+	  padding: 2px 8px;
+	  margin-top: 2px;
+    }
+	</style>
+
+
+<div style="width:100%;margin:0 auto;padding:0;">
+<form id="qform" action="" method="post" class="form-inline">
+<input type="hidden" name="bid" value="{{branch.id}}" />
+<div style="float:left;width:40%">
+<img src="/go_static/img/title.png" width="100%"></img>
+</div>
+<div style="float:right;width:40%;text-align:right;line-height:30px;">{{branch.branchName}}校区</div>
+<div style="clear:both;text-align:center;padding:20px 0 16px 0;">
+<h3>学习问卷</h3>
+</div>
+
+{%if res%}
+<center>问卷已提交，感谢您的配合！</center>
+{%elif e%}
+<center>{{err}}</center>
+{%else%}
+<div style="font-size:16px;margin-bottom:20px;">
+  <p>亲爱的家长朋友您好，感谢您选择真朴围棋。在新学期开始之际，为了进一步提高老师的教学和服务水平，请您配合我们完成以下的调查，十分感谢。</p>
+  <p>请您放心填写，您的建议会让我们做得更好，此数据不会公开，仅供内部管理参考。</p>
+
+</div>
+<div class="bg-success" style="padding:3px 0px 3px 15px;margin:0;"><h3>孩子信息</h3></div>
+<div style="width:100%;margin:0 auto;padding:0 0 20px 0;">
+
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<input type="text" class="form-control" id="name" name="name" placeholder="孩子姓名"/>
+</div>
+
+<div class="form-group text-right" style="margin:5px;padding:0 10px 0 10px;">
+<select class="form-control" id="teacher" name="teacher"/>
+<option value=''>选择任课老师</option>
+{%for t in teachers%}
+<option value="{{t.id}}">{%if t.name2%}{{t.name2}}{%else%}{{t.name}}{%endif%}老师</option>
+{%endfor%}
+</select>
+</div>
+
+<div>
+<h5>您的孩子在真朴学棋多久了？</h5>
+<div class="radio"><label>
+  <input type="radio" name="length" value="A：一个月内" /> A：一个月内
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="length" value="B：1-3个月" /> B：1-3个月
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="length" value="C：3个月－半年" /> C：3个月－半年
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="length" value="D：半年－1年" /> D：半年－1年
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="length" value="E：1-2年" /> E：1-2年
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="length" value="F：2－3年" /> F：2－3年
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="length" value="G：3年以上" /> G：3年以上
+</label></div>
+</div>
+
+
+</div>
+<div class="bg-success" style="padding:3px 0px 3px 15px;">
+<h3>关于围棋课</h3>
+</div>
+<div style="width:100%;margin:0 auto;padding-bottom:20px;padding-top:0">
+<div>
+<h5>您的孩子喜欢上围棋课吗？</h5>
+<div class="radio"><label>
+  <input type="radio" name="a1" value="A：非常喜欢" /> A：非常喜欢
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="a1" value="B：一般喜欢" /> B：一般喜欢
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="a1" value="C：不喜欢" /> C：不喜欢
+</label></div>
+</div>
+
+<div>
+<h5>您对任课老师是否满意？</h5>
+<div class="radio"><label>
+  <input type="radio" name="a2" value="A：非常满意" /> A：非常满意
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="a2" value="B：一般满意" /> B：一般满意
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="a2" value="C：不满意" /> C：不满意
+</label></div>
+</div>
+
+<div>
+<h5>老师多久开一次家长会</h5>
+<div class="radio"><label>
+  <input type="radio" name="a3" value="A：几乎每次课后都开" /> A：几乎每次课后都开
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="a3" value="B：一个月左右开一次" /> B：一个月左右开一次
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="a3" value="C：一个季度一次" /> C：一个季度一次
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="a3" value="D：一学期开一次" /> D：一学期开一次
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="a3" value="E：几乎不开" /> E：几乎不开
+</label></div>
+</div>
+
+
+
+
+<div>
+<h5>任课老师都用什么方式跟您沟通孩子的学习情况？（可多选）</h5>
+<div class="checkbox"><label>
+<input type="checkbox" name="a4[]" value="A：每次放学后/课间当面沟通" />A：每次放学后/课间当面沟通
+</label></div>
+<div class="checkbox"><label>
+<input type="checkbox" name="a4[]" value="B：平时微信/短信沟通" />B：平时微信/短信沟通
+</label></div>
+<div class="checkbox"><label>
+<input type="checkbox" name="a4[]" value="C：平时电话沟通" />C：平时电话沟通
+</label></div>
+<div class="checkbox"><label>
+<input type="checkbox" name="a4[]" value="D：很少沟通" />D：很少沟通
+</label></div>
+</div>
+
+
+<div>
+<h5>任课老师每次有课后反馈吗？您知道孩子每次学了什么吗？</h5>
+<div class="radio"><label>
+<input type="radio" name="a5" value="A：每节课有微信群的照片、视频和文字反馈，知道孩子每次课都学了什么。" />A：每节课有微信群的照片、视频和文字反馈，知道孩子每次课都学了什么。
+</label></div>
+<div class="radio"><label>
+<input type="radio" name="a5" value="B：偶尔有微信群的照片和文字（或其他方式）反馈，大概孩子都学了什么。" />B：偶尔有微信群的照片和文字（或其他方式）反馈，大概孩子都学了什么。
+</label></div>
+<div class="radio"><label>
+<input type="radio" name="a5" value="C：基本没有反馈，不知道孩子学了什么。" />C：基本没有反馈，不知道孩子学了什么。
+</label></div>
+</div>
+<div>
+<h5>您知道这个班的课程规划吗？</h5>
+<div class="radio"><label>
+<input type="radio" name="a6" value="A：知道课程规划" />A：知道课程规划
+</label></div>
+<div class="radio"><label>
+<input type="radio" name="a6" value="B：了解一点课程规划" />B：了解一点课程规划
+</label></div>
+<div class="radio"><label>
+<input type="radio" name="a6" value="C：不知道课程规划" />C：不知道课程规划
+</label></div>
+</div>
+
+<div>
+<h5>您觉得孩子通过学围棋，在哪些方面有所改变？</h5>
+<div class="form-group text-right" style="margin:5px;padding:0px 10px 20px 10px;">
+<textarea class="form-control" id="a7" name="a7"></textarea>
+</div>
+</div>
+
+<div class="bg-success" style="padding:3px 0px 3px 15px;">
+<h3>关于校区</h3>
+</div>
+<div style="width:100%;margin:0 auto;padding-bottom:30px;padding-top:0;">
+<div>
+<h5>您对校区的整体感觉如何？</h5>
+<div class="radio"><label>
+  <input type="radio" name="b1" value="A：非常满意" /> A：非常满意
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="b1" value="B：一般满意" /> B：一般满意
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="b1" value="C：不满意" /> C：不满意
+</label></div>
+</div>
+
+<div>
+<h5>您对校区的前台老师满意吗？</h5>
+<div class="radio"><label>
+  <input type="radio" name="b2" value="A：非常满意" /> A：非常满意
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="b2" value="B：一般满意" /> B：一般满意
+</label></div>
+<div class="radio"><label>
+  <input type="radio" name="b2" value="C：不满意" /> C：不满意
+</label></div>
+</div>
+
+<div>
+<h5>您身边如果有小朋友要学围棋，您会推荐我们吗？</h5>
+
+<div class="radio"><label>
+<input type="radio" name="b3" value="A：会" />A：会
+</label></div>
+
+<div class="radio"><label>
+<input type="radio" name="b3" value="B：不会" />B：不会
+</label></div>
+</div>
+
+<div>
+<h5>您对我们有什么样的意见和建议？</h5>
+<div class="form-group text-right" style="margin:5px;padding:0px 10px 0 10px;">
+<textarea class="form-control" id="b4" name="b4"></textarea>
+</div>
+</div>
+
+
+<div style="margin:0 auto;width:140px;">
+<input id="submitBtn" type="submit" value="提交" class="btn btn-default"/>
+</div>
+<div style="margin:10px;"></div>
+</form>
+</div>
+{%endif%}
+{% endblock %}
+{% block scripts %}
+<script>
+$("title").html('真朴围棋调查问卷')
+
+$('#qform').validate({
+    rules: {
+			teacher:{
+	        required: true
+	    },
+    	name: {
+	        required: true
+	    },
+        length: {
+            required: true
+        },
+        a1: {
+            required: true
+        },
+				a2: {
+            required: true
+        },
+				a3: {
+            required: true
+        },
+				a4: {
+            required: true
+        },
+				a5: {
+            required: true
+        },
+				a6: {
+            required: true
+        },
+				b1: {
+            required: true
+        },
+				b2: {
+            required: true
+        },
+				b3: {
+            required: true
+        }
+    }
+});
+
+</script>
+{% endblock %}

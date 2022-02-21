@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+
+            <h4 class="modal-title" id="myModalLabel">修改渠道</h4>
+            <div class="modal-body" id="info-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span id="sourceTypeSpan2"></span><span id="sourctCategorySpan"></span>&nbsp;&nbsp;
+
+{%if categoryName%}
+    {{categoryName}}
+{%else%}
+    <select id="categoryCode">
+    {% for c in categories%}
+    <option value="{{c.id}}">{{c.categoryName}}</option>
+    {%endfor%}
+    </select>
+
+{%endif%}
+                    </div>
+                    <div class="panel-body">
+                        <p><span>渠道名：</span><input type="text" id="sourceName" value="{{source.sourceName}}">
+                        <p><span>代码：</span><input type="text" id="sourceCode" value="{{source.sourceCode}}">
+                        <p><span>联系人：</span><input type="text" id="contact"  value="{{source.contact}}">
+                        <p><span>手机号：</span><input type="text" id="mobile"  value="{{source.mobile}}">
+                        <p><span>微信openId：</span><input type="text" id="weixin" value="{{source.weixin}}">
+                        <p><span>删除（填“1”删除）：</span><input type="text" id="deleted" value="{{source.deleted|default:''}}">
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="save_source" type="button" class="btn btn-danger" data-dismiss="modal">保存</button>
+            </div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#save_source").click(function(id){
+	var url = "{% url 'branch:api_editSource' %}";
+	var name = $("#sourceName").val();
+	var code = $("#sourceCode").val();
+	var contact = $("#contact").val();
+	var mobile = $("#mobile").val();
+	var weixin = $("#weixin").val();
+	var deleted = $("#deleted").val();
+	var categoryCode = $("#categoryCode").val();
+
+	if(!categoryCode) categoryCode = '{{source.categoryCode}}';
+	if(!name)return;
+	if(!code)return;
+	if(!deleted)deleted = '';
+	if(!contact)contact = '';
+	if(!mobile)mobile = '';
+	if(!weixin)weixin = '';
+	$.post(url,{"id":'{{source.id}}',
+		"sourceName":name,
+		"sourceCode":code,
+		"contact":contact,
+		"mobile":mobile,
+		"weixin":weixin,
+		"categoryCode":categoryCode,
+		"deleted":deleted
+		},function(res){alert(res.msg)});
+});
+</script>
+{% endblock %}

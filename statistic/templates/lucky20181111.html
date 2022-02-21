@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+
+<div style="padding-top:10px;padding-bottom:3;float:left;">
+<a href="/go2/statistic/indexStat"><返回</a>
+</div>
+<div style="float:left;font-size:20px;font-weight:bold;padding:10px 10px 0 20px;">2018双十一抽奖统计</div>
+
+
+
+<link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+        <style>
+
+    td{padding:1px;}
+    </style>
+
+
+<div style="margin-left:0px;clear:both;">
+<table id="datatable" border="1">
+        <thead>
+        <tr>
+        <th style="padding:6px;">来源校区</th>
+
+        <th style="padding:6px;">总人数</th>
+        <th style="padding:6px;">在校生数</th>
+        <th style="padding:6px;">一等奖</th>
+        <th style="padding:6px;">二等奖</th>
+        <th style="padding:6px;">三等奖</th>
+        <th style="padding:6px;">四等奖</th>
+
+        <th style="padding:6px;">已兑奖</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for reg in res %}
+
+            <tr>
+                <td style="padding:1px;" width="120" nowrap>{{reg.branchName|default:''}}</td>
+
+
+
+                <td style="padding:1px;">{{reg.all|default:""}}</td>
+                <td style="padding:1px;">{{reg.in|default:''}}</td>
+                <td style="padding:1px;">{{reg.1|default:""}}</td>
+                <td style="padding:1px;">{{reg.2|default:""}}</td>
+                <td style="padding:1px;">{{reg.3|default:""}}</td>
+                <td style="padding:1px;">{{reg.4|default:""}}</td>
+                <td  style="padding:1px;">{{reg.done|default:''}}</td>
+
+
+
+            </tr>
+
+        {% endfor %}
+        </tbody>
+        <tfoot style="background:#eeeeee;">
+
+          <th>合计</th>
+          <th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+        </tfoot>
+        <!--tr>
+          <td style="padding:6px;">来源校区</th>
+
+          <td style="padding:6px;">总人数</th>
+          <td style="padding:6px;">在校生数</th>
+          <td style="padding:6px;">一等奖</th>
+          <td style="padding:6px;">二等奖</th>
+          <td style="padding:6px;">三等奖</th>
+          <td style="padding:6px;">四等奖</th>
+
+          <td style="padding:6px;">已兑奖</th>
+        </tr-->
+    </table>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#searchButton").click(function(){
+  var kw = $("#keyword").val()
+
+    document.location.href="{%url 'web:regList2'%}?kw="+kw
+
+})
+function use(voucher,value){
+  window.open("{%url 'web:useVoucher'%}?voucher="+voucher+"&value="+value)
+}
+$(document).ready(function() {
+	$('#datatable').DataTable({
+	"paging":   false,
+	"searching": false,
+	"info":false,
+  "language": {
+        "lengthMenu": "每页显示 _MENU_",
+        "zeroRecords": "空空如也",
+        "sInfo":"从 _START_ 到 _END_， 共 _TOTAL_ ",
+        "infoEmpty": "没有找到哦",
+        "sSearch":"查询",
+        "oPaginate": {
+        "sFirst":"首页",
+        "sPrevious": 	"上一页",
+        "sNext":     	"下一页",
+        "sLast":     	"末页"
+      },
+        "infoFiltered": "(从 _MAX_ 中搜索)"
+    },
+	  "order": [[ 1  , "desc" ]],
+    "footerCallback": function( tfoot, data, start, end, display ) {
+      var api = this.api();
+      $( api.column( 1 ).footer() ).html(
+          api.column( 1 ).data().reduce( function ( a, b ) {
+              var ai = new Number(a)
+              var bi = new Number(b)
+              return ai + bi;
+          }, 0 )
+      );
+      $( api.column( 2 ).footer() ).html(
+          api.column( 2 ).data().reduce( function ( a, b ) {
+              var ai = new Number(a)
+              var bi = new Number(b)
+              return ai + bi;
+          }, 0 )
+      );
+      $( api.column( 3 ).footer() ).html(
+          api.column( 3 ).data().reduce( function ( a, b ) {
+              var ai = new Number(a)
+              var bi = new Number(b)
+              return ai + bi;
+          }, 0 )
+      );
+      $( api.column( 4 ).footer() ).html(
+          api.column( 4 ).data().reduce( function ( a, b ) {
+              var ai = new Number(a)
+              var bi = new Number(b)
+              return ai + bi;
+          }, 0 )
+      );
+      $( api.column( 5 ).footer() ).html(
+          api.column( 5 ).data().reduce( function ( a, b ) {
+              var ai = new Number(a)
+              var bi = new Number(b)
+              return ai + bi;
+          }, 0 )
+      );
+      $( api.column( 6 ).footer() ).html(
+          api.column( 6 ).data().reduce( function ( a, b ) {
+              var ai = new Number(a)
+              var bi = new Number(b)
+              return ai + bi;
+          }, 0 )
+      );
+      $( api.column( 7 ).footer() ).html(
+          api.column( 7 ).data().reduce( function ( a, b ) {
+              var ai = new Number(a)
+              var bi = new Number(b)
+              return ai + bi;
+          }, 0 )
+      );
+    }
+
+	});
+
+});
+
+
+
+
+</script>
+{% endblock %}

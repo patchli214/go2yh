@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+<style>
+.c{padding:20px 0 0 0;color:black;}
+td{font-size: 20px}
+</style>
+<div style="cursor:pointer;color:#999999">
+  <h3>
+    <img src="/go_static/img/logo.png" width="30" />
+    <b>真朴围棋主任评分</b>
+  </h3>
+</div>
+<center>
+  <table style="">
+  <tr><td>校区：{{login_teacher.branchName}}  </td></tr>
+  <tr><td>主任：{{assessObject.name}}</td></tr>
+  <tr><td>{{assessCode}}</td></tr>
+</table>
+
+
+  <div class="c">
+    <input type="hidden" id="assessObject" value="{{assessObject.id}}" />
+  </div>
+  <div class="c">
+    评分：
+    <select id="score" style="border:2px solid;">
+      <option value="10">10</option>
+      <option value="9">9</option>
+      <option value="8">8</option>
+      <option value="7">7</option>
+      <option value="6">6</option>
+      <option value="5">5</option>
+      <option value="4">4</option>
+      <option value="3">3</option>
+      <option value="2">2</option>
+      <option value="1">1</option>
+    </select>&nbsp;<font color="#999999">(最高10分，最低1分)</font>
+  </div>
+  <div class="c">
+评分理由及想说的话 <br>
+    <textarea id="memo" placeholder="" style="width:250px;height:100px;border:2px solid;"></textarea>
+  </div>
+  <div class="c">
+        <span onclick="saveAssess()" class="btn btn-primary" id="submit">提交</span>
+  </div>
+  <div class="c"><font color="#999999">评分匿名提交到总部，评分对象无法看到。</font></div>
+</center>
+{% endblock %}
+{% block scripts %}
+    <script>
+    {%if assess%}
+    $("#score").val('{{assess.score}}')
+    $("#memo").val('{{assess.memo}}')
+    $("#assessObject").val('{{assessObject.id}}')
+    {%endif%}
+    function saveAssess(){
+      var assessObject = $("#assessObject").val();
+      var score = $("#score").val();
+      var memo = $('#memo').val();
+
+      $.post("{% url 'teacher:api_headmasterAssess'%}", {
+        'assessCode':'{{assessCode}}',
+          'assessObject':assessObject,
+          'memo': memo,
+          'score': score
+
+      }, function (res) {
+          if (res.error == 0) {
+              alert("成功");
+              location.href='teacherList';
+          } else {
+              alert(res.message);
+          }
+      });
+    }
+    </script>
+{% endblock %}

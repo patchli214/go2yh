@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% block content %}
+<title>发票记录</title>
+<a name="top"></a>
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+<link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+        <style>
+
+    .inactiveNam{background:#555555;color:white;}
+
+    .showMemo{cursor:pointer;}
+    .showMemo2{cursor:pointer;}
+    td{padding:1px;}
+
+    </style>
+{% include 'subNav.html' %}
+
+
+<div style="margin-left:-60px;float:left;width:100%">
+  开票日期：<input id="beginDate" type="text" placeholder="起始日期" style="width:90px;"> 到
+  <input id="endDate" type="text" placeholder="截至日期" style="width:90px;">
+  <button id="searchButton" class="btn btn-primary">查询</button>
+<table id="datatable">
+        <thead>
+        <tr>
+        <th nowrap style="width:100px;">校区</th>
+        <th nowrap style="width:80px;">学生</th>
+        <th style="width:80px;">电话</th>
+
+        <th nowrap>申请日期</th>
+        <th nowrap>种类</th>
+        <th nowrap>合同总金额</th>
+        <th nowrap>申请开票金额</th>
+        <th nowrap>类型</th>
+        <th nowrap style="width:120px;">抬头</th>
+        <th nowrap style="width:120px;">纳税人识别号</th>
+        <th nowrap style="width:120px;">地址电话</th>
+        <th nowrap style="width:120px;">银行帐号</th>
+        <th nowrap style="width:140px;">开票日期</th>
+        <th nowrap>备注</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for r in requires %}
+
+        <tr style="color:{%if r.status == 1%}black{%elif r.status == -1%}#bbbbbb{%endif%};">
+
+          <td style="padding:4px;">{%if r.student%}[{{r.student.branch.city.cityName}}]<br>{{r.student.branchName}}  {%endif%}</td>
+          <td nowrap style="padding:4px;">{%if r.student%}{{r.student.name|default:""}}{%if not r.student.name%}{{r.student.name2|default:""}}{%endif%}  {%endif%}</td>
+          <td style="padding:4px;">{%if r.student%}{{r.student.prt1mobile}}{%if r.student.prt2mobile%}<br>{{r.student.prt2mobile|default:""}}{%endif%}{%endif%}</td>
+
+          <td style="padding:4px;" nowrap>{{r.appDate|date:"Y-m-d"}}</td>
+          <td nowrap align="center">{%if r.isMemberFee %}会员费{%endif%}</td>
+          <td nowrap align="center" style="padding:4px;">{{r.contractSum}}</td>
+          <td nowrap align="center" style="padding:4px;">{{r.sum}}</td>
+          <td style="padding:4px;" nowrap>{%if r.rType == 1%}普票{%elif r.rType == 2%}专票{%endif%}</td>
+          <td  style="padding:4px;">{{r.title}}</td>
+          <td  style="padding:4px;">{{r.taxNo|default:''}}</td>
+          <td  style="padding:4px;">{{r.address|default:''}}</td>
+          <td  style="padding:4px;">{{r.bank|default:''}}</td>
+          <td  align="center" style="padding:4px;">{{r.printDate|date:"Y-m-d"|default:"驳回"}}</td>
+          <td  style="padding:4px;">
+            {{r.memo|default:""}}
+            </td>
+
+
+        </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{%if sum > 10%}
+<div style="text-align:center;padding:20px;">
+<a href="#top"><button>返回顶部</button></a>
+</div>
+{%endif%}
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+$("#subNav23").attr("class","activeNav");
+
+{% include 'subNavJs.html' %}
+
+$(document).ready(function() {
+	$('#datatable').DataTable({
+	"paging":   false,
+	"searching": true,
+	"info":true,
+  order:[[12,"desc"]],
+  dom: 'Bfrtip',
+  "language": {
+        "lengthMenu": "每页显示 _MENU_ 学生",
+        "zeroRecords": "空空如也",
+        "sInfo":"共开票 _TOTAL_ ",
+        "infoEmpty": "没有找到哦",
+        "sSearch":"关键词搜索",
+        "oPaginate": {
+        "sFirst":"首页",
+        "sPrevious": 	"上一页",
+        "sNext":     	"下一页",
+        "sLast":     	"末页"
+      },
+        "infoFiltered": "(从 _MAX_ 中搜索)"
+    },
+  buttons: [
+        { extend: 'copy', text: '复制' },
+        { extend: 'csv', text: '保存' },
+        { extend: 'print', text: '打印' }
+    ]
+	});
+});
+
+$(".approve").click(function(){
+
+    $("#sname").html('<font color="#888888">学生姓名：</font>'+$(this).attr("sname"))
+    $("#rsum").html('<font color="#888888">申请开票金额：</font>'+$(this).attr("rsum"))
+    $("#ravail").html('<font color="#888888">可开金额：</font>'+$(this).attr("ravail"))
+    $("#rtitle").html('<font color="#888888">抬头：</font>'+$(this).attr("rtitle"))
+    $("#rtype").html('<font color="#888888">发票类型：</font>'+$(this).attr("rtype"))
+    $("#rtaxNo").html('<font color="#888888">纳税人识别号：</font>'+$(this).attr("rtaxNo"))
+    $("#raddress").html('<font color="#888888">地址电话：</font>'+$(this).attr("raddress"))
+    $("#rbank").html('<font color="#888888">银行帐号：</font>'+$(this).attr("rbank"))
+
+
+    $("#r_oid").val($(this).attr("coid"))
+    $("#attach").html('<img src="/go_static/users/'+$(this).attr("pic")+'" />')
+    $("#refundModal").modal();});
+
+$("#searchButton").click(function(){
+  var beginDate = $("#beginDate").val();
+  var endDate = $("#endDate").val();
+  if(beginDate==''){
+      alert("请填起始日期")
+      return
+    }
+    if(endDate==''){
+      alert("请填截至日期")
+      return
+    }
+    var url = "{% url 'workflow:receipts' %}?beginDate="+beginDate+"&endDate="+endDate
+    window.location.href=url
+})
+
+$("#save_refund").click(function(){
+
+  var oid = $("#r_oid").val()
+  var printDate = $("#printDate").val()
+  var status = '1'
+  if(!printDate){
+    alert('请填写退费日期')
+    return
+  }
+  if(!confirm("确定开票吗？")){
+    return
+  }
+
+  $.post("{% url 'workflow:receiptDeal_api'%}", {
+      'id':oid,
+      'printDate': printDate,
+      'status': status
+  }, function (res) {
+      if (res.error == 0) {
+          alert("已通知校区开票成功，请安排发送发票到校区");
+          location.reload(true);
+      } else {
+          alert("失败："+res.msg);
+      }
+  });
+})
+
+
+$(".reject").click(function(){
+
+    $("#sname2").html('<font color="#888888">学生姓名：</font>'+$(this).attr("sname"))
+    $("#rsum2").html('<font color="#888888">申请开票金额：</font>'+$(this).attr("rsum"))
+    $("#ravail2").html('<font color="#888888">可开金额：</font>'+$(this).attr("ravail"))
+    $("#rtitle2").html('<font color="#888888">抬头：</font>'+$(this).attr("rtitle"))
+    $("#rtype2").html('<font color="#888888">发票类型：</font>'+$(this).attr("rtype"))
+    $("#rtaxNo2").html('<font color="#888888">纳税人识别号：</font>'+$(this).attr("rtaxNo"))
+    $("#raddress2").html('<font color="#888888">地址电话：</font>'+$(this).attr("raddress"))
+    $("#rbank2").html('<font color="#888888">银行帐号：</font>'+$(this).attr("rbank"))
+
+
+    $("#r_oid").val($(this).attr("coid"))
+    $("#attach").html('<img src="/go_static/users/'+$(this).attr("pic")+'" />')
+    $("#rejectModal").modal();});
+
+
+
+$("#save_reject").click(function(){
+
+  var oid = $("#r_oid").val()
+  var memo = $("#memo").val()
+  if(!memo){
+    alert('请填写驳回理由')
+    return
+  }
+  var status = '-1'
+  if(!confirm("确定驳回开票申请吗？")){
+    return
+  }
+
+
+  $.post("{% url 'workflow:receiptDeal_api'%}", {
+      'id':oid,
+      'memo':memo,
+
+      'status': status
+  }, function (res) {
+      if (res.error == 0) {
+          alert("已驳回开票申请");
+          location.reload(true);
+      } else {
+          alert("失败："+res.msg);
+      }
+  });
+})
+
+
+$('#printDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+</script>
+{% endblock %}

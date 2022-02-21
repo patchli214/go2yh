@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="javascript:document.location.href='/go2/student/students'"><返回</a>
+</div>
+<h4>{{user.student.name}}</h4>
+<div>
+<span style="font-weight:bold;color:red;">起点</span>
+<select id="beginLevel">
+  <option value="">请选择</option>
+  {%for key,value in GO_LEVEL.items%}
+  <option value="{{key}}" {%if target.beginLevel == key%}selected="selected"{%endif%}>{{key}}</option>
+  {%endfor%}
+  </select>
+开始日期<input type="text" id="beginDate" value="{%if target.beginDate%}{{target.beginDate|date:'Y-m-d'}}{%endif%}" style="">
+<span style="font-weight:bold;padding-left:10px;color:red;">目标</span>
+3个月<select id="quarterTarget">
+  <option value="">请选择</option>
+  {%for key,value in GO_LEVEL.items%}
+  <option value="{{key}}" {%if target.quarterTarget == key%}selected="selected"{%endif%}>{{key}}</option>
+  {%endfor%}
+  </select>
+半年<select id="halfyearTarget">
+  <option value="">请选择</option>
+  {%for key,value in GO_LEVEL.items%}
+  <option value="{{key}}" {%if target.halfyearTarget == key%}selected="selected"{%endif%}>{{key}}</option>
+  {%endfor%}
+  </select>
+一年<select id="yearTarget">
+  <option value="">请选择</option>
+  {%for key,value in GO_LEVEL.items%}
+  <<option value="{{key}}" {%if target.yearTarget == key%}selected="selected"{%endif%}>{{key}}</option>
+  {%endfor%}
+  </select>
+
+  <button onclick="saveTarget()">保存</button>
+</div>
+<hr>
+<h5>上周学习记录</h5>
+到达级别<select id="level">
+  {%for key,value in GO_LEVEL.items%}
+  <<option value="{{key}}" {%if lastWeek.level == key%}selected="selected"{%endif%}>{{key}}</option>
+  {%endfor%}
+  </select>
+做题数<input type="text" id="questions" value="{{lastWeek.q|default:''}}" style="width:60px;">
+下棋数<input type="text" id="matches" value="{{lastWeek.m|default:''}}" style="width:60px;">
+<button onclick="saveHistory()">保存</button>
+<button onclick="goArch('{{user.student.id}}')" style="margin-left:10px;">查看全部学习记录</button>
+<hr>
+<h5>记录新成就</h5>
+<div style="float:left">
+日期<input id="date" type="text" />
+类型<select id="type">
+  <option value="-1">请选择</option>
+  <option value="2a">一星考</option>
+  <option value="2b">二星考</option>
+  <option value="2c">三星考</option>
+  <option value="3">棋院证书</option>
+  <option value="8">其他证书</option>
+  <option value="6">对校区贡献或进步</option>
+</select>
+备注
+</div>
+<div style="float:left">
+<textarea id="memo"></textarea>
+</div>
+<div style="clear:both">
+  <button onclick="save()">保存</button>
+</div>
+
+<hr>
+
+<h5>全部成就</h5>
+{%for h in histories%}
+<div style="">
+  {{h.date|date:"Y-m-d"}} {%if h.type == 6%}贡献:{%endif%}{{h.memo}}
+  <a href="javascript:remove('{{h.id}}')">
+  <i class="glyphicon glyphicon-trash" title="删除"></i></a>
+  <hr />
+</div>
+{%endfor%}
+{%if not histories%}
+暂无
+{%endif%}
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+function save(){
+  var userId = '{{user.id}}'
+  var type = $("#type").val()
+  var memo = $("#memo").val()
+  var date = $("#date").val()
+  if(type=='-1'){
+    alert('请选择类型')
+    return
+  }
+  if(!date){
+    alert('请选择日期')
+    return
+  }
+  $.post("{% url 'student:api_studentMemo' %}", {
+      "date":date,
+      "type": type,
+      "memo": memo,
+      "userId": userId
+  }, function (res) {
+      if (res["error"] == 0) {
+          alert("成功")
+          window.location.reload();
+      } else {
+          alert("失败:" + res["msg"])
+      }
+  });
+}
+
+function saveTarget(){
+  console.log('{{user.id}}')
+
+  var userId = '{{user.id}}'
+  var beginLevel = $("#beginLevel").val()
+  var beginDate = $("#beginDate").val()
+  var endDate = $("#endDate").val()
+  var quarterTarget = $("#quarterTarget").val()
+  var halfyearTarget = $("#halfyearTarget").val()
+  var yearTarget = $("#yearTarget").val()
+  if(beginLevel==''){
+    alert('请选择初始级别')
+    return
+  }
+  if(quarterTarget==''){
+    alert('请选择三个月目标')
+    return
+  }
+  if(halfyearTarget==''){
+    alert('请选择半年目标')
+    return
+  }
+  if(yearTarget==''){
+    alert('请选择一年目标')
+    return
+  }
+  if(!beginDate){
+    alert('请选择开始日期')
+    return
+  }
+  $.post("{% url 'student:api_editTarget' %}", {
+      "beginLevel":beginLevel,
+      "beginDate": beginDate,
+      "quarterTarget": quarterTarget,
+      "halfyearTarget": halfyearTarget,
+      "yearTarget": yearTarget,
+      {%if target%}"tid":'{{target.id}}',{%endif%}
+      "userId": userId
+  }, function (res) {
+      if (res["error"] == 0) {
+          alert("成功")
+          window.location.reload();
+      } else {
+          alert("失败:" + res["msg"])
+      }
+  });
+}
+
+function saveHistory(){
+  console.log('{{user.id}}')
+
+  var userId = '{{user.id}}'
+  var qs = $("#questions").val()
+  var ms = $("#matches").val()
+  if(qs=='')qs = '0'
+  if(ms=='')ms = '0'
+  var memo = qs+','+ms
+
+  var level = $("#level").val()
+  if(level==''){
+    alert('请选择级别')
+    return
+  }
+  $.post("{% url 'student:api_saveRecord' %}", {
+      "memo":memo,
+      "level": level,
+      "userId": userId
+  }, function (res) {
+      if (res["error"] == 0) {
+          alert("成功")
+          window.location.reload();
+      } else {
+          alert("失败:" + res["msg"])
+      }
+  });
+}
+
+function remove(hid){
+  if(!confirm('确定删除？')){
+    return
+  }
+  if(!hid){
+    alert('wrong hid')
+    return
+  }
+
+  $.post("{% url 'student:api_memoDelete' %}", {
+      "hid":hid
+  }, function (res) {
+      if (res["error"] == 0) {
+          alert("删除记录成功")
+          window.location.reload();
+      } else {
+          alert("失败:" + res["msg"])
+      }
+  });
+}
+
+$('#date').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+function goArch(id){
+  window.open('achievement?studentId='+id)
+}
+</script>
+{% endblock %}

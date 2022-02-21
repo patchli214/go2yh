@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="font-size:20px;">
+<img src="/go_static/img/logo.png" width="30" />真朴儿童围棋教室
+</div>
+<center>
+	<div style="padding-top:20px;">
+<h4>满意度问卷已提交，感谢您的参与！</h4>
+</div>
+
+{%if sid%}
+<div style="padding:20px;">
+去看看{{sname|default:""}}小朋友的真朴学习档案吧
+</div>
+<div class="btn btn-success" style="padding:10px;">
+	<a href="http://go2crm.cn/go2/student/achievement?studentId={{sid}}"><span style="color:white;">查看学习档案</span></a>
+</div>
+{%endif%}
+
+</center>
+{% endblock %}
+{% block scripts %}
+<script>
+
+
+</script>
+{% endblock %}

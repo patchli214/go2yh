@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {font-size:18px;}
+td{font-size:18px;padding:4px;}
+th{font-size:18px;padding:4px;}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a>
+</div>
+
+<div>
+<center><h3>【{{login_teacher.branchName}}】一周预约到场成交明细</h3>
+<div style="width:100%;margin:0 auto;text-align:center;">
+<select id="searchWeekBegin" style="font-size:18px;">
+<option value="0">本周</option>
+<option value="1">上周</option>
+</select>
+<button id="searchButton" style="font-size:18px;">查询</button>
+</center>
+</div>
+
+<div id="table-container" style="padding-top:10px;width:100%;margin:0 auto;">
+<center>
+  <div id="todayDiv">
+    <span style="inline-height:30px;height:30px;vertical-align: top;">今日数据：</span><!--到场1，成交3（网络2 1*20课时  1*140课时   门店1*20课时）新生续费2（2*220课时） 老生续费10（4*220课时  6*96课时）流水：-->
+    <span>
+    <textarea style="width:600px;" id="todayData" >{{datenow|default:''}} {{login_teacher.branchName}}：{%if todayData.reg > 0%}拜访{{todayData.reg}}，{%endif%}{%if todayData.show > 0%}到场{{todayData.show}}，{%endif%}{%if todayData.newdeal > 0%}成交{{todayData.newdeal}}{%if todayData.newdealNet > 0 or todayData.newdealSchool > 0%}({%if todayData.newdealNet > 0%}网络{{todayData.newdealNet}} {%for key,value in todayData.newContractsNet.items%} {{value}}*{{key}}{%endfor%}{%endif%}{%if todayData.newdealSchool > 0%} 校区{{todayData.newdealSchool}} {%for key,value in todayData.newContractsSchool.items%} {{value}}*{{key}}{%endfor%}{%endif%}){%endif%}，{%endif%}{%if todayData.redealNew > 0%}新生续费{{todayData.redealNew}}({%for key,value in todayData.newRedealContracts.items%} {{value}}*{{key}}{%endfor%})，{%endif%}{%if todayData.redealOld > 0%}老生续费{{todayData.redealOld}}({%for key,value in todayData.oldRedealContracts.items%} {{value}}*{{key}}{%endfor%})，{%endif%}{%if todayData.lessonFee > 0%}季度学费{{todayData.lessonFee}}({%for key,value in todayData.lessonFeeContracts.items%} {{value}}*{{key}}{%endfor%})，{%endif%}{%if todayData.hc > 0%}集训{{todayData.hc}}，{%endif%}{%if todayData.sale > 0%}零售{{todayData.sale}}，{%endif%}{%if todayData.level > 0%}星级考{{todayData.level}}，{%endif%}{%if todayData.outLevel > 0%}社会考级{{todayData.outLevel}}，{%endif%}{%if todayData.deal > 0%}营收{{todayData.deal}}，{%endif%}</textarea>
+    </span>
+  </div>
+  <div>学籍：{{studentTotal}}</div>
+
+<table border="1">
+<thead>
+<th></th>
+<th>拜访</th>
+<th>到场(网络)</th>
+<th>成交<font color="red">*</font>(网络)</th>
+<th>新生续费</th>
+<th>老生续费</th>
+<th>季度学费</th>
+<th>集训班</th>
+<th>星级考</th>
+<th>零售</th>
+<th>定金已存</th>
+<th>营收</th>
+<th>社会考级</th>
+<th>退费</th>
+</thead>
+<tbody>
+{% for two in days %}
+<tr>
+<td>{{two.title}}</td>
+<td>{% if two.statBranch.reg > 0 %}{{two.statBranch.reg}}{% endif %}</td>
+<td>{% if two.statBranch.show > 0 %}{{two.statBranch.show}}{% endif %}{% if two.statNet.show > 0 %}({{two.statNet.show}}){% endif %}</td>
+<td>{% if two.statBranch.newdeal > 0 %}{{two.statBranch.newdeal}}{% endif %}{% if two.statNet.newdeal > 0 %}({{two.statNet.newdeal}}){% endif %}{%if two.statBranch.newdealSum > 0%}-{{two.statBranch.newdealSum}}{%endif%}</td>
+<td>{{two.statBranch.redealNew|default:''}}{%if two.statBranch.newredealSum > 0%}-{{two.statBranch.newredealSum}}(元){%endif%}</td>
+<td>{{two.statBranch.redealOld|default:''}}{%if two.statBranch.oldredealSum > 0%}-{{two.statBranch.oldredealSum}}(元){%endif%}</td>
+<td>{{two.statBranch.lessonFee|default:''}}{%if two.statBranch.feedealSum > 0%}-{{two.statBranch.feedealSum}}(元){%endif%}</td>
+<td>{{two.statBranch.hc|default:''}}{%if two.statBranch.holidaydealSum > 0%}-{{two.statBranch.holidaydealSum}}(元){%endif%}</td>
+<td>{{two.statBranch.level|default:''}}{%if two.statBranch.levelSum > 0%}-{{two.statBranch.levelSum|default:''}}(元){%endif%}</td>
+<td>{{two.statBranch.sale|default:''}}{%if two.statBranch.saleSum > 0%}-{{two.statBranch.saleSum|default:''}}(元){%endif%}</td>
+<td>{%if two.statBranch.deposit%}{{two.statBranch.deposit|default:''}}(元){%endif%}</td>
+<td>{{two.statBranch.deal|default:''}}</td>
+<td>{{two.statBranch.outLevel|default:''}}{%if two.statBranch.outLevelSum > 0%}-{{two.statBranch.outLevelSum|default:''}}(元){%endif%}</td>
+<td>{{two.statBranch.refund|default:''}}</td>
+</tr>
+{% endfor %}
+<tr>
+<td>合计</td>
+<td>{% if totals.statBranch.reg > 0 %}{{totals.statBranch.reg}}{% endif %}</td>
+<td>{% if totals.statBranch.show > 0 %}{{totals.statBranch.show}}{% endif %}{% if totals.statNet.show > 0 %}({{totals.statNet.show}}){% endif %}</td>
+<td>{% if totals.statBranch.newdeal > 0 %}{{totals.statBranch.newdeal}}{% endif %}{% if totals.statNet.newdeal > 0 %}({{totals.statNet.newdeal}}){% endif %}{%if totals.statBranch.newdealSum > 0%}-{{totals.statBranch.newdealSum}}{%endif%}</td>
+<td>{% if totals.statBranch.redealNew > 0 %}{{totals.statBranch.redealNew}}{%endif%}{%if totals.statBranch.newredealSum > 0%}-{{totals.statBranch.newredealSum}}(元){%endif%}</td>
+<td>{% if totals.statBranch.redealOld > 0 %}{{totals.statBranch.redealOld}}{%endif%}{%if totals.statBranch.oldredealSum > 0%}-{{totals.statBranch.oldredealSum}}(元){%endif%}</td>
+<td>{% if totals.statBranch.lessonFee > 0 %}{{totals.statBranch.lessonFee}}{%endif%}{%if totals.statBranch.feedealSum > 0%}-{{totals.statBranch.feedealSum}}(元){%endif%}</td>
+<td>{% if totals.statBranch.hc > 0 %}{{totals.statBranch.hc|default:''}}{%endif%}{%if totals.statBranch.holidaydealSum > 0%}-{{totals.statBranch.holidaydealSum}}(元){%endif%}</td>
+<td>{% if totals.statBranch.level > 0 %}{{totals.statBranch.level|default:''}}{%endif%}{%if totals.statBranch.levelSum > 0%}-{{totals.statBranch.levelSum|default:''}}(元){%endif%}</td>
+<td>{% if totals.statBranch.sale > 0 %}{{totals.statBranch.sale|default:''}}{%endif%}{%if totals.statBranch.saleSum > 0%}-{{totals.statBranch.saleSum|default:''}}(元){%endif%}</td>
+<td>{% if totals.statBranch.deposit > 0 %}{{totals.statBranch.deposit}}(元){%endif%}</td>
+<td>{% if totals.statBranch.deal > 0 %}{{totals.statBranch.deal}}{%endif%}</td>
+<td>{% if totals.statBranch.outLevel > 0 %}{{totals.statBranch.outLevel}}{%endif%}</td>
+<td>{% if totals.statBranch.refund > 0 %}{{totals.statBranch.refund}}{%endif%}</td>
+</tr>
+</tbody>
+</table>
+<font color="red">*</font>成交个数包括集训班收费超过3600元的
+</center>
+
+</div>
+{% block scripts %}
+    <script>
+{% endblock %}
+$("#searchButton").click(function(){
+	var url = "{%url 'statistic:statDayBranch'%}?doSearch=1&searchWeekBegin="+$("#searchWeekBegin").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+})
+{%if total2 == 0%}
+$("#table-container").css("display","none");
+{%endif%}
+$("#searchWeekBegin").val('{{searchWeekBegin}}')
+$("#searchWeekBegin").css("color","red")
+var td = $("#todayData").val()
+console.log(td)
+if(td.substring(td.length-1,td.length)=='，'){
+
+  td = td.substring(0,td.length-1)
+
+  $("#todayData").val(td)
+}
+
+if(td=='{{login_teacher.branchName}}：'){
+  $("#todayData").val('{{login_teacher.branchName}}：0')
+}
+{%if not todayData%}
+  $("#todayDiv").html('')
+{%endif%}
+    </script>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+    <style>
+    #classes td{width:80px;}
+    .inactiveNam{background:#555555;color:white;}
+    </style>
+{% include 'subNav.html' %}
+
+
+<div>
+<table id="classes"  class="table  table-hover">
+<tbody>
+<tr><td colspan="15" align="center">今天课表</td></tr>
+<tr style="background:#eeeeee;"><td></td><td>8:00</td><td>9:00</td><td>10:00</td><td>11:00</td><td>12:00</td><td>13:00</td><td>14:00</td><td>15:00</td><td>16:00</td><td>17:00</td><td>18:00</td><td>19:00</td><td>20:00</td></tr>
+{% for roomClasses in dayClasses %}
+<tr>
+  <td>{{forloop.counter}}教室</td>
+  
+  {% for hour in hours %}  
+    <td>
+    {% for class in roomClasses %}
+      {% if hour in class.school_time %}
+
+        {% if class.demoIsFinish == 1 %}
+          <font color="green">
+        {% endif %}
+          {{class.school_time}}<br>{{class.teacher.name}}<br>{% if class.gradeClass_type == 2 %}试听课<br>{% for s in class.students %}<a href="/go2/regUser/studentInfo/{{s.id}}">{%if s.name%}{{s.name}}{%elif s.name2%}{{s.name2}}{%else%}无{%endif%}</a>&nbsp;{%endfor%}{% endif %}
+          {% if class.gradeClass_type == 1 %}正课{% endif %}
+        {% if class.demoIsFinish == 1 %}
+          </font>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    </td>
+  {% endfor %}
+  </tr>
+{% endfor %}
+
+  </tbody>
+</table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+$("#subNav6").attr("class","activeNav");
+
+function go_deposit(oid) {
+    var url = "{% url 'regUser:student_deposit' %}";
+    url = url+"?student_oid="+oid;
+    document.location.href=url;
+}
+{% include 'subNavJs.html' %}
+
+</script>
+{% endblock %}

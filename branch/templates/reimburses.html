@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'logo.html' %}
+{% include 'nav.html' %}
+<style>
+.active{background:#ffffff;color:black}
+.unactive{background:black;color:white}
+td,th{border-left:#dddddd solid 1px;}
+th{text-align:center}
+</style>
+<a name="top"></a>
+
+    <div style="float:left;padding:10px;">
+    <input style="width:90px;" type="text" id="beginDate" name="beginDate" placeholder="起始日期">
+       <input style="width:90px;" type="text" id="endDate" name="endDate" placeholder="截至日期">
+    <select id="searchStatus" name="searchStatus">
+      <option value="">全部状态</option>
+      <option value="0">未提交</option>
+      <option value="4">已提交本部门</option>
+      <option value="1">已提交财务</option>
+      <option value="2">已报</option>
+      <option value="3">被驳回</option>
+
+    </select>
+    <select id="searchTeacher" name="searchTeacher">
+      <option value="">全部申请人</option>
+      {%for t in teachers%}
+      <option value="{{t.id}}">{{t.name}}</option>
+      {%endfor%}
+    </select>
+
+    <button id="searchButton" onclick="search()">搜索</button>
+    </div>
+<div style="float:right;">
+  <button onclick="add()">新报销</button>&nbsp;&nbsp;
+
+</div>
+<div style="clear:both;">
+    <table  id="datatable"  class="table table-hover">
+      <thead>
+        <tr style="background:#eeeeee;border-bottom:#ffffff solid 3px;">
+          <th nowrap>状态</th>
+          <th nowrap>类型</th>
+          <th nowrap>预算内</th>
+          <th nowrap>发票</th>
+          <th nowrap>申请人</th>
+          <th nowrap>金额</th>
+          <th nowrap>申请日期</th>
+          <th nowrap>摘要</th>
+          <th nowrap>财务处理日期</th>
+          <th style="min-width:200px;">备注</th>
+          <th style="width:60px;">删除</th>
+          <th style="width:60px;">操作</th>
+
+
+</tr>
+</thead>
+<tbody>
+        {% for s in reimburses %}
+
+            <tr style="background:{{s.color}}">
+                <td >{{s.statusName}}</td>
+                <td >{{s.typeName}}</td>
+                <td >{%if s.budget%}是{%endif%}</td>
+                <td >{%if s.hasReceipt%}有{%endif%}</td>
+                <td >{{s.applicantName}}</td>
+                <td >{{s.sum }}</td>
+
+                <td >{{s.appDate|date:"Y-m-d"}}</td>
+                <td>{{s.memo}}</td>
+                <td >{{s.paidDate|date:"Y-m-d"|default:""}}</td>
+
+                <td >{%if s.appmemo%}{{s.appmemo|default:''}}{%endif%}{%if s.finmemo%}[财务审批]{{s.finmemo|default:''}}{%endif%}</td>
+                <td align="center">
+                  {%if s.status == 0 and s.applicant == login_teacher.id%}
+                  <i onclick="remove('{{s.id}}')" class="glyphicon glyphicon-trash" title="删除"></i>
+
+                  {%elif s.status == 0 and login_teacher.role == 7%}
+                  <i onclick="remove('{{s.id}}')" class="glyphicon glyphicon-trash" title="删除"></i>
+                  {%endif%}</td>
+                <td align="center">
+                    <a href="javascript:{{s.op}}">
+                      {%if s.opName == '审批'%}<font color="red">{%endif%}
+                        {%if s.opName == '修改提交'%}
+                          修改{%else%}
+                          {{s.opName|default:""}}
+                        {%endif%}
+                      {%if s.opName == '审批'%}</font>{%endif%}</a>
+{%if s.opName == '修改提交'%}|
+<a href="javascript:submit('{{s.id}}')">
+提交本部门
+</a>
+                      {%endif%}
+                </td>
+
+
+            </tr>
+            {%endfor%}
+
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="picModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="info-body">
+
+                  <div>
+                     <span id="attach"></span>
+                  </div>
+
+            </div>
+
+        </div>
+    </div>
+  </center>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function() {
+
+    $('#datatable').DataTable( {
+      "paging":   false,
+      "searching": true,
+      "info":false,
+      "ordering": false,
+      "language": {
+            "lengthMenu": "每页显示 _MENU_ ",
+            "zeroRecords": "空空如也",
+            "sInfo":"共 _TOTAL_ ",
+            "infoEmpty": "没有找到哦",
+            "sSearch":"关键词查询",
+            "oPaginate": {
+            "sFirst":"首页",
+            "sPrevious": 	"上一页",
+            "sNext":     	"下一页",
+            "sLast":     	"末页"
+          },
+            "infoFiltered": "(从 _MAX_ 中搜索)"
+        }
+      })
+    })
+
+//选中的报销单id临时存储数组
+var ids = new Array();
+
+//进入报销单添加页面
+function add(){
+  document.location.href="{% url 'branch:reimburse' %}"
+}
+
+//进入某个报销单修改页面
+function go(id){
+  document.location.href="{% url 'branch:reimburse' %}?id="+id
+}
+function show(id){
+  document.location.href="{% url 'branch:reimburseShow' %}?id="+id
+}
+
+//进入某个请款单清借款页面
+function goReturn(id){
+  document.location.href="{% url 'branch:reimburse' %}?borrowId="+id
+}
+
+
+function remove(id){
+  if(confirm('确定删除？')){
+    $.post("{% url 'branch:reimburseRemove_api'%}", {
+        'id':id
+
+    }, function (res) {
+        if (res.error == 0) {
+            alert("成功");
+            location.reload(true);
+        } else {
+            alert("失败:"+res.msg);
+        }
+    });
+  }
+}
+
+
+//日期控件
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+
+function submit(id){
+  if(confirm('确定提交给部门审批人吗？')){
+
+    $.post("{% url 'branch:api_submitReimburse' %}", {
+      "status":4,
+      "id":id
+
+    }, function (res) {
+      console.log('[res]'+res['error']);
+      location.reload(true);
+      if (res.error == 0) {
+        var openId = res.openId;
+        var first= '报销申请';
+        var date = new Date();
+        var keyword4= date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes();
+        console.log(openId)
+        console.log(res.tel)
+        console.log('{{login_teacher.teacherName}}')
+        console.log('{{login_teacher.branchName}}')
+        inform(first,openId,'{{login_teacher.teacherName}}',res.tel,keyword4,'{{login_teacher.branchName}}');
+
+          alert("成功");
+          var url = "{%url 'branch:reimburses'%}";
+
+          window.location.href=url;
+      } else {
+          alert("失败:" + res["msg"])
+      }
+    });
+  }
+}
+
+
+//查询报销单
+function search(){
+  var searchStatus = $("#searchStatus").val();
+  var searchTeacher = $("#searchTeacher").val();
+  //alert(searchTeacher)
+  var y = $("#beginDate").val();
+  var m = $("#endDate").val();
+  search = '?1=1';
+  if(y.length>0)search = search+'&beginDate='+y;
+  if(m.length>0)search = search+'&endDate='+m;
+  if(searchStatus.length>0){
+
+     search = search+'&searchStatus='+searchStatus;
+   }
+
+  if(searchTeacher.length>0){
+     search = search+'&searchTeacher='+searchTeacher;
+   }
+
+  var url = "{% url 'branch:reimburses' %}"+search
+  window.location.href=url;
+}
+
+function goInfo(){
+  window.open("{% url 'branch:reg'%}?branchId={{login_teacher.branch}}");
+}
+function goSource(){
+  var url = "{%url 'branch:sources'%}";
+  window.open(url);
+}
+function goPics(){
+  var url = "{%url 'web:pages'%}?type=3";
+  window.open(url);
+}
+function active(id){
+  $('#'+id).addClass("active");
+}
+function unactive(id){
+  $('#'+id).removeClass("active");
+}
+$("#nav10").css("color","red");
+{%if searchStatus > -1%}$("#searchStatus").val('{{searchStatus}}'){%endif%}
+{%if searchTeacher%}$("#searchTeacher").val('{{searchTeacher.id}}'){%endif%}
+
+{%if beginDate%}$("#beginDate").val('{{beginDate}}'){%endif%}
+{%if endDate%}$("#endDate").val('{{endDate}}'){%endif%}
+</script>
+{% endblock %}

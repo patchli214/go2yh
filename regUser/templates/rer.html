@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {
+	font-family: 微软雅黑, Arial;
+}
+div {
+	padding: 10px 30px 10px 30px;text-align:center;
+}
+</style>
+<div style="padding-top:25px;font-size:20px;">
+	
+	<img src="/go_static/img/logo.png"  width="30"/>&nbsp;真朴儿童围棋教室
+	{%if err == 0%}
+	<br><font style="font-size:16px;">——{{student.branchName|default:""}}校区——</font>
+	{%endif%}
+
+</div>
+{%if err == 0%}
+<div>欢迎&nbsp;{{student.name}}&nbsp;小朋友</div>
+<div>我们会稍后联系安排免费试听课</div>
+{%endif%}
+{%if err == 1%}
+<div>{{res}}</div>
+<div>欢迎致电真朴围棋槐房万达校区<br>联系安排免费试听课</div>
+<div><a href="tel:010-67916580"><button>拨打电话</button></a></div>
+{%endif%}
+{%endblock%}
+{% block scripts %}
+<script>
+var first= "{{referrerName}}小朋友转介";
+var date = new Date();
+var keyword4= date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes();
+{%for openId in openIds%}
+inform(first,'{{openId}}','{{student.name}}','{{student.prt1mobile}}',keyword4,'{{student.regBranchName}}');
+{%endfor%}
+
+</script>
+{%endblock%}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<title>DataTables example - Zero configuration</title>
+	<link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.css">
+	<script type="text/javascript" language="javascript" src="../js/jquery.js">
+	</script>
+	<script type="text/javascript" language="javascript" src="../js/jquery.dataTables.js">
+	</script>
+	<script type="text/javascript" language="javascript" class="init">
+	
+
+$(document).ready(function() {
+	$('#datatable').DataTable({
+	"paging":   false,
+	"searching": false,
+	"info":false,
+	"order": [[ 1, "desc" ]]
+	});
+} );
+
+
+	</script>
+</head>
+<body class="dt-example">
+	<div class="container">
+		<section>
+			<h1>DataTables example <span>Zero configuration</span></h1>
+
+<table id="datatable" >
+        <thead>
+        <tr>
+        <th></th>
+        
+        <th>编号</th>
+        
+        <th></th>
+        <th>孩子</th>
+        <th>年龄</th>
+        <th>电话</th>
+        
+        <th>意向</th>
+        
+        
+        <th width="60">提醒老师</th>
+        
+        
+        <th width="120">提醒事项</th>
+        <th width="350">联络记录</th>
+        <th  align="center">操作</th>
+        </tr>
+        </thead>
+		
+		
+        <tbody>
+        
+          
+            
+            <tr class="A"  >
+            <td width="10">1</td>
+                
+                <td width="60" nowrap>122017071811</td>
+                
+                <td width="10">A</td>
+                <td width="70"><a href="/go2/regUser/studentInfo/596dc98c97a75d2d713e6f49/" >刘郁童</a></td>
+                <td width="30">6.3</td>
+                
+                <td width="60">13681583833...</td>
+                
+        <td  width="70" nowrap>五棵松</td>
+        
+                
+                
+                
+                <td width="100" nowrap>许倩倩&nbsp; 周宣军&nbsp;</td>
+                
+                
+                
+                <td width="100" nowrap>[2017-07-21]问问姥爷孩子爸妈回来了吗</td>
+                <td width="350"><div onclick="gotrack('596dc98c97a75d2d713e6f49')" class="showMemo" goid="596dc98c97a75d2d713e6f49" style="overflow:hidden;min-height:40px;max-height:100px;text-overflow:ellipsis;width:350px;">
+        【备注】 五棵松校区 122017071811 张先生（姥爷）孩子刘郁童 6岁多男孩性格居中零基础，在家玩过跳棋和五子棋，看到别人下围棋孩子走不动，就想着给孩子报一个围棋班。大概了解课程费用，介绍了20课时。小学开学之前住永定路，上小学后会搬到北航爷爷住的地方，因为孩子在北航附近上小学。孩子学围棋的事情要和爸妈商量一下，因为是父母出钱和排班级时间，试听课也是爸妈带着去，爸妈现在在出差，星期五六就回来了，可能会约周末的试听课，爸妈不会围棋，介绍了家长课堂。请先发短信周五晚上联系姥爷问问孩子爸妈回来了没有13681583833；68387741【网络部许倩倩】
+        </div>
+        <div onclick="gotrack('596dc98c97a75d2d713e6f49')"  class="showMemo2" id="596dc98c97a75d2d713e6f49" style="display:none;position:fixed;left:0;top:0;min-height:40px;max-height:700px;width:350px;">
+        【备注】 五棵松校区 122017071811 张先生（姥爷）孩子刘郁童 6岁多男孩性格居中零基础，在家玩过跳棋和五子棋，看到别人下围棋孩子走不动，就想着给孩子报一个围棋班。大概了解课程费用，介绍了20课时。小学开学之前住永定路，上小学后会搬到北航爷爷住的地方，因为孩子在北航附近上小学。孩子学围棋的事情要和爸妈商量一下，因为是父母出钱和排班级时间，试听课也是爸妈带着去，爸妈现在在出差，星期五六就回来了，可能会约周末的试听课，爸妈不会围棋，介绍了家长课堂。请先发短信周五晚上联系姥爷问问孩子爸妈回来了没有13681583833；68387741【网络部许倩倩】</div></td>
+                <td width="40">
+                    <button style="width:40px;font-size:12px;padding:2px;"
+                            
+                                class="btn btn-default" onclick = "addDemo('596dc98c97a75d2d713e6f49');"
+                            
+                                >试听
+                    </button>
+
+                    <button style="font-size:12px;padding:2px;" id="depositButton" onclick="go_deposit('596dc98c97a75d2d713e6f49')"
+                
+                class="btn btn-default"
+                
+                >定金</button>
+                </td>
+                
+            </tr>
+			
+            
+          
+        
+        </tbody>
+    </table>
+			
+			
+		</section>
+	</div>
+	
+</body>
+</html>

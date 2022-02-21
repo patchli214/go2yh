@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load filter %}
+{% load filter_regUser %}
+{% block content %}
+    <div><h3>班级详情</h3></div>
+    <table class="table  table-hover">
+        <tbody>
+        <tr>
+            <td width="30%">班级名:</td>
+            <td>
+                {{ gradeClass.name }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                开班日期:
+            </td>
+            <td>
+                {{ gradeClass.start_date|date:"Y-m-d" }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                上课时间:
+            </td>
+            <td>
+                周{{ gradeClass.school_day|week_name }} {{ gradeClass.school_time }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                教室:
+            </td>
+            <td>
+                {{ gradeClass.classroom.name }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                学生:
+            </td>
+            <td>
+                {% for student_oid in gradeClass.students_oid %}
+                    <a href="{% url 'regUser:student_info' student_oid %}">{{ student_oid|get_student_name }}</a>
+                {% endfor %}
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+{% endblock %}

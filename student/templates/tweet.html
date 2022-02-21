@@ -1,0 +1,223 @@
+{% load staticfiles %}
+<html>
+<head>
+
+    <title>新学期大礼包</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+<style>
+#div-contant{position: fixed;bottom:0;width:100%;text-align: center;}
+#div-contant img{display:inline;width:80%}
+ .stat{text-align:right;padding-right:10px;padding-left:10px;}
+ #inc_reg{visibility: hidden;}
+ #photo_title{visibility: hidden;}
+ #search_button{display: none;}
+
+ @media screen and (min-width: 300px) {
+   #inc_reg{visibility: visible;}
+   #photo_title{visibility: visible;}
+   #search_button{display: inline;}
+ }
+
+</style>
+<script src="/go_static/js/jquery2.min.js"></script>
+<script src="/go_static/js/school.js"></script>
+<script src="/go_static/js/school_zt_1.js"></script>
+</head>
+
+<body style="background:orange;">
+
+  <div id="mainpicDiv" style="width:100%;">
+
+
+<img src="/go_static/img/20190826a.jpg" width="100%" />
+
+
+
+
+  </div>
+  <a name="reg">
+  </a>
+  <center>
+  <div class="txtinput" style="font-size:20px;color:white;width:100%;padding-top:10px;">
+    <center>
+    预约免费试听
+  </center>
+  </div>
+  </center>
+  <center>
+    <div class="txtinput1" style="width:80%;background:#fdd9a2;font-size:14px;padding:12px 6px 6px 6px;">
+
+    </div>
+
+  <div class="txtinput1" style="width:80%;background:#fdd9a2;font-size:14px;padding:12px 6px 6px 6px;">
+    <center>
+    您的称呼
+     <input id="name" name="name" type="text" class="inputtxt" />
+  </center>
+  </div>
+
+  <div class="txtinput1"  style="width:80%;background:#fdd9a2;font-size:14px;padding:6px 6px 12px 6px;">
+    <center>
+      <center>手机号码
+    <input id="tel" name="tel" type="text" class="inputtxt"/>
+  </center>
+  </div>
+  <div class="txtinput1"  style="width:80%;background:#fdd9a2;font-size:14px;padding:6px 6px 12px 6px;">
+      <center>
+        <button onclick="check_input()" style="width:50%;height:30px;background:#13ce17;font-size:16px;color:white">提交预约</button>
+  </center>
+  </div>
+
+  <div class="txtinput" style="font-size:14px;color:black;padding-bottom:10px;padding-top:6px;">
+    友情提示<br />
+    最近预约试听较多，校区接待能力有限，请提前预约
+
+  </div>
+  </center>
+  <div class="txtinput" style="font-size:14px;color:black;background:#fdd9a2;padding:10px 10px 20px 10px;">
+  <p>
+    <center>试听课须知</center>
+  </p>
+    <li>家长和孩子一起体验，建议爸爸妈妈一起来</li>
+    <li>课上会有互动小游戏，可以看下孩子的反应和兴趣</li>
+    <li>可以了解老师的教学水平和校区环境，试听满意再报名</li>
+
+  </div>
+
+
+  <div id="c2div">
+
+    <div style="padding-top:20px;height:150px;background:url(/go_static/img/c_01.jpg);position:relative;left:0px;top:0px">
+    <center><span id="c_title" style="color:yellow;font-family:微软雅黑;font-size:24px">全国223所学校</span></center>
+
+    <center style="padding-top:10px;"><span id="c_title2" style="color:white;font-family:微软雅黑;font-size:20px">北京17所校区&nbsp;&nbsp;&nbsp;&nbsp;家门口的围棋学校</span></center>
+    </div>
+
+
+  </div>
+
+
+
+<div id="inc_reg">
+<!-- include 'include_reg.html' -->
+</div>
+
+
+
+
+
+{%if tel != ''%}
+<div id="div-contant" style="height:42px"><center>
+
+	<button id="button2" style="background:orange;height:50px;width:80%;color:white;font-size:18px;padding-bottom:8px;" onclick="document.location.href='tel:{{tel}}';">电话咨询</button>
+
+	</center>
+</div>
+{%endif%}
+
+</body>
+</html>
+
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+
+$(document).ready(function(){
+  m_loadschool();
+
+});
+  /*
+   * 注意：
+   * 1. 所有的JS接口只能在公众号绑定的域名下调用，公众号开发者需要先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。
+   * 2. 如果发现在 Android 不能分享自定义内容，请到官网下载最新的包覆盖安装，Android 自定义分享接口需升级至 6.0.2.58 版本及以上。
+   * 3. 常见问题及完整 JS-SDK 文档地址：http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html
+   *
+   * 开发中遇到问题详见文档“附录5-常见错误及解决办法”解决，如仍未能解决可通过以下渠道反馈：
+   * 邮箱地址：weixin-open@qq.com
+   * 邮件主题：【微信JS-SDK反馈】具体问题
+   * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
+   */
+  var ticket = '{{ticket}}'
+  //var string1 = '{{string1}}'
+  var url = '{{url}}'
+  wx.config({
+    debug: false,
+    appId: '{{appId}}',
+    timestamp: '{{res.timestamp}}',
+    nonceStr: '{{res.nonceStr}}',
+    signature: '{{res.signature}}',
+    jsApiList: [
+      'checkJsApi',
+      'onMenuShareTimeline',
+      'onMenuShareAppMessage',
+      'onMenuShareQQ',
+      'onMenuShareWeibo',
+      'onMenuShareQZone'
+      // 所有要调用的 API 都要加到这个列表中
+    ]
+  });
+
+  wx.ready(function () {
+      wxOnShare();
+  });
+
+  function wxOnShare() {
+      var title = "9月开学季，真朴围棋新生报名和续费将获得‘新学期大礼包’，数量有限，限额抢购。截止日期9月30日。";
+      var desc = "9月开学季，真朴围棋新生报名和续费将获得‘新学期大礼包’，数量有限，限额抢购。截止日期9月30日。";
+      var link = location.href.split('#')[0];
+
+      var imgUrl = "http://rang.jieli360.com{{iconUrl}}";
+      wx.onMenuShareAppMessage({
+          title: title,
+          desc: desc,
+          link: link,
+          imgUrl: imgUrl,
+          trigger: function (res) {
+          },
+          success: function (res) {
+          },
+          cancel: function (res) {
+          },
+          fail: function (res) {
+          }
+      });
+      wx.onMenuShareTimeline({
+          title: title,
+          link: link,
+          imgUrl: imgUrl,
+          trigger: function (res) {
+          },
+          success: function (res) {
+          },
+          cancel: function (res) {
+          },
+          fail: function (res) {
+          }
+      });
+    }
+
+function check_input(){
+  var tel = $("#tel").val()
+  var name = $("#name").val()
+  if(tel.length<8){
+    alert('手机号码太短！')
+    return false
+  }
+  $.post("{% url 'student:api_tweet' %}", {
+    "csrfmiddlewaretoken": "{{ csrf_token }}",
+    "tel":tel,
+    "name":name,
+    "bid":'{{bid}}'
+  }, function (res) {
+    if (res["error"] == 0) {
+       alert("预约成功")
+    } else {
+       alert("预约失败:" + res["msg"])
+    }
+
+ });
+
+}
+</script>

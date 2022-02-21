@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+    <style>
+    #classes td{width:80px;}
+    #subNav{position:relative;top:-12px;background:#555555;color:white;border:1px solid #555555;}
+    span{border:1px solid #555555;}
+    .activeNav{
+        background:white;
+        color:black;
+        border:1px solid #555555;
+
+        }
+    .inactiveNam{background:#555555;color:white;}
+    </style>
+{% include 'subNav.html' %}
+
+
+<table class="table  table-hover" id="datatable">
+        <thead>
+        <tr style="background:#eeeeee;">
+
+        <td style="width:8%">孩子</td>
+        <td style="width:14%">电话</td>
+        <td style="width:9%">任课老师</td>
+        <td style="width:9%">已上次数</td>
+        <td style="width:9%">剩余次数</td>
+        <td style="width:9%">结课日期</td>
+        <td  style="width:50%;text-align:center;">学籍</td>
+        <td style="width:6%"></td>
+        </tr>
+      </thead>
+        <tbody>
+        {% for student in students %}
+            <tr>
+
+
+                <td><a href="{% url 'regUser:student_info' student.id %}" >{%if student.name%}{{student.name}}{%elif student.name2%}{{student.name2}}{%else%}无{%endif%}</a></td>
+                <td>{{student.prt1mobile}}</td>
+                <td>{{student.teacherName|default:""}}</td>
+                <td align="center">{{student.lessons}}</td>
+                <td align="center">{{student.lessonLeft}}</td>
+                <td>{{student.endDate|date:"Y-m-d"|default:""}}</td>
+                <td style="text-align:right;">
+                    {% if student.contract%}
+            {% for contract in student.contract %}
+                <div>{{ contract.singDate|date:"Y-m-d"|default:"" }}签约 {{ contract.beginDate|date:"Y-m-d"|default:"" }}开课 {{ contract.contractType.duration|default:"" }}周 {{contract.paid|default:""}}元 {{contract.classType.name|default:""}}</div>
+            {% endfor %}
+            {% endif %}
+
+                </td>
+                <td>
+                    <button class="btn btn-success" onclick="click_contract('{{ student.id }}');">合同</button>
+                </td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+$("#subNav5").attr("class","activeNav");
+
+
+function click_contract(oid) {
+    var url = "{%url 'contract:studentContracts'%}?student_oid="+oid;
+    document.location.href=url;
+}
+
+{% include 'subNavJs.html' %}
+
+
+$(document).ready(function() {
+	$('#datatable').DataTable({
+	"paging":   false,
+	"searching": false,
+	"info":false,
+	"order": [[ 4, "asc" ]],
+	"columns": [
+	            { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": true },
+              { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": false },
+	            { "orderable": false }
+	          ]
+	});
+});
+
+
+</script>
+{% endblock %}

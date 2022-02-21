@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include 'back.html' %}
+<div style="padding-bottom:20px;">
+
+<center><h4>重复号码解决流程</h4></center>
+
+<li>1.处理的双方，一般是门店或部门的负责人，相互之间沟通。</li>
+<li>2.将冲突的客户情况，微信截屏发给对方，或者发到相互都能看到的校区网络部群。之后按照规则协调处理。看算哪一方的来源。</li>
+<li>3.协调后，一方负责人要在CRM系统中，点击解决，保留协调好的记录来源。并要在跟进记录中写明，已和XX老师（老师请写全名）
+  微信/电话沟通，算XX来源。以防止再次冲突时，可以快速找到当时的处理结果。</li>
+<li>4、另一方可以在孩子列表页面点击“同意”来最终解决冲突，或点“反对”按钮恢复原来的两条数据冲突状态</li>
+<h4>具体的处理原则，如下</h4>
+
+<li>1、校区之间号码重复问题：
+不同校区间两位老师拜访到同一个号码，谁先约到谁先签约算谁的。
+同一个校区两位老师拜访到同一个号码，
+由校区主任制定规则，酌情而定。</li>
+<li>2、校区和网络部间的重复号码，双方谁先拿到号码录入系统，就拥有3个月保护期，保护期内受保护一方如果没有跟踪客户，被对方拿到号码，就算对方的。（有无跟踪需要有证据，如微信短信电话记录、CRM跟踪记录等）。
+不考虑下次跟踪日期的设置，鼓励积极联系。</li>
+<li>3.网络部分配给A校区的客户，如果B校区自己拜访并约到场了，算B校区的。（碰到这种情况，请先和网络部协调解决）</li>
+<li>4、不到3岁半的孩子，网络和校区谁先约到算谁的。（有无跟踪需要有证据，如微信短信电话记录、CRM跟踪记录等）</li>
+<li>5、对于冲突的客户，如果双方有任何一方认为不适用这4个原则的特殊客户，可以通过上级协调解决。</li>
+</div>
+<table class="table  table-hover" >
+  <form id="form1" method="post">
+    <input type="hidden" id="sid" name="sid">
+    <tr><td colspan=10 width="100%"><input autofocus="autofocus" style="height:50px;width:100%;text-align:center;" id="track_txt" name="track_txt" placeholder="这里填写协商内容"></td></tr>
+{%for s in dups%}
+  <tr>
+    <td nowrap>{{s.name}}</td>
+    <td>{{s.prt1mobile}}</td>
+    <td nowrap>{{s.regTeacher.name}}</td>
+    <td nowrap>{{s.regTime|date:"Y-m-d"|default:""}}</td>
+    <td nowrap>意向:{{s.branch.branchName}}</td>
+    <td>{{s.memo}}
+    <td nowrap>来源:<font color="red">{{s.regBranch.branchName}}</font></td>
+    <td nowrap><span class="btn btn-success"  onclick="keep('{{s.id}}','{{s.regBranchName}}')">保留</span></td>
+  </tr>
+{%endfor%}
+</form>
+</table>
+{% endblock %}
+{% block scripts %}
+<script>
+function keep(id,bname){
+  var track_txt = $("#track_txt").val()
+  //alert(track_txt)
+  if(track_txt==''){
+    alert('请填写协商内容')
+    return
+  }
+  if(confirm('确定保留 '+bname+' 校区数据？')){
+
+    $.post("{% url 'regUser:resolve0_api'%}", {
+      'sid':id,
+      'track_txt':track_txt
+    }, function (res) {
+      console.log('done')
+      if (res.error == 0) {
+          console.log('error==0')
+          alert(res.msg);
+          console.log('msg')
+          var url = res.url
+          console.log('url')
+          document.location.href=url;
+      } else {
+          alert(res.msg);
+      }
+    });
+
+
+  }
+}
+</script>
+{% endblock %}

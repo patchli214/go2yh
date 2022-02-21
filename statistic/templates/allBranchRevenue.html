@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee;}
+th{width:60px;}
+
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a>
+</div>
+
+<div>
+<div style="margin-left:20px;"><center><b>校区营收统计</b>
+<select id="city">
+<option value="{{city}}" selected="selected">{{cityName}}</option>
+</select>
+<input id="beginDate" type="text" placeholder="起始日期">
+<input id="endDate" type="text" placeholder="截至日期">
+<button id="searchButton">查询</button>
+</center>
+</div>
+
+
+<center>
+<div id="table-container" style="min-width:300px;max-width:100%;padding-bottom:40px;">
+
+  <table id="datatable" border="1">
+    <thead>
+      <tr style="background:#eeeeee;">
+        <th style="padding:3px 0 3px 10px;">序号</th>
+        <th style="padding:3px 0 3px 10px;">校区</th>
+
+        <th style="padding:3px 0 3px 10px;" align="center">新生人数</th>
+        <th style="padding:3px 0 3px 10px;" align="center">网络招生</th>
+        <th style="padding:3px 0 3px 10px;" align="center">新生续费人数</th>
+        <th style="padding:3px 0 3px 10px;" align="center">老生续费人数</th>
+        <th style="padding:3px 0 3px 10px;" align="center">流失人数</th>
+        <th style="padding:3px 0 3px 10px;" align="center">新生学费(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">新生续费(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">老生续费(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">季度学费(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">集训班收入(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">星级考收入(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">零售(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">杂费(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">营收(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">社会考级收入(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">定金(元)</th>
+        <th style="padding:3px 0 3px 10px;" align="center">退费(元)</th>
+      </tr>
+    </thead>
+    <tbody>
+{%for stat in res%}
+      <tr>
+        <td style="padding:0 0 0 10px;">{{stat.sn}}</td>
+        <td style="padding:0 0 0 10px;">{{stat.title}}</td>
+
+        <td style="padding:0 0 0 10px;">{%if stat.newdeal > 0%}{{stat.newdeal}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.newdealNet > 0%}{{stat.newdealNet}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.redealNew > 0%}{{stat.redealNew}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.redealOld > 0%}{{stat.redealOld}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.gone > 0%}{{stat.gone}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.newdealSum > 0%}{{stat.newdealSum}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.newredealSum > 0%}{{stat.newredealSum}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.oldredealSum > 0%}{{stat.oldredealSum}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.feedealSum > 0%}{{stat.feedealSum}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.holidaydealSum > 0%}{{stat.holidaydealSum}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.level > 0%}{{stat.level}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.sale > 0%}{{stat.sale}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.other > 0%}{{stat.other}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.deal > 0%}{{stat.deal}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.outLevel > 0%}{{stat.outLevel}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.deposit > 0%}{{stat.deposit}}{%endif%}</td>
+        <td style="padding:0 0 0 10px;">{%if stat.refund > 0%}{{stat.refund}}{%endif%}</td>
+      </tr>
+{%endfor%}
+    </tbody>
+    <tfoot style="background:#eeeeee;">
+      <tr>
+        <th></th>
+        <th>合计</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+
+        <th></th>
+      </tr>
+    </tfoot>
+</table>
+<table>
+  <tr>
+    <td>9.9转化网课：{{stat2.online}}个，{{stat2.deal}}元</td>
+    </tr>
+    </table>
+
+</div>
+</center>
+
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#searchButton").click(function(){
+	if($("#beginDate").val()==''){
+	    alert("请填起始日期")
+	    return
+    }
+    if($("#endDate").val()==''){
+    	alert("请填截至日期")
+    	return
+    }
+	var url = "{%url 'statistic:allBranchRevenue'%}?beginDate="+$("#beginDate").val()+"&endDate="+$("#endDate").val()+"&city="+$("#city").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+})
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+$("#city").val('{{city}}')
+$("#city").css("color","red")
+
+$(document).ready(function() {
+    $('#datatable').DataTable( {
+    	"paging":   false,
+    	"searching": false,
+    	"info":false,
+        dom: 'Bfrtip',
+        buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ],
+        "footerCallback": function( tfoot, data, start, end, display ) {
+          var api = this.api();
+          $( api.column( 2 ).footer() ).html(
+              api.column( 2 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 3 ).footer() ).html(
+              api.column( 3 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 4 ).footer() ).html(
+              api.column( 4 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 5 ).footer() ).html(
+              api.column( 5 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 6 ).footer() ).html(
+              api.column( 6 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 7 ).footer() ).html(
+              api.column( 7 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 8 ).footer() ).html(
+              api.column( 8 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 9 ).footer() ).html(
+              api.column( 9 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 10 ).footer() ).html(
+              api.column( 10 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 11 ).footer() ).html(
+              api.column( 11 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 12 ).footer() ).html(
+              api.column( 12 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 13 ).footer() ).html(
+              api.column( 13 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 14 ).footer() ).html(
+              api.column( 14 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 15 ).footer() ).html(
+              api.column( 15 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 16 ).footer() ).html(
+              api.column( 16 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 17 ).footer() ).html(
+              api.column( 17 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 18 ).footer() ).html(
+              api.column( 18 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+          $( api.column( 19 ).footer() ).html(
+              api.column( 19 ).data().reduce( function ( a, b ) {
+                  var ai = new Number(a)
+                  var bi = new Number(b)
+                  return ai + bi;
+              }, 0 )
+          );
+
+  }
+    });
+
+});
+
+</script>
+{% endblock %}

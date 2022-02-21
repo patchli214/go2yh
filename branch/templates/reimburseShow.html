@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% block content %}
+
+<title>报销（请款）申请</title>
+<div style="float:left;cursor:pointer" onclick="goback()" ><返回</div>
+<hr style="margin-top:2px;margin-bottom:30px"/>
+
+    <div id="printDiv" style="width:900px;">
+
+      <style>
+      table{border-top: 1px solid black;
+      border-left: 1px solid black;}
+      tr{height:40px;}
+      td{padding:2px;font-size:16px;text-align: center;
+        border-right:1px solid black;
+        border-bottom:1px solid black;
+      }
+      .bigTd{font-size:22px;font-weight:bold;}
+      .itemType{width:100px;}
+      .itemName{width:400px;}
+      .itemAmount{width:100px;}
+      .itemSum{width:120px;}
+      </style>
+
+    <center style="font-weight:bold;font-size:16px;">{%if reimburse.isBorrow%}{%if reimburse.borrowId%}清借款{%else%}请款{%endif%}{%else%}报销{%endif%}申请{%if reimburse.status == 2 and reimburse.borrowId%}(已清){%elif reimburse.status == 2 and not reimburse.isBorrow%}(已报){%elif reimburse.status == 2 and reimburse.isBorrow and not reimburse.borrowId%}(已借){%endif%}
+
+        <table width="900" cellspacing="0" style="margin-top:6px;{%if reimburse.hasReceipt%}border:3px solid black;{%endif%}">
+
+          <tr>
+            <td>部门</td>
+            <td class="bigTd" nowrap>{{reimburse.payBranch.branchName}}</td>
+            <td>日期</td>
+            <td nowrap class="bigTd" >{{reimburse.appDate|date:"Y-m-d"}}</td>
+            <td>预算内</td>
+            <td>{%if reimburse.budget%}是{%else%}否{%endif%}</td>
+            <td>发票</td>
+            <td class="bigTd" >{%if reimburse.hasReceipt%}有{%else%}无{%endif%}</td>
+            <td>申请人部门</td>
+            <td>{{reimburse.branch.branchName}}</td>
+          </tr>
+          <tr>
+            <td>项目</td>
+            <td colspan="9">
+              <table cellspacing="0">
+                <tr><td class="itemType">
+                  {{i1.typeName}}</td><td class="itemName">{{i1.itemName}}</td><td class="itemAmount">数量：{%if i1.count > 0%}{{i1.count}}{%endif%}</td><td class="itemSum">金额：{{i1.amount}}
+                </td></tr>
+                  {%if i2%}<tr><td class="itemType">{{i2.typeName}}</td><td class="itemName">{{i2.itemName}}</td><td class="itemAmount">数量：{%if i2.count > 0%}{{i2.count}}{%endif%}</td><td class="itemSum">金额：{{i2.amount}}</td></tr>
+                  {%else%}<tr><td class="itemType"></td><td class="itemName"></td><td class="itemAmount"></td><td class="itemSum"></td></tr>
+                  {%endif%}
+
+                  {%if i3%}<tr><td class="itemType">{{i3.typeName}}</td><td class="itemName">{{i3.itemName}}</td><td class="itemAmount">数量：{%if i3.count > 0%}{{i3.count}}{%endif%}</td><td class="itemSum">金额：{{i3.amount}}</td></tr>
+                  {%else%}<tr><td class="itemType"></td><td class="itemName"></td><td class="itemAmount"></td><td class="itemSum"></td></tr>
+                  {%endif%}
+                  {%if i4%}<tr><td class="itemType">{{i4.typeName}}</td><td class="itemName">{{i4.itemName}}</td><td class="itemAmount">数量：{%if i4.count > 0%}{{i4.count}}{%endif%}</td><td class="itemSum">金额：{{i4.amount}}</td></tr>
+                  {%else%}<tr><td class="itemType"></td><td class="itemName"></td><td class="itemAmount"></td><td class="itemSum"></td></tr>
+                  {%endif%}
+                  {%if i5%}<tr><td class="itemType">{{i5.typeName}}</td><td class="itemName">{{i5.itemName}}</td><td class="itemAmount">数量：{%if i5.count > 0%}{{i5.count}}{%endif%}</td><td class="itemSum">金额：{{i5.amount}}</td></tr>
+                  {%else%}<tr><td class="itemType"></td><td class="itemName"></td><td class="itemAmount"></td><td class="itemSum"></td></tr>
+                  {%endif%}
+              </table>
+           </td>
+          </tr>
+          <tr>
+            <td colspan="2">结算 人民币(大写)</td>
+            <td colspan="{%if reimburse.borrowId%}4{%else%}5{%endif%}" id="rmb"></td>
+            <td>总金额</td>
+            <td colspan="{%if reimburse.borrowId%}1{%else%}3{%endif%}">{{reimburse.sum|default:''}}</td>
+            {%if reimburse.borrowId%}<td style="text-align:right;padding-right:14px;"colspan="2">借款：{{borrow}}<br>余额：{{remain}}</td>{%endif%}
+          </tr>
+          <tr>
+            <td width="11%">公司负责人</td>
+            <td width="9%"></td>
+            <td width="10%">财务复核</td>
+            <td width="11%"></td>
+            <td width="9%">出纳</td>
+            <td width="9%"></td>
+            <td width="11%">部门审批人</td>
+            <td width="9%">{%if reimburse.status == 1 or  reimburse.status == 2 or reimburse.status == 3 %}{{reimburse.branchLeaderName}}{%endif%}</td>
+            <td width="11%">申请人</td>
+            <td width="9%" class="bigTd" >{{reimburse.applicantName}}</td>
+          </tr>
+
+
+        </table>
+
+
+</center>
+<p style="padding:10px 0 10px 0px;">
+{{reimburse.appmemo|default:''}} {%if reimburse.finmemo%}财务审批：{{reimburse.finmemo|default:''}}{%endif%}
+</p>
+    </div>
+
+
+<span style="line-height:8px;"></span>
+
+<div style="width:800px;">
+
+<center style="padding:10px 0 30px 0;">
+  {%if reimburse.status == 1%}
+    {%if login_teacher.cityRB == login_teacher.id or login_teacher.cityRB2 == login_teacher.id%}
+    <button class="btn btn-default" onclick="PrintElem('printDiv')">打印报销单</button>
+    <button class="btn btn-default" onclick="PrintElem('printDiv2')">打印票据</button>&nbsp;&nbsp;|&nbsp;
+      <input id="finmemo" placeholder="驳回理由" style="width:280px;">
+      <button class="btn btn-danger" onclick="submit(3)">驳回</button>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <input id="payDate" value="{{dateNow|date:'Y-m-d'}}" style="width:120px;" placeholder="{%if reimburse.isBorrow and reimburse.borrowId%}清借款{%elif reimburse.isBorrow and not reimburse.borrowId%}借款{%else%}报销{%endif%}日期"/>
+      <button class="btn btn-success" onclick="submit(2)">{%if reimburse.isBorrow and reimburse.borrowId%}清借款{%elif reimburse.isBorrow and not reimburse.borrowId%}借款{%else%}报销{%endif%}</button>
+
+    {%else%}
+      <button class="btn btn-default" onclick="PrintElem('printDiv')">打印报销单</button>
+      <button class="btn btn-default" onclick="PrintElem('printDiv2')">打印票据</button>
+    {%endif%}
+  {%elif reimburse.status == 2 or reimburse.status == 3%}
+      <button class="btn btn-default" onclick="PrintElem('printDiv')">打印报销单</button>
+      <button class="btn btn-default" onclick="PrintElem('printDiv2')">打印票据</button>
+
+  {%endif%}
+  {%if login_teacher.role == 7 and reimburse.status == 4%}
+  &nbsp;&nbsp;<button class="btn btn-default" onclick="submit(1)">批准并提交财务</button>
+  &nbsp;&nbsp;<button class="btn btn-default" onclick="submit(0)">驳回</button>
+  {%endif%}
+</center>
+</div>
+<br>
+{%if reimburse.proof%}<span id="printDiv2" style="cursor:pointer;"><img src="/go_static/users/{{reimburse.branch.id}}/reimburse/{{reimburse.proof}}?tag={{millisecond}}" style="max-width:800px;" onclick="showImg()"/></span>{%endif%}
+
+
+
+
+
+  <div class="modal fade" id="picModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <center>
+      <div class="modal-dialog" role="document"  style="margin:10px;width:95%;">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                          aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel"></h4>
+              </div>
+              <div class="modal-body" id="info-body">
+
+                    <div>
+                       <img src="/go_static/users/{{reimburse.branch.id}}/reimburse/{{reimburse.proof}}?tag={{millisecond}}" width="100%" />
+                    </div>
+
+              </div>
+
+          </div>
+      </div>
+    </center>
+  </div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+    function showImg(){
+      $("#picModal").modal();
+    }
+    function PrintElem(elem)
+    {
+      var mywindow = window.open('', 'PRINT', 'height=600,width=800');
+      mywindow.document.write('</head><body >');
+      mywindow.document.write(document.getElementById(elem).innerHTML);
+      mywindow.document.write('</body></html>');
+      mywindow.document.close(); // necessary for IE >= 10
+      mywindow.focus(); // necessary for IE >= 10*/
+      mywindow.print();
+      mywindow.close();
+      return true;
+    }
+
+    function goback(){
+      var url = "{% url 'branch:reimburses' %}";
+      {%if login_teacher.cityRB == login_teacher.id or login_teacher.cityRB2 == login_teacher.id%}
+        {%if reimburse.status == 2 or reimburse.status == 3%}
+          url = "{% url 'workflow:reimburseDeals' %}?hasReceipt=";
+        {%else%}
+          url = "{% url 'workflow:reimburseApps' %}?hasReceipt=";
+        {%endif%}
+      {%endif%}
+      {%if login_teacher.cityRB == login_teacher.id%}
+         url = url+"1";
+      {%endif%}
+      {%if login_teacher.cityRB2 == login_teacher.id%}
+         url = url+"0";
+      {%endif%}
+      document.location.href=url
+    }
+
+
+
+
+   function submit(status){
+     var memo = $("#finmemo").val();
+     var payDate = $("#payDate").val();
+
+     var msg = '';
+     if(status==0)msg='驳回';
+     if(status==1)msg='批准并提交财务';
+     if(status==2)msg='{%if reimburse.isBorrow and reimburse.borrowId%}清借款{%elif reimburse.isBorrow and not reimburse.borrowId%}借款{%else%}报销{%endif%}';
+     if(status==3)msg='驳回';
+
+     if(status==3)
+       if(memo==''){
+           alert('请填写驳回理由')
+           return
+        }
+     if(status==2)
+          if(payDate==''){
+              alert('请填写'+msg+'日期')
+              return
+           }
+
+     if(confirm('确定'+msg+'?')){
+       $.post("{% url 'branch:api_submitReimburse' %}", {
+         "status":status,
+         "memo":memo,
+         "payDate":payDate,
+         "id":'{{reimburse.id}}'
+
+       }, function (res) {
+         console.log('[res]'+res['error']);
+         //location.reload(true);
+         if (res["error"] == 0) {
+             alert("成功");
+             var url = "{%url 'branch:reimburses'%}";
+             if(status==2||status==3){
+               url = '{{reimurl}}'
+
+             }
+
+             window.location.href=url;
+         } else {
+             alert("失败:" + res["msg"])
+         }
+       });
+     }
+   }
+
+   $("#rmb").html(numToCny({{reimburse.sum}}));
+
+   $('#payDate').datetimepicker({
+       timepicker: false,
+       format: 'Y-m-d'
+   });
+    </script>
+{% endblock %}

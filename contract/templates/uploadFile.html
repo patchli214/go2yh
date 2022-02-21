@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <style>
+    </style>
+{% endblock %}
+{% block content %}
+{% include 'back.html' %}
+<h4>
+{%if type == 4%}退费申请单照片上传{%elif type == 5%}合同照片上传
+{%elif type == 9%}元十九会员申请照片上传
+{%elif type == 10%}元十九收据照片上传
+{%endif%}
+</h4>
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+    {{ form }}
+    <br><br>
+<input type="submit" value="上传">
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+
+$("#id_student_oid").val('{%if student_oid%}{{student_oid}}{%else%}0{%endif%}');
+$("#id_teacher_oid").val('{%if teacher_oid%}{{teacher_oid}}{%else%}0{%endif%}');
+$("#id_contractId").val('{%if contractId%}{{contractId}}{%else%}0{%endif%}');
+$("#id_type").val('{{type}}');
+$("label").css("display","none")
+</script>
+{% endblock %}

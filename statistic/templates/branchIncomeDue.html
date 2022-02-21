@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<hr style="margin-top:2px;margin-bottom:10px"/>
+
+<center><h4>校区月度应消课时统计</h4></center>
+<div style="width:100%;margin:0 auto;text-align:center;">
+<input type="hidden" id="branch" />
+<input type="hidden" id="year" />
+<input type="hidden" id="month" />
+{{branchName}}:{{year}}年{{month}}月
+
+<span id="tip"></span>
+</div>
+<div style="width:100%;margin:0 auto;text-align:center;padding-bottom:80px">
+
+
+<table border="1" width="80%" align="center" id="datatable">
+  <thead>
+<tr>
+<td>班级</td>
+<td>学生</td>
+<td>课时</td>
+<td>前四次</td>
+<td>休假</td>
+
+<td>消费额</td>
+<td>前四次课消费</td>
+
+
+</tr>
+</thead>
+<tbody>
+{%for key,si in students.items%}
+
+
+  <tr style="color:#999999;">
+  <td>{{si.classname}}</td>
+  <td><a target="_blank" href="/go2/regUser/studentInfo/{{si.id}}">{{si.name}}</a></td>
+  <td>{{si.thisPure}}</td>
+  <td>{%if si.first4 > 0%}{{si.first4}}{%endif%}</td>
+  <td>{{si.sus|default:""}}</td>
+
+  <td>{{si.consume}}</td>
+  <td>  {%if si.consumeFirst4 > 0%}{{si.consumeFirst4}}{%endif%}</td>
+
+  </tr>
+
+{%endfor%}
+</tbody>
+
+<tfoot style="background:#eeeeee;">
+ <tr>
+  <th>合计</th>
+<th></th><th></th><th></th><th></th><th></th><th></th>
+</tr>
+</tfoot>
+</table>
+
+</div>
+{%endblock%}
+
+{% block scripts %}
+    <script>
+    function search(){
+        $("#tip").html('<font color="red">查询中请稍等...</font>');
+        var month = $("#month").val();
+        var year = $("#year").val();
+        var branch = $("#branch").val();
+        var url = "{%url 'statistic:branchIncomeDue'%}?year="+year+"&month="+month+"&branch="+branch;
+        window.location.href=url
+    }
+    $("#year").val('{{year}}');
+    $("#month").val('{{month}}');
+    {%if branch%}
+    $("#branch").val('{{branch}}');
+    {%endif%}
+
+
+    $(document).ready(function() {
+        $('#datatable').DataTable( {
+            "paging":   false,
+            "ordering":true,
+            "info":false,
+          "footerCallback": function( tfoot, data, start, end, display ) {
+              var api = this.api();
+              $( api.column( 3 ).footer() ).html(
+                  api.column( 3 ).data().reduce( function ( a, b ) {
+                      var ai = new Number(a)
+                      var bi = new Number(b)
+                      return ai + bi;
+                  }, 0 )
+              );
+
+              $( api.column( 2 ).footer() ).html(
+                  api.column( 2 ).data().reduce( function ( a, b ) {
+                      var ai = new Number(a)
+                      var bi = new Number(b)
+                      return ai + bi;
+                  }, 0 )
+              );
+              $( api.column( 6 ).footer() ).html(
+                  api.column( 6 ).data().reduce( function ( a, b ) {
+                      var ai = new Number(a)
+                      var bi = new Number(b)
+                      return ai + bi;
+                  }, 0 )
+              );
+
+              $( api.column( 5 ).footer() ).html(
+                  api.column( 5 ).data().reduce( function ( a, b ) {
+                      var ai = new Number(a)
+                      var bi = new Number(b)
+                      return ai + bi;
+                  }, 0 )
+              );
+          }
+
+        })
+      })
+    </script>
+{% endblock %}

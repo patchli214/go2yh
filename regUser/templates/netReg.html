@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{% url 'web:regList' %}"><返回工作台</a>
+</div>
+<h4><center style="font-weight:bold;">孩子登记</center></h4>
+<div style="width:100%;margin:0 auto;padding:0;">
+<form id="qform" name="qform" class="form-inline" action="apiReg" method="post">
+<input type="hidden" id="source" name="source">
+<input type="hidden" id="sourceType" name="sourceType" value="A">
+<input type="hidden" id="sourceCategory" name="sourceCategory">
+<input type="hidden" id="callInTime" name="callInTime">
+<input type="hidden" id="regTeacher" name="regTeacher" value="{{login_teacher.id}}">
+<input type="hidden" id="regBranch" name="regBranch" value="{{login_teacher.branch}}">
+<select id="branch" name="branch" class="form-control" >
+  <option value="" selected="selected">选择意向校区</option>
+{% for b in branchs %}
+  {%if b.branchType != '1' and b.sn < 9000%}
+     <option value="{{b.id}}">{{b.branchName}}</option>
+  {%endif%}
+{% endfor %}
+</select>
+<input type="text" class="form-control" id="prt1mobile" name="prt1mobile"  placeholder="电话">
+<input type="text" class="form-control" id="code" name="code" placeholder="编码">
+<div style="margin-top:10px;margin-bottom:10px;">
+备注<br>
+<textarea style="width:96%;" id="memo" name="memo" rows="6"></textarea>
+</div>
+
+
+<div style="margin-top:20px;width:100%;">
+<center><input id="submitButton" type="submit" style="font-size:20px;" value="保存" /></center>
+</div>
+</form>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $("title").html("网络部信息录入简版");
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+    $("#callInTime").val(new Date().Format("yyyy-MM-dd hh:mm"));
+$('#qform').validate({
+            rules: {
+        	    prt1mobile: {
+        	        minlength: 7,
+        	        required: true
+        	    }
+            },
+            submitHandler: function(form) {
+    					 $("#submitButton").attr("disabled","disabled")
+    					 $(form).ajaxSubmit();
+    				}
+        });
+
+$("#memo").focus(function(){
+	if($("#memo").val()==''&&$("#regBranch").val()=='5867c26f0bb1e63b74d6cd62'){
+		var prt1 = "";
+		if($("#prt1").val()){
+			prt1 = ' '+$("#prt1").val();
+		}
+		var code = '';
+		if($("#code").val())code = ' '+$("#code").val();
+		var y='',m='',age='';
+		if($("#ageYear").val()||($("#ageMonth").val()&&$("#ageMonth").val()!='0')){
+			if($("#ageYear").val())y=$("#ageYear").val()+'岁';
+    		if($("#ageMonth").val()&&$("#ageMonth").val()!='0')m=$("#ageMonth").val()+'个月';
+    		age = ' '+y+m;
+		}
+		var gender = '';
+		if($("#male").prop("checked"))gender = ' 男';
+		if($("#female").prop("checked"))gender = ' 女';
+		var kid = '';
+		if($("#name").val()||$("#name2").val()){
+			kid = ' 孩子';
+			if($("#name").val())kid = kid+$("#name").val();
+			if($("#name2").val())kid = kid+' 小名'+$("#name2").val();
+		}
+		var branch = $( "#branch option:selected" ).text()+'校区';
+		if($("#branch").val()=='')branch="";
+		var memo = branch+$("#code").val()+prt1+kid+gender+age+' ';
+		if($("#prt1mobile").val()!='')
+		    memo = memo + '电话'+$("#prt1mobile").val();
+        $("#memo").val(memo);
+	}
+});
+
+function doSth(value){
+    var code = $("#code").val().trim();
+    if(code.length>0){
+        var found = false
+        code = code.substring(0,2)
+        {%for source in sources%}
+        if(code=='{{source.sourceCode}}'){
+            found = true
+            $("#sourceCategory").val('{{source.categoryCode}}')
+            $("#source").val('{{source.id}}')
+            console.log('source:'+$("#source").val())
+            console.log('sourceCategory'+$("#sourceCategory").val())
+        }
+        {%endfor%}
+        if(!found){
+            alert('没有这个渠道编号：'+code)
+        }
+    }
+    return
+}
+$("#code").blur(function(){
+doSth('go')
+})
+    </script>
+{% endblock %}

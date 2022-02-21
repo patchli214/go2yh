@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+{% load filter %}
+{% load filter_regUser %}
+{% block content %}
+{% include 'back.html' %}
+    <div class="text-center" id="title_div"></div>
+    <div class="text-center">{{ gradeClass_type }}</div>
+    <div class="text-right">
+        <button class="btn btn-default" onclick="schedule_list()">看日程</button>
+    </div>
+    <table class="table" style="margin-top: 10px">
+
+
+
+        <tr id="gradeClassType_tr" style="display: none">
+            <td>类型</td>
+            <td>
+
+                <input id="gradeClass_type_missClass" type="radio" name="gradeClass_type"> 补课
+
+            </td>
+        </tr>
+
+
+        <tr id="gradeClassBranch_tr" style="display: block">
+            <td>校区</td>
+            <td><select id="branch_oid" name="branch_oid" >
+  {% for b in branchs %}
+  {% if b.id|stringformat:"s" == login_teacher.branch %}
+  <option selected="selected" value="{{b.id}}">{{b.branchName}}</option>
+  {% else %}
+  <option  value="{{b.id}}">{{b.branchName}}</option>
+  {%  endif  %}
+  {% endfor %}
+  </select></td>
+        </tr>
+        <tr id="gradeClassName_tr" style="display:none">
+            <td>名称</td>
+            <td><input id="name" type="text" value="{{ gradeClass.name }}"/></td>
+        </tr>
+        <tr id="gradeClassStartDate_tr">
+            <td class="title">日期</td>
+            <td><input readonly="readonly" id="start_date" type="text" value="{{ gradeClass.start_date|date:"Y-m-d" }}"/></td>
+        </tr>
+        <tr>
+            <td>时间</td>
+            <td>
+                <select id="school_day">
+                    {% for i in week_list %}
+                        <option value={{ i }} {% if i == gradeClass.school_day %}selected {% endif %}>
+                            周{{ i|week_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <input id="school_time" type="text" value="{{ gradeClass.school_time }}"/></td>
+        </tr>
+        <tr>
+            <td>教室</td>
+            <td>
+                <select id="classroom">
+                    <option value="">无</option>
+                    {% for classroom in classrooms %}
+                        <option value={{ classroom }} {% if gradeClass.classroom == classroom %}selected{% endif %}>
+                            {{ classroom }}教室
+                        </option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>老师</td>
+            <td>
+                <select id="teacher">
+                    <option value="">无</option>
+                    {% for teacher in teachers %}
+                        <option value={{ teacher.id }} {% if gradeClass.teacher.id == teacher.id %}selected{% endif %}>
+                            {{ teacher.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr id="gradeClassStudents_tr" style="display: none">
+            <td>学生</td>
+            <td>
+                <select id="select1" multiple="multiple" style="height: 200px;width: 100px;">
+                    {% if thisStudent %}
+                    <option value='{{thisStudent.id}}'>{{thisStudent.name}}</option>
+                    {% endif %}
+                    {% for student in gradeClass.students %}
+                        <option value='{{ student.id }}'>{{ student.name }}</option>
+                    {% endfor %}
+                </select>
+                <button id="add" style="">
+                    >>
+                </button>
+                <button id="remove">
+                    <<
+                </button>
+                <select id="no_class_students" multiple="multiple" style="height: 200px;width: 100px;display: none">
+                    {% for no_class_student in no_class_students %}
+                        <option value={{ no_class_student.id }}>{%if not no_class_student.name and no_class_student.name2%}({{no_class_student.name2}}){%endif%}{{ no_class_student.name }}</option>
+                    {% endfor %}
+                </select>
+                <select id="no_sign_students" multiple="multiple" style="height: 200px;width: 100px;display: none">
+                    {% for no_sign_student in no_sign_students %}
+                        <option value={{ no_sign_student.id }}>{{ no_sign_student.name }}</option>
+                    {% endfor %}
+                </select>
+                <select id="in_class_students" multiple="multiple" style="height: 200px;width: 100px;display: none">
+                    {% for in_class_student in in_class_students %}
+                        <option value={{ in_class_student.id }}>{{ in_class_student.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr id="gradeClassInfo_tr" style="display: none">
+            <td>说明</td>
+            <td><input id="info" type="text" value="{{ gradeClass.info }}"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="text-center">
+                    <button class="btn btn-danger" onclick="save_gradeClass('{{ gradeClass.id }}')">保存</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var gradeClass_type = '{{ gradeClass_type }}';
+        var surplus_select = ""; //剩余学生的select
+        $(document).ready(function () {
+
+            //正常开班
+            if (gradeClass_type == GradeClassType.normal.toString()) {
+                //标题
+                $("#title_div").html("<h3>课程</h3>");
+                //班级名称
+                $("#gradeClassName_tr").show();
+                //开班日期或日程日期
+                $("#gradeClassStartDate_tr>.title").html("开班日期");
+
+                $("#gradeClassStudents_tr").show();
+                surplus_select = "#no_class_students";
+                $(surplus_select).show();
+            } else {
+                //标题
+                $("#title_div").html("<h3>日程</h3>");
+                //类型
+                $("#school_day").hide();
+                $("#gradeClassType_tr").show();
+                $("#gradeClass_type_demo").val(GradeClassType.demo);
+                $("#gradeClass_type_missClass").val(GradeClassType.missClass);
+                $("#gradeClass_type_other").val(GradeClassType.other);
+
+                // 试听课
+                if (gradeClass_type == GradeClassType.demo.toString()) {
+                    $("#gradeClass_type_demo").attr("checked", 'checked');
+                    surplus_select = "#no_sign_students";
+                    $("#gradeClassStudents_tr").show();
+                    $(surplus_select).show();
+                }
+                // 补课
+                else if (gradeClass_type == GradeClassType.missClass.toString()) {
+                    $("#gradeClass_type_missClass").attr("checked", 'checked');
+                    surplus_select = "#in_class_students";
+                    $("#gradeClassStudents_tr").show();
+                    $(surplus_select).show();
+                }
+                // 其他
+                else if (gradeClass_type == GradeClassType.other.toString()) {
+                    $("#gradeClass_type_other").attr("checked", 'checked');
+                    $("#gradeClassInfo_tr").show();
+                }
+            }
+
+            $('#start_date').datetimepicker({
+                timepicker: false,
+                format: 'Y-m-d'
+            });
+
+            //上课时间或日程时间
+            $('#school_time').datetimepicker({
+                datepicker: false,
+                step: 30,
+                format: 'H:i'
+            });
+        });
+        $("#add").click(function () {
+            var $option = $("#select1 option:selected");  //获取选中的选项
+            $option.appendTo(surplus_select);  //追加给对方
+            $("#select1").val("");
+            $(surplus_select).val("");
+        });
+        $("#remove").click(function () {
+            var $option = $(surplus_select + " option:selected");
+            $option.appendTo("#select1");
+            $("#select1").val("");
+            $(surplus_select).val("");
+        });
+
+        $(":radio").click(function () {
+            var gradeClass_type = $(this).val();
+            var url = "{% url 'gradeClass:edit_gradeClass' '99999' '' %}";
+            url = url.replace('99999', gradeClass_type);
+            location.href = url;
+
+        });
+
+        function save_gradeClass(gradeClass_oid) {
+            var name = $("#name").val();
+            var start_date = $("#start_date").val();
+            var school_day = $("#school_day").val();
+            var school_time = $("#school_time").val();
+            var classroom = $("#classroom").val();
+            var teacher = $("#teacher").val();
+            var select1 = $("#select1").val();
+            var branch_oid = $("#branch_oid").val();
+            var students = [];
+            time = /[0-1]\d|20:[0-5]\d/;
+            if(!time.test(school_time)){
+            	alert("时间格式错误！");
+                return;
+            }
+            $.each($("#select1>option"), function (i, v) {
+                students.push($(v).val());
+            });
+            var info = $("#info").val();
+            console.log(JSON.stringify(students));
+
+
+            if (!start_date || !school_day || !school_time) {
+                alert("请填写完整");
+                return;
+            }
+
+            //开班
+            if (gradeClass_type == GradeClassType.normal.toString()) {
+                if (!name || !classroom || !teacher || students.length == 0) {
+                    alert("请填写完整");
+                    return;
+                }
+
+            }
+            //试听或补课
+            else if (gradeClass_type == GradeClassType.demo.toString() || gradeClass_type == GradeClassType.missClass.toString()) {
+                if (!classroom || !teacher || students.length == 0) {
+                    alert("请填写完整");
+                    return;
+                }
+                //其他
+            } else if (gradeClass_type == GradeClassType.other.toString()) {
+                if (!info) {
+                    alert("请填写完整");
+                    return;
+                }
+            }
+
+            $.post("{% url 'gradeClass:api_save_gradeClass' gradeClass_type %}", {
+                "gradeClass_oid": gradeClass_oid,
+                "name": name,
+                "start_date": start_date,
+                "school_day": school_day,
+                "school_time": school_time,
+                "classroom_oid": classroom,
+                "teacher_oid": teacher,
+                "branch_oid": branch_oid,
+                "students_oid": JSON.stringify(students),
+                "info": info
+            }, function (res) {
+                alert(res["msg"]);
+                if(res["error"]==0){
+                    var url = "{{mainurl}}";
+                    window.location.href = url;
+                }
+
+            });
+
+        }
+
+        function schedule_list() {
+            var url = "{% url 'gradeClass:schedule' %}";
+            window.open(url);
+        }
+    </script>
+{% endblock %}

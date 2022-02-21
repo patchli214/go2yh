@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+{%if lesson%}
+<center><h4>
+{%if lesson.type == 2%}补课
+{%else%}上课
+{%endif%}
+内容及签到
+</h4>
+</center>
+<div style="float:left">班级名称:{{lesson.gradeClass.name}}</div>
+<div style="float:left;padding-left:10px;">上课日期:<input type="text" id="lessonTime" value='{{lesson.lessonTime|date:"Y-m-d H:i"}}'></div>
+<div style="float:left;padding-left:10px;">老师：<select id="teacher">
+{%for t in teachers%}
+<option value="{{t.id}}" {%if t.id == lesson.teacher.id%}selected="selected"{%endif%}>{{t.name}}</option>
+{{lesson.teacher.name}}
+{%endfor%}
+</select>
+</div>
+<div style="clear: left;">课时系数（正常情况不用填，如本次课不算课时，请填写0）： <input type="text" id="value" value="{{lesson.value|default:''}}" /></div>
+<div style="display: inline-block;vertical-align: top;">内容&nbsp;<textarea id="memo" style="min-width:400px;height:100px;">{%if lesson.memo%}{{lesson.memo}}{%endif%}</textarea></div>
+<div><center><button onclick="printLesson()">打印内容</button>&nbsp;&nbsp;<button onclick="saveLesson()">保存</button></center></div>
+<div>
+<table class="table table-hover">
+<tr style="background:#eeeeee;">
+<td>学生</td>
+<td>表现</td>
+{%if lesson.type == 2%}<td>补哪次课</td>{%endif%}
+<td>出勤<input type="checkbox" id="checkall" /></td>
+
+</tr>
+</div>
+{%endif%}
+
+{% for student in students %}
+<tr>
+<td>{{student.name|default:""}}</td>
+<td><textarea class="memos" id="{{student.id}}_"  style="width:600px;height:50px;">{%if student.memo %}{{student.memo}}{%endif%}</textarea></td>
+{%if lesson.type == 2%}<td>{%for l in student.oriLessons%}[{{l|date:"Y-m-d"}}]&nbsp;{%endfor%}</td>{%endif%}
+<td><input type="checkbox" id="{{student.id}}" {% if student.checked %}checked="checked"{% endif %}></td>
+</tr>
+
+{% endfor %}
+</table>
+<center>
+{%if expired%}
+<button disabled>签到</button>
+已过签到修改期，不能再修改签到！
+{%else%}
+<button id="checkinButton" onclick="checkin()">签到</button>
+{%endif%}
+</center>
+<!--  table>
+<tr>
+                <td>
+                    签到照片<br>
+                    <a href="/go2/gradeClass/checkinPic?class_oid={{lesson.gradeClass.id}}"><button>上传</button></a>
+                </td>
+                <td><img id="classPic" >
+                    <br>
+                </td>
+            </tr>
+</table-->
+{% endblock %}
+{% block scripts %}
+<script>
+var memos = ''
+$('#lessonTime').datetimepicker({
+    timepicker: true,
+    step: 10,
+    format: 'Y-m-d H:i'
+});
+var studentArray = new Array()
+$("input[type=checkbox]").each(function(){
+	checkStudent($(this))
+});
+
+
+$("input[type=checkbox]").click(function(){
+	checkStudent($(this))
+});
+
+
+function checkStudent(obj){
+	var id = obj.attr("id");
+	if(obj.prop("checked")){
+		studentArray.push(id);
+	}else{
+		var arr = new Array()
+		for(var i=0;i<studentArray.length;i++){
+			if(studentArray[i]!=id)
+				arr.push(studentArray[i])
+		}
+		studentArray = arr;
+	}
+
+}
+
+function checkin(){
+    $("#checkinButton").attr("disabled","disabled")
+    $("#checkinButton").html("签到中，请稍等几秒钟...")
+    $("textarea[class=memos]").each(function(){
+      memos = memos + $(this).attr("id") + $(this).val() + "|"
+    });
+
+	    var url = " {% url 'gradeClass:checkin' %}";
+        $.post(url, {
+          "csrfmiddlewaretoken": "{{ csrf_token }}",
+        	"type":'{{lesson.type}}',
+        	"value":$("#value").val(),
+            "id": "{{lesson.id}}",
+            "teacher":$("#teacher").val(),
+            "students":studentArray.join('|'),
+            "memos":memos,
+            "memo":$("#memo").val(),
+            "lessonTime":$("#lessonTime").val()
+        }, function (res) {
+            alert(res["msg"]);
+            if(res["error"]=='0'){
+            	url = "{% url 'gradeClass:lessons' %}?type=1&id={{lesson.gradeClass.id}}";
+            	window.location.href=url;
+            }else{
+              $("#checkinButton").removeAttr("disabled")
+              $("#checkinButton").html("签到")
+              console.log($("#checkinButton").attr("disabled"))
+
+            }
+
+        });
+ }
+
+ function saveLesson(){
+	    var url = " {% url 'gradeClass:saveLessonContent' %}";
+        $.post(url, {
+          "csrfmiddlewaretoken": "{{ csrf_token }}",
+            "lessonId": "{{lesson.id}}",
+            "teacher":$("#teacher").val(),
+            "memo":　$("#memo").val(),
+            "value":　$("#value").val(),
+            "lessonTime":$("#lessonTime").val()
+
+        }, function (res) {
+            alert(res["msg"]);
+            if(res["error"]=='0'){
+            	url = "{% url 'gradeClass:lessons' %}?type=1&id={{lesson.gradeClass.id}}";
+            	//window.location.href=url;
+            }
+
+        });
+ }
+
+function printLesson(){
+    saveLesson()
+    var p = ''
+    var printData = $("#memo").val()// 获得 数据
+    {% for student in students %}
+    p = p+'<p>'+printData+'</p>'
+    {%endfor%}
+    window.document.body.innerHTML = p
+    window.print()
+ }
+var pi = ''
+$("#classPic").attr("src","/go_static/users/{{lesson.gradeClass.branch.id}}/class/{{lesson.gradeClass.id}}/"+pi+".jpg");
+
+$("#checkall").click(function(){
+  if($(this).prop("checked")){
+    {%for s in students%}
+    $("#{{s.id}}").prop("checked",true)
+    checkStudent($("#{{s.id}}"))
+    {%endfor%}
+  }else{
+    {%for s in students%}
+    $("#{{s.id}}").prop("checked",false)
+    checkStudent($("#{{s.id}}"))
+    {%endfor%}
+  }
+})
+
+</script>
+{%endblock%}

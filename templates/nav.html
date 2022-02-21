@@ -1,0 +1,102 @@
+
+    <div align="left" style="width:100%;clear:both;">
+        {% if login_teacher.role == login_teacher.RoleAdm%}
+          <a id="nav0" href="/">工作台</a> |
+          <a id="nav6" href="{% url 'contract:contract_list' %}?branch={{login_teacher.branch}}">收入</a> |
+        <a id="nav5" href="/go2/branch/branchList">校区</a> |
+        <a id="nav4" href="/go2/teacher/teacherList">人员</a> |
+        <a id="nav7" href="{%url 'statistic:indexStat'%}">统计</a> |
+        {%elif login_teacher.role == login_teacher.RoleFin %}
+
+        <a id="nav0" href="/">工作台</a> |
+                <a id="nav1"  href="{% url 'regUser:student_list' %}">孩子&nbsp;</a>&nbsp;&nbsp; |
+        <a id="nav6" href="{% url 'contract:contract_list' %}?branch={{login_teacher.branch}}">收入</a> |
+        <a id="nav7" href="{%url 'statistic:indexStat'%}">统计</a> |
+        <a id="nav4" href="/go2/teacher/teacherList">部门人员</a> |
+        {%elif login_teacher.branchType == '1' and login_teacher.role < login_teacher.RoleFin %}
+        <a id="nav0" href="/">工作台</a> |
+        <a id="nav1"  class="badge3"  href="{% url 'regUser:student_list' %}">孩子&nbsp;</a>&nbsp;&nbsp; |
+        <a id="nav6" href="{% url 'contract:contract_list' %}?branch={{login_teacher.branch}}">收入</a> |
+        <a id="nav4" href="/go2/teacher/teacherList">部门人员</a> |
+        <a id="nav5" href="/go2/branch/branchList">校区列表</a> |
+        <a id="nav7" href="{%url 'statistic:indexStat'%}">统计</a> |
+        {%elif login_teacher.branchType == '2'%}
+
+          {%if login_teacher.showIncome == '1'%}
+        <a id="nav0" href="/">工作台</a> |
+        <a id="nav6" href="{% url 'contract:contract_list' %}?branch={{login_teacher.branch}}">收入</a> |
+        <a id="nav7" href="{%url 'statistic:indexStat'%}">统计</a> |
+          {%elif login_teacher.role == 5%}
+          <a id="nav7" href="{%url 'statistic:indexStat'%}">统计</a> |
+          {%endif%}
+        <a id="nav4" href="/go2/teacher/teacherList">部门人员</a> |
+        {%elif login_teacher.branchType == '0' %}
+        <a id="nav0" href="/">工作台</a> |
+        <a id="nav1"  class="badge3"  href="{% url 'regUser:student_list' %}">孩子&nbsp;</a>&nbsp;&nbsp; |
+          {%if login_teacher.role > login_teacher.RoleTea%}
+        <a id="nav6" href="{% url 'contract:contract_list' %}?branch={{login_teacher.branch}}">收入</a> |
+          {%endif%}
+        <a id="nav2" href="/go2/gradeClass/gradeClassList">班级</a> |
+        <a id="nav9" href="{% url 'student:students' %}">学生</a> |
+        <a id="nav3" href="/go2/gradeClass/schedule">日程</a> |
+        <a id="nav5" href="/go2/branch/reg?branchId={{login_teacher.branch}}">校区</a> |
+
+        <a id="nav4" href="/go2/teacher/teacherList">老师</a> |
+        <a id="nav7" href="{%url 'statistic:indexStat'%}">统计</a> |
+        {%elif login_teacher.branchType == '3' %}
+        <a id="nav7" href="{%url 'statistic:indexStat'%}">统计</a> |
+        <a id="nav5" href="/go2/branch/branchList">校区列表</a> |
+        <a id="nav4" href="/go2/teacher/teacherList">部门人员</a> |
+
+        {%endif%}
+        
+        <a id="nav10" class="badge3" href="{% url 'branch:reimburses'%}">报销&nbsp;</a>&nbsp;&nbsp; |
+        <a id="nav8" href="/go_static/howto/index.html">帮助</a> |
+
+        &nbsp;<button id="addKid" style="padding:4px 10px 4px 10px;background:yellow;" class="btn btn-default">添加孩子</button>
+
+    </div>
+
+<script>
+$("#addKid").click(function(){
+	{% if login_teacher.branchType == '1' and login_teacher.role < RoleAdm %}
+	    if(mobileCheck()){
+	    	window.location.href="{%url 'regUser:netReg'%}";
+	    }
+	    else{
+	    	window.location.href="{%url 'regUser:reg'%}";
+	    }
+	{%else%}
+	    window.location.href="{%url 'regUser:reg'%}";
+	{%endif%}
+	})
+
+  {%if login_teacher.role == 7 or login_teacher.role == 9%}
+
+  $.post("{% url 'branch:reimburseNum_api'%}", {
+    "csrfmiddlewaretoken": "{{ csrf_token }}",
+  }, function (res) {
+      if (res.error == 0) {
+          if(res.num>0)
+              $("#nav10").attr("data-badge",res.num)
+      } else {
+          alert("失败");
+      }
+  });
+  {%endif%}
+
+  {%if login_teacher.role > 4%}
+
+  $.post("{% url 'regUser:resolveToDo_api'%}", {
+    "csrfmiddlewaretoken": "{{ csrf_token }}",
+  }, function (res) {
+      if (res.error == 0) {
+          if(res.num>0)
+              $("#nav1").attr("data-badge",res.num)
+      } else {
+          alert("失败");
+      }
+  });
+  {%endif%}
+
+</script>

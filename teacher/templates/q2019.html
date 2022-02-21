@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+	<style>
+	body{font-family:微软雅黑,Arial;max-width:800px;margin:0 auto}
+	h3{margin-top:5px;margin-bottom:5px;}
+	h5{font-weight: bold;}
+	div{padding:5px 0px 0px 5px;}
+	#submitBtn{padding:10px 40px 10px 40px;font-size:16px;}
+    label.valid {
+	  width: 24px;
+	  height: 24px;
+	  background: url(assets/img/valid.png) center center no-repeat;
+	  display: inline-block;
+	  text-indent: -9999px;
+    }
+    label.error {
+	  font-weight: bold;
+	  color: red;
+	  padding: 2px 8px;
+	  margin-top: 2px;
+    }
+	</style>
+
+
+<div style="width:100%;margin:0 auto;padding:0;">
+<form id="qform" action="api_q2019" method="post" class="form-inline">
+	{% csrf_token %}
+<input type="hidden" name="questCount" value="{{q.questCount}}" />
+<input type="hidden" name="assessCode" value="{{assessCode}}" />
+{%if branch%}
+<input type="hidden" name="branchId" value="{{branch.id}}" />
+{%endif%}
+<input type="hidden" name="assessorId" value="{{assessor.id|default:''}}" />
+<div style="float:left;width:40%">
+<img src="/go_static/img/title.png" width="100%"></img>
+</div>
+<div style="float:right;width:40%;text-align:right;line-height:30px;">{{login_teacher.branchId}}{{branch.branchName}}校区</div>
+<div style="clear:both;text-align:center;padding:20px 0 16px 0;">
+<h3>{{q.title}}</h3>
+</div>
+
+
+<div style="font-size:16px;margin-bottom:20px;">
+  {{q.prelude}}
+</div>
+
+<div style="width:100%;margin:0 auto;padding:0 0 20px 0;">
+
+
+
+
+
+<div><center><h5>共{{q.questCount}}个问题</h5></center></div>
+{%for q in qs%}
+<div>
+  <h5>{{q.sn}}.{{q.q}}</h5>
+  {%if q.fill == 1%}
+    <input type="text" id="{{q.sn}}" name="{{q.sn}}" style="width:{%if q.len%}{{q.len}}px{%else%}100%{%endif%}" />{{q.post|default:''}}
+	{%elif q.list == 1%}
+	  <select id="{{q.sn}}" name="{{q.sn}}">
+			<option value="">请选择</option>
+			{%for an in q.ans%}
+			<option value="{{an.code}}">{{an.text}}</option>
+			{%endfor%}
+		</select>
+  {%else%}
+    {%for an in q.ans%}
+      <div class="radio"><label>
+      <input type="{%if q.multi == 1%}checkbox{%else%}radio{%endif%}" id="{{q.sn}}" name="{{q.sn}}" value="{{an.code}}" />{{an.code}}.{{an.text}}
+      </label></div>
+    {%endfor%}
+	{%endif%}
+</div>
+{%endfor%}
+<div style="padding:30px 0 10px 0;">
+<center><input type="submit" value="提交" class="btn btn-success" style="width:90%" /></center>
+</div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+$("title").html('真朴围棋调查问卷')
+
+$('#qform').validate({
+    rules: {
+			{%for q in qs%}
+			  //if q.fill != 1%}
+        {{q.sn}}: {
+            required: true
+        },
+				//endif%}
+			{%endfor%}
+			{%if not branch%}
+			branchId:{
+					required: true
+			},
+			{%endif%}
+
+    }
+});
+function gotBranch(){
+	var branchId = $("#branchId").val()
+	var url = 'q?tag=201908_'+branchId
+	location.href=url
+}
+</script>
+{% endblock %}

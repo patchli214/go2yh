@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+<link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+        <style>
+
+    .inactiveNam{background:#555555;color:white;}
+
+    .showMemo{cursor:pointer;}
+    .showMemo2{cursor:pointer;}
+    td{padding:1px;}
+    </style>
+{% include 'subNav.html' %}
+
+
+<div style="margin-left:0px;float:left;">
+<table id="datatable" >
+        <thead>
+        <tr>
+        <th nowrap>校区</th>
+        <th nowrap>学生</th>
+        <th>电话</th>
+        <th nowrap>来源</th>
+        <th nowrap>种类</th>
+        <th nowrap>申请日期</th>
+        <th nowrap>申请开票金额</th>
+        <th nowrap>可开金额</th>
+        <th nowrap>已开金额</th>
+        <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for r in requires %}
+        <tr>
+          <td nowrap>[{{r.student.branch.city.cityName}}]{{r.student.branchName}}  </td>
+          <td nowrap>{{r.student.name|default:""}}{%if not r.student.name%}{{r.student.name2|default:""}}{%endif%}  </td>
+          <td>{{r.student.prt1|default:""}}{{r.student.prt1mobile}}{{r.student.prt2|default:""}}{{r.student.prt2mobile|default:""}}</td>
+          <td nowrap>{{r.student.regBranchName|default:""}}</td>
+          <td nowrap align="center">{%if r.isMemberFee %}会员费{%endif%}</td>
+          <td nowrap>{{r.appDate|date:"Y-m-d"}}</td>
+          <td nowrap align="center">{{r.sum}}</td>
+          <td nowrap align="center">{{r.available|default:0}}</td>
+          <td nowrap align="center">{{r.printed|default:0}}</td>
+          <td nowrap>
+            <button id="refundButton"
+                sname="{{r.student.name}}"
+                rsum="{{r.sum}}"
+                coid="{{r.id}}"
+                ravail="{{r.available}}"
+                rtitle='{{r.title}}'
+                rType='{%if r.rType == 1%}普票{%elif r.rType == 2%}专票{%endif%}'
+                rtaxNo='{{r.taxNo}}'
+                raddress='{{r.address}}'
+                rbank='{{r.bank}}'
+                isMember='{{r.isMemberFee}}'
+
+
+                class="btn btn-success approve">开票</button>&nbsp;
+                <button id="rejectButton"
+                sname="{{r.student.name}}"
+                rsum="{{r.sum}}"
+                coid="{{r.id}}"
+                ravail="{{r.available}}"
+                rtitle='{{r.title}}'
+                rType='{%if r.rType == 1%}普票{%elif r.rType == 2%}专票{%endif%}'
+                rtaxNo='{{r.taxNo}}'
+                raddress='{{r.address}}'
+                rbank='{{r.bank}}'
+                isMember='{{r.isMemberFee}}'
+
+
+                    class="btn btn-danger reject">驳回</button>
+            </td>
+
+        </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{{sum}}
+{%if sum > 10%}
+<div style="text-align:center;padding:20px;">
+<a href="#top"><button>返回顶部</button></a>
+</div>
+{%endif%}
+
+<div class="modal fade" id="refundModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="min-width:400px;max-width:600px;margin:0 auto;">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">开票</h4>
+            </div>
+            <div class="modal-body" id="info-body">
+              <div>
+                开票日期：<input id="printDate" />
+              </div>
+                <div style="padding:10px">
+                    <span id="sname"></span>
+                    <span id="rsum"></span>
+                    <span id="ravail"></span>
+
+                    <input type="hidden" id="r_oid" />
+                  </div>
+
+                  <center>
+                  <div style="width:400px;">
+                    <li style="text-align:left;" id="isMember"></li>
+                    <li style="text-align:left;" id="rtype"></li>
+                    <li style="text-align:left;" id="rtitle"></li>
+                    <li style="text-align:left;" id="rtaxNo"></li>
+                    <li style="text-align:left;" id="raddress"></li>
+                    <li style="text-align:left;" id="rbank"></li>
+
+                  </div>
+                </center>
+
+            </div>
+            <div class="modal-footer">
+                <button id="save_refund" type="button" class="btn btn-success" data-dismiss="modal">确定开票</button>
+            </div>
+        </div>
+    </div>
+  </center>
+</div>
+
+<div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="min-width:400px;max-width:600px;margin:0 auto;">
+  <center>
+    <div class="modal-dialog" role="document"  style="margin:10px;width:95%;max-width:1030px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">驳回开票申请</h4>
+            </div>
+            <div class="modal-body" id="info-body">
+              <div>
+                驳回理由：<input id="memo" />
+              </div>
+                <div style="padding:10px">
+                    <span id="sname2"></span>
+                    <span id="rsum2"></span>
+                    <span id="ravail2"></span>
+
+                    <input type="hidden" id="r_oid" />
+                  </div>
+
+                  <center>
+                  <div style="width:400px;">
+                    <li style="text-align:left;" id="isMember2"></li>
+                    <li style="text-align:left;" id="rtype2"></li>
+                    <li style="text-align:left;" id="rtitle2"></li>
+                    <li style="text-align:left;" id="rtaxNo2"></li>
+                    <li style="text-align:left;" id="raddress2"></li>
+                    <li style="text-align:left;" id="rbank2"></li>
+
+                  </div>
+                </center>
+
+            </div>
+            <div class="modal-footer">
+                <button id="save_reject" type="button" class="btn btn-success" data-dismiss="modal">确定驳回</button>
+            </div>
+        </div>
+    </div>
+  </center>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+$("#subNav22").attr("class","activeNav");
+$("#printDate").val('{{dateNowStr}}')
+{% include 'subNavJs.html' %}
+
+$(document).ready(function() {
+	$('#datatable').DataTable({
+	"paging":   false,
+	"searching": false,
+	"info":false,
+	"order": [[ 4, "desc" ]],
+	"columns": [
+
+    { "orderable": false },
+    { "orderable": false },
+    { "orderable": false },
+    { "orderable": false },
+    { "orderable": true },
+    { "orderable": false },
+    { "orderable": false },
+    { "orderable": false }
+	 ]
+	});
+});
+
+$(".approve").click(function(){
+
+    $("#sname").html('<font color="#888888">学生姓名：</font>'+$(this).attr("sname"))
+    $("#rsum").html('<font color="#888888">申请开票金额：</font>'+$(this).attr("rsum"))
+    $("#ravail").html('<font color="#888888">可开金额：</font>'+$(this).attr("ravail"))
+    $("#rtitle").html('<font color="#888888">抬头：</font>'+$(this).attr("rtitle"))
+    $("#rtype").html('<font color="#888888">发票类型：</font>'+$(this).attr("rtype"))
+    $("#rtaxNo").html('<font color="#888888">纳税人识别号：</font>'+$(this).attr("rtaxNo"))
+    $("#raddress").html('<font color="#888888">地址电话：</font>'+$(this).attr("raddress"))
+    $("#rbank").html('<font color="#888888">银行帐号：</font>'+$(this).attr("rbank"))
+    var im = '学费'
+    if($(this).attr("isMember")=='True')
+        im = '会员费'
+    $("#isMember").html('<font color="#888888">种类：</font>'+im)
+
+
+    $("#r_oid").val($(this).attr("coid"))
+    $("#attach").html('<img src="/go_static/users/'+$(this).attr("pic")+'" />')
+    $("#refundModal").modal();});
+
+
+
+$("#save_refund").click(function(){
+
+  var oid = $("#r_oid").val()
+  var printDate = $("#printDate").val()
+  var status = '1'
+  if(!printDate){
+    alert('请填写开票日期')
+    return
+  }
+  if(!confirm("确定开票吗？")){
+    return
+  }
+
+  $.post("{% url 'workflow:receiptDeal_api'%}", {
+      'id':oid,
+      'printDate': printDate,
+      'status': status
+  }, function (res) {
+      if (res.error == 0) {
+          alert("已通知校区开票成功，请安排发送发票到校区");
+          location.reload(true);
+      } else {
+          alert("失败："+res.msg);
+      }
+  });
+})
+
+
+$(".reject").click(function(){
+
+    $("#sname2").html('<font color="#888888">学生姓名：</font>'+$(this).attr("sname"))
+    $("#rsum2").html('<font color="#888888">申请开票金额：</font>'+$(this).attr("rsum"))
+    $("#ravail2").html('<font color="#888888">可开金额：</font>'+$(this).attr("ravail"))
+    $("#rtitle2").html('<font color="#888888">抬头：</font>'+$(this).attr("rtitle"))
+    $("#rtype2").html('<font color="#888888">发票类型：</font>'+$(this).attr("rtype"))
+    $("#rtaxNo2").html('<font color="#888888">纳税人识别号：</font>'+$(this).attr("rtaxNo"))
+    $("#raddress2").html('<font color="#888888">地址电话：</font>'+$(this).attr("raddress"))
+    $("#rbank2").html('<font color="#888888">银行帐号：</font>'+$(this).attr("rbank"))
+    var im = '学费'
+    if($(this).attr("isMember")=='True')
+        im = '会员费'
+    $("#isMember2").html('<font color="#888888">种类：</font>'+im)
+
+    $("#r_oid").val($(this).attr("coid"))
+    $("#attach").html('<img src="/go_static/users/'+$(this).attr("pic")+'" />')
+    $("#rejectModal").modal();});
+
+
+
+$("#save_reject").click(function(){
+
+  var oid = $("#r_oid").val()
+  var memo = $("#memo").val()
+  if(!memo){
+    alert('请填写驳回理由')
+    return
+  }
+  var status = '-1'
+  if(!confirm("确定驳回开票申请吗？")){
+    return
+  }
+
+
+  $.post("{% url 'workflow:receiptDeal_api'%}", {
+      'id':oid,
+      'memo':memo,
+      'status': status
+  }, function (res) {
+      if (res.error == 0) {
+          alert("已驳回开票申请");
+          location.reload(true);
+      } else {
+          alert("失败："+res.msg);
+      }
+  });
+})
+
+
+$('#printDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+</script>
+{% endblock %}

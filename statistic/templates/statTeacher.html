@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+body {}
+thead{
+    background-color:white;
+}
+tr:hover{background:#eeeeee}
+</style>
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexStat'%}"><返回</a><font color="red">{{err}}</font>
+</div>
+
+<div>
+
+
+<center><h4>【{{login_teacher.branchName}}】老师工作成绩统计</h4>
+
+<div style="width:100%;margin:0 auto;text-align:center;">
+<input id="beginDate" type="text" placeholder="起始日期">
+<input id="endDate" type="text" placeholder="截至日期">
+<button id="searchButton">查询</button>
+</center>
+</div>
+
+<br>
+<div id="table-container">
+<center>
+    <table  id="maintable" border="1">
+    <thead>
+        <tr style="background:#eeeeee;">
+        <th></th>
+        <th  align="center">拜访</th>
+        <th  align="center">到场</th>
+        <th  align="center">试听课(网络)</th>
+        <th  align="center">试听课成交(网络)</th>
+        <th  align="center">成交率(网络)</th>
+        <th  align="center">招生</th>
+        <th  align="center">转介</th>
+        <th  align="center">退费</th>
+
+        </tr>
+</thead>
+<tbody>
+{%for stat in res%}
+<tr>
+<td>{{stat.title}}</td>
+<td>{%if stat.reg > 0%}{{stat.reg}}{%endif%}</td>
+<td>{%if stat.show > 0%}{{stat.show}}{%endif%}</td>
+<td>{%if stat.demo > 0%}{{stat.demo}}{%endif%}{%if stat.demoNet > 0%}({{stat.demoNet}}){%endif%}</td>
+<td>{%if stat.demoDeal > 0%}{{stat.demoDeal}}{%endif%}{%if stat.demoDealNet > 0%}({{stat.demoDealNet}}){%endif%}</td>
+<td>{%if stat.demo > 0%}{{stat.dealRatio}}%{%endif%}{%if stat.dealNetRatio > 0%}({{stat.dealNetRatio}}%){%endif%}</td>
+<td {%if stat.title == '合计'%}style="background:#aaaaaa"{%endif%}>{%if stat.deal > 0%}{{stat.deal}}{%endif%}</td>
+<td {%if stat.title == '合计'%}style="background:#aaaaaa"{%endif%}>{%if stat.refer > 0%}{{stat.refer}}{%endif%}</td>
+<td {%if stat.title == '合计'%}style="background:#aaaaaa"{%endif%}>{%if stat.refund > 0%}{{stat.refund}}{%endif%}</td>
+</tr>
+{%endfor%}
+
+</tbody>
+</table>
+<div style="padding-top:6px;">
+<font color="red">＊</font>老师可能给其他校区拜访、上试听课，所以个人合计有可能不等于校区合计值
+</div>
+</center>
+</div>
+<div id="bottom_anchor"></div>
+{% endblock %}
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+
+$("#searchButton").click(function(){
+	var url = "{%url 'statistic:statTeacher'%}?beginDate="+$("#beginDate").val()+"&endDate="+$("#endDate").val();
+	$("#searchButton").html("<font style='color:grey;'>查询中...</font>")
+	window.location.href=url;
+})
+
+$("#beginDate").val('{{beginDate}}')
+$("#beginDate").css("color","red")
+$("#endDate").val('{{endDate}}')
+$("#endDate").css("color","red")
+
+</script>
+{% endblock %}

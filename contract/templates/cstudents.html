@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="padding:10px;">
+  {%if login_teacher.branchType == '9'%}
+
+  {%endif%}
+<input style="width:90px;" type="text" id="searchName" name="searchName" placeholder="学生">
+   <input style="width:90px;" type="text" id="searchPhone" name="searchPhone" placeholder="电话">
+
+<!--select id="searchStatus" name="searchStatus">
+  <option>全部状态</option>
+  <option value="0">有效</option>
+  <option value="2">退费</option>
+  <option value="-1">退费申请</option>
+  <option value="1">结束</option>
+</select-->
+
+
+
+
+<button id="searchButton"  class="btn btn-success" onclick="search()">学生查询</button>
+
+</div>
+<table  id="datatable"  class="table table-hover">
+  <thead>
+<tr>
+<th nowrap style="padding:10px;">部门</th>
+<th nowrap style="padding:10px;">渠道</th>
+
+<th nowrap style="padding:10px;">学生姓名</th>
+<th nowrap style="padding:10px;">电话</th>
+<th nowrap style="padding:10px;">来源老师</th>
+<th nowrap style="padding:10px;">录入日期</th>
+<th nowrap style="width:140px;padding:10px;">备注</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+{%for c in list%}
+
+<tr>
+
+  <td nowrap style="padding:2px;">
+
+  {{c.branch.branchName|default:""}}
+
+  </td>
+  <td style="padding:2px;">{%if c.sourceType == 'A'%}<font color="green">网络</font>{%elif  c.sourceType == 'B'%}<font color="red">拜访</font>{%elif  c.sourceType == 'C'%}<font color="red">转介</font>{%elif  c.sourceType == 'D'%}社会{%endif%}</td>
+<td nowrap style="padding:2px;">{{c.name|default:""}} {{c.name2|default:""}}</td>
+  <td nowrap style="padding:2px;">{{c.prt1mobile|default:""}} {{c.prt2mobile|default:""}}</td>
+  <td nowrap style="padding:2px;">{{c.regTeacher.name|default:""}}</td>
+  <td nowrap style="padding:2px;">{{c.regTime|date:"Y-m-d"|default:""}}</td>
+  <td nowrap style='width:160px;padding:2px;'>{{c.memo|default:""}}</td>
+  <td nowrap style="padding:2px;">
+  <button onclick="contract('{{c.id}}')">合同</button>
+  </td>
+
+
+</tr>
+{%endfor%}
+</tbody>
+</table>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$('#beginDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+$('#endDate').datetimepicker({
+    timepicker: false,
+    format: 'Y-m-d'
+});
+function contract(oid) {
+	var url = "{% url 'contract:studentContracts' %}"+"?student_oid="+oid;
+  window.open(url);
+}
+document.onkeydown=function(event){
+    e = event ? event :(window.event ? window.event : null);
+	    if(e.keyCode==13){
+	    	search();
+     	}
+}
+function search(){
+  $("#searchButton").html("<font style='color:grey;'>查询中请稍候...</font>")
+	var searchName = $("#searchName").val();
+  var searchPhone = $("#searchPhone").val();
+  var search = '?1=1';
+
+  if(searchName)
+	   search = search+'&searchName='+searchName;
+  if(searchPhone)
+	   search = search+'&searchPhone='+searchPhone;
+
+	var url = "{% url 'contract:cstudents' %}"+search
+	window.location.href=url;
+}
+function clickPage(page){
+	var url = '{% url 'contract:contract_list' %}'
+	url = url+'?branch={{branch}}&page='+page;
+	window.location.href = url;
+	//window.location.href = '/go?page='+page;
+}
+
+$("#searchName").val('{{searchName}}')
+$("#searchName").css("color","red")
+$("#searchPhone").val('{{searchPhone}}')
+$("#searchPhone").css("color","red")
+
+
+
+
+$(document).ready(function() {
+
+    $('#datatable').DataTable( {
+    	"paging":   false,
+    	"searching": true,
+    	"info":false,
+      "language": {
+            "lengthMenu": "每页显示 _MENU_ 学生",
+            "zeroRecords": "空空如也",
+
+            "sInfo":"共 _TOTAL_ 合同",
+            "infoEmpty": "没有找到哦",
+            "sSearch":"查询",
+            "oPaginate": {
+		        "sFirst":"首页",
+		        "sPrevious": 	"上一页",
+		        "sNext":     	"下一页",
+		        "sLast":     	"末页"
+	        },
+            "infoFiltered": "(从 _MAX_ 中搜索)"
+        },
+      "order": [[ {{showCol}}, "desc" ]],
+      dom: 'Bfrtip',
+      buttons: [
+            { extend: 'copy', text: '复制' },
+            { extend: 'csv', text: '保存' },
+            { extend: 'print', text: '打印' }
+        ],
+
+
+    });
+
+});
+
+$("#incomes").click(function(){
+  window.location.href='incomes'
+})
+$("#Y19Incomes").click(function(){
+  window.open('Y19Incomes')
+})
+
+$("#deposits").click(function(){
+  window.location.href='deposits'
+})
+</script>
+{% endblock %}

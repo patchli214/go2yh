@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+【老师】{{gc.teacher.name}}
+【上课时间】{{oriTime|date:"Y-m-d H:i"}}
+（周{{gc.school_day}}）
+
+<div>本次课修改为：</div>
+<div>
+时间：
+<input type="text" id="lessonTime" value="{{oriTime|date:"Y-m-d H:i"}}">
+</div>
+<div>
+<button onclick="saveLesson()">确认修改</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$('#lessonTime').datetimepicker({
+	step: 10,
+    format: 'Y-m-d H:i'
+});
+
+function saveLesson(){
+	
+	$.post("{% url 'gradeClass:api_changeLesson' %}", {
+        "classId": '{{classId}}',
+        "lessonTime": $("#lessonTime").val(),
+        "oriTime": '{{oriTime|date:"Y-m-d H:i"}}'
+    }, function (res) {
+        alert(res["msg"]);
+        if(res["error"]==0){
+            var url = "{% url 'gradeClass:schedule' %}";
+            window.location.href = url;
+        }
+
+    });
+}
+</script>
+{% endblock %}

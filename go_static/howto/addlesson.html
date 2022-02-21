@@ -1,0 +1,49 @@
+<html>
+<head>
+    <title>CRM帮助－补课</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+.block{cursor:pointer;padding-left:6px;padding-right:16px;padding-top:6px;float:left;height:114px;}
+</style>
+</head>
+<body >
+<div style="margin:10px;">
+  <a href="/go_static/howto/index.html"><返回帮助主页</a>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<center><h4>补课</h4></center>
+<div style="margin:20px;">
+在班级页面，找到要签到的班级，点击补课小按钮（➕）
+<div class="demopicDiv"><img src="/go_static/img/howto/classes.png" style="width:90%;"></div>
+选择哪个学生补课，补哪次课
+<div class="demopicDiv"><img src="/go_static/img/howto/addlesson1.png" style="width:80%;"></div>
+<div class="demopicDiv"><img src="/go_static/img/howto/addlesson2.png" style="width:80%;"></div>
+最后填写补课时间、老师、教室，保存即可。补课会自动出现在签到页面，和正常课程签到方法一样
+<div class="demopicDiv"><img src="/go_static/img/howto/addlesson3.png" style="width:80%;"></div>
+
+
+
+</div>
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>

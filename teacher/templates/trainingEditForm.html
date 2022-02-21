@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+    <div>
+    <center style="font-weight:bold;"><h3>
+        {% if not training %}添加练功信息{% endif %}
+        {% if training %}修改练功信息{% endif %}
+    </h3></center>
+        <table class="table">
+        <tr>
+                <td>
+                     练功老师
+                </td>
+                <td>
+                    <select id="teacher_oid">
+                    {% for t in teachers %}
+    <option value="{{t.id}}"
+        {% if teacher_oid == t.id|stringformat:"s" %}
+          selected="selected"
+        {%  endif  %}
+
+    >{{t.name}}</option>
+  {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    类型
+                </td>
+                <td><select class="form-control" id="type">
+                <option value="-1">--选择练功类型--</option>
+                <option {% if training.type == 8%}selected="selected"{% endif %}
+                                value="8">教育书籍读后感</option>
+                <option {% if training.type == 9%}selected="selected"{% endif %}
+                                value="9">教学相关文章</option>
+                <option {% if training.type == 10%}selected="selected"{% endif %}
+                                value="10">家长分享</option>
+
+                <option {% if training.type == 1%}selected="selected"{% endif %}
+                                value="1">体验课</option>
+                <option {% if training.type == 4%}selected="selected"{% endif %}
+                                value="4">体验课演练</option>
+                <option {% if training.type == 2%}selected="selected"{% endif %}
+                                value="2">正课及教案</option>
+                <option {% if training.type == 5%}selected="selected"{% endif %}
+                                value="5">正课演练</option>
+                <option {% if training.type == 3%}selected="selected"{% endif %}
+                                value="3">电话</option>
+                <option {% if training.type == 6%}selected="selected"{% endif %}
+                                value="6">电话演练</option>
+            </select></td>
+            </tr>
+            <tr>
+                <td>
+                     memo
+                </td>
+                <td>
+                    <textarea id="memo"  style="min-width:100%;min-height:260px;">{{training.memo|default:''}}</textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                     练功日期
+                </td>
+                <td>
+                    <input type="text" id="trainingDate" value="{{training.training_date|date:"Y-m-d"|default:""}}">
+                </td>
+            </tr>
+  <tr>
+                <td>
+                     分享日期
+                </td>
+                <td>
+                    <input type="text" id="reviewDate" value="{{training.review_date|date:"Y-m-d"|default:""}}">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="btn btn-default" onclick="reg()">OK</button>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    var Request = new QueryString();
+    var training_oid = Request['training_oid'];
+    $('#trainingDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+    $('#reviewDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+
+    function reg() {
+
+            var memo = $("#memo").val();
+            if (memo=="" ) {
+                alert("memo不能空");
+                return;
+            }
+            var tdate = $("#trainingDate").val()
+            if (tdate=="" ) {
+                alert("练功日期不能空");
+                return;
+            }
+
+            $.post("{% url 'teacher:trainingEdit' %}", {
+            	"training_oid":training_oid,
+                "teacher_oid": '{{teacher_oid}}',
+                "memo": $("#memo").val(),
+                "type": $("#type").val(),
+                "trainingDate":tdate,
+                "reviewDate":$("#reviewDate").val()
+            }, function (res) {
+                if (res["error"] == 0) {
+                    alert("成功")
+                } else {
+                    alert("失败:" + res["msg"])
+                }
+                var url = "{% url 'teacher:trainings' '111111111111111111111111'%}";
+                url = url.replace("111111111111111111111111", "{{teacher_oid}}");
+                window.location.href=url;
+            });
+        }
+    </script>
+{% endblock %}

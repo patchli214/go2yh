@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load filter %}
+{% load filter_regUser %}
+{% load filter_gradeClass %}
+{% block styles %}
+    <style>
+        .gradeClass_div {
+            min-height: 100px;
+            border: 2px solid #F6F6F6;
+            margin: 5px;
+            padding: 5px;
+        }
+
+        .gradeClass_info {
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+
+    <div class="text-center"><h3>日程</h3></div>
+    <div class="text-right" style="margin-right: 20px;margin-bottom: 10px;">
+        <button class="btn btn-default" style="display: inline-block" onclick="add_schedle()">添加日程</button>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            {% for i in week_list %}
+                <th style="width: 14%" class="text-center">周{{ forloop.counter|week_name }}</th>
+            {% endfor %}
+
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr>
+            {% for day_liat in week_list %}
+                <td>
+                    {% for gradeClass in day_liat %}
+                        <a href="{% url 'gradeClass:edit_gradeClass' gradeClass.gradeClass_type gradeClass.id %}">
+                            <div class="gradeClass_div">
+                                <div class="gradeClass_info">{{ gradeClass.school_time }}</div>
+                                <div class="gradeClass_info">{{ gradeClass.teacher.name }}</div>
+                                <div class="gradeClass_info">{{ gradeClass.classroom.name }}</div>
+                                <div class="gradeClass_info"> {{ gradeClass.gradeClass_type|get_gradeClass_type }}
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </td>
+
+            {% endfor %}
+        </tr>
+
+        </tbody>
+    </table>
+
+    <nav style="text-align: center">
+        <ul class="pagination">
+            {% for page in pages %}
+                {% if gradeClasses.number == page %}
+                    <li class="active" onclick="clickPage({{ page }})"><a>{{ page }}</a></li>
+                {% else %}
+                    <li onclick="clickPage({{ page }})"><a>{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+        </ul>
+    </nav>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        function add_schedle() {
+            var url = "{% url 'gradeClass:edit_gradeClass' '99999' '' %}";
+            url = url.replace('99999', GradeClassType.demo);
+            window.open(url);
+        }
+
+        function clickPage(page) {
+            var url = getRequestUrl("{% url 'gradeClass:gradeClass_list' %}", "page", page);
+            window.location.href = url;
+        }
+        $("#nav3").css("color","red");
+        $("#nav3").css("font-weight","bold");
+    </script>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+    <style>
+    #classes td{width:80px;}
+    #subNav{position:relative;top:-12px;background:#555555;color:white;border:1px solid #555555;}
+    span{border:1px solid #555555;}
+    .activeNav{
+        background:white;
+        color:black;
+        border:1px solid #555555;
+        
+        }
+    .inactiveNam{background:#555555;color:white;}
+    </style>
+{% include 'subNav.html' %}
+
+<div id="tip"></div>
+<div style="margin-left:20px;float:left;"><center><h4>
+<select id="branch">
+<option value=''>选择校区</option>
+{%for b in branches%}
+<option style="font-size:10px;" value="{{b.id}}" {%if branch == b.id|stringformat:"s"%}selected="selected"{%endif%}>{{b.branchName}}</option>
+{%endfor%}
+</select>校区未联系记录</h4></center>
+<table class="table  table-hover">
+        <tbody>
+        <tr  style="background:#eeeeee;">
+        <td></td>
+        <td>校区</td>
+        <td>级别</td>
+        <td>编号</td>
+        <td>孩子</td>
+        <td>性别</td>
+        <td>年龄</td>
+        <td>电话</td>
+        <td>接单老师</td>
+        <td>备注</td>
+       
+        </tr>
+        {% for student in students %}
+            <tr 
+            {%if student.probability == 'A'%} class="A" {%endif%}
+             {%if student.probability == 'B'%} class="B" {%endif%}
+             {%if student.probability == 'C'%} class="C" {%endif%}
+            >
+            <td>{{forloop.counter}}</td>
+<td>{{student.branchName}}</td>
+<td>{{student.probability|default:""}}</td>
+<td>{{student.code|default:""}}</td>
+                <td><a href="{% url 'regUser:student_info' student.id %}" >{%if student.name%}{{student.name|default:"无"}}{%elif student.name2%}{{student.name2|default:"无"}}{%elif student.prt1%}{{student.prt1|default:"无"}}孩子{%else%}无{%endif%}</a></td>
+                <td>{{student.gender|default:""}}</td>
+                <td>{{student.yearMonth|default:""}}</td>
+                <td>{{student.prt1mobile}}</td>
+                <td>{{student.regTeacherName|default:""}}</td>
+                <td>{{student.memo|default:""}}</td>
+
+                
+                
+                
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+$("#subNav11").attr("class","activeNav");
+$("#branch").change(function(){
+	var url = "{%url 'regUser:dboard11'%}?branch="+$("#branch").val();
+	$("#tip").html("<font style='color:red;'>查询中请稍等......</font>")
+	window.location.href=url;
+})
+
+{% include 'subNavJs.html' %}
+</script>
+{% endblock %}

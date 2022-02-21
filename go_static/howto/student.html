@@ -1,0 +1,50 @@
+<html>
+<head>
+    <title>CRM帮助－合同和班级管理</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+.block{cursor:pointer;padding-left:6px;padding-right:16px;padding-top:6px;float:left;height:114px;}
+</style>
+</head>
+<body >
+<div style="margin:10px;">
+  <a href="/go_static/howto/index.html"><返回帮助主页</a>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<center><h4>合同和班级管理</h4></center>
+<div style="margin:20px;">
+
+签单以后，运营老师要为学生生成合同（学籍信息），确定了班级后要把这个学生排入班级，以便老师展开各项学生服务工作。而且这样做可以方便为后续新老生续费做相应跟踪服务<br>
+<div class="demopicDiv"><img src="/go_static/img/howto/contract1.png" style="max-width:800px;width:100%;"></div>
+1、合同。在孩子页面找到要报名的孩子，点“合同”按钮进入合同页面，生成新合同（注意选择正确的合同时长和费用类型，填写正确的实收金额）
+<div  class="demopicDiv" ><img src="/go_static/img/howto/contract.png" style="max-width:600px;width:100%;"></div>
+2、签合同后，可以到“班级”页面创建班级或者将孩子添加进现有班级
+<div  class="demopicDiv" ><img src="/go_static/img/howto/classes.png" style="max-width:1000px;width:100%;"></div>
+开班或者修改班级操作：
+<div  class="demopicDiv" ><img src="/go_static/img/howto/class.png" style="max-width:700px;width:100%;"></div>
+
+
+</div>
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>

@@ -1,0 +1,129 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+body {
+	font-family: 微软雅黑, Arial;
+}
+
+div {
+	padding: 10px 30px 10px 30px;text-align:center;
+}
+
+#submitBtn {
+	padding: 10px 40px 10px 40px;
+	font-size: 16px;
+}
+
+label.valid {
+	width: 24px;
+	height: 24px;
+	background: url(assets/img/valid.png) center center no-repeat;
+	display: inline-block;
+	text-indent: -9999px;
+}
+
+label.error {
+	font-weight: bold;
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
+}
+</style>
+
+</head>
+<body>
+<div style="padding-top:25px;font-size:20px;">
+
+	<img src="/go_static/img/logo.png"  width="30"/>&nbsp;真朴儿童围棋教室
+
+</div>
+
+<div style="padding-top:5px;font-size:16px;">
+
+<h4>招行员工专属优惠报名</h4>
+原价9000元/30次的课程<br>
+可以享受7200元的优惠价格
+
+	</div>
+  <div>请填写下面信息以便联系您预约试听课和报名</div>
+	<form id="qform" action="cmb2017res" method="post"
+		class="form-inline">
+
+
+		<div>
+           <input  style="max-width:400px;min-width:250px;" type="text" name="name"
+				id="name" value="" placeholder="孩子姓名或小名（必填）" class="form-control">
+		</div>
+		<div >
+		<select id="ageYear" name="ageYear">
+		  <option value="">几岁?</option>
+		  {% for y in year%}
+		  <option value="{{y}}">{{y}}岁</option>
+		  {%endfor%}
+		</select>
+		<select  id="ageMonth" name="ageMonth" >
+		<option value="0">几个月?</option>
+		<option value="0">整</option>
+		  {% for m in month%}
+		  <option value="{{m}}">{{m}}个月</option>
+		  {%endfor%}
+		</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		    <label class="radio-inline"> <input type="radio"
+				name="gender" value="女" id="female" />女
+			</label> <label class="radio-inline"> <input type="radio"
+				name="gender" value="男" id="male" />男
+			</label>
+
+		</div>
+		<div>
+			 <input style="max-width:400px;min-width:250px;" type="text" name="prt1mobile"
+				id="prt1mobile" value="" placeholder="手机号（必填）"
+				class="form-control">
+		</div>
+		<div>
+			<input style="max-width:300px;height:40px;font-size:16px;" type="submit" class="btn btn-danger" value="获取优惠名额" />
+</div>
+				</form>
+		</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+	$('#qform').validate({
+		rules : {
+			name : {
+				minlength : 2,
+				required : true
+			},
+
+			prt1mobile : {
+				minlength : 11,
+				required : true
+			},
+			year : {
+				minlength : 1,
+				required : true
+			},
+
+			gender : {
+				required : true
+			}
+		},
+		messages : {
+            name : {
+                required : "孩子名必填"
+            },
+            prt1mobile : {
+                required : "手机号必填"
+            },
+            gender : {
+                required : "请选择男或女"
+            }
+        },
+	});
+
+
+</script>
+{% endblock %}

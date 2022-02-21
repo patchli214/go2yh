@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+<link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+        <style>
+
+    .inactiveNam{background:#555555;color:white;}
+
+    .showMemo{cursor:pointer;}
+    .showMemo2{cursor:pointer;}
+    td{padding:1px;}
+    </style>
+{% include 'subNav.html' %}
+
+<!--div>
+  <center>
+  开始日期<input id="beginDate" value="{{beginDate|default:''}}">
+  结束日期<input id="endDate" value="{{endDate|default:''}}">
+  <button>查询</button>
+</center></div-->
+<div style="margin-left:0px;float:left;">
+<table id="datatable" >
+        <thead>
+        <tr>
+        <th width="100">注册时间</th>
+        <th>称呼</th>
+        <th>性别</th>
+        <th width="60">年龄</th>
+        <th>城市</th>
+        <th>电话</th>
+        <th style="max-width:200px;">来源</th>
+        <th>处理</th>
+        <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for reg in list %}
+
+            <tr {% if reg.done %}style="background:#f3fff2"{%endif%}>
+
+                <td width="120" nowrap>{{reg.regTime|date:"Y-m-d H:i"}}</td>
+
+                <td width="60">{{reg.name|default:""}}</td>
+
+                <td>{{reg.gender|default:""}}</td>
+
+                <td  nowrap>{%if reg.year%}{{reg.year|default:""}}{%if reg.month%}.{{reg.month}}{%endif%}岁{%endif%}</td>
+        <td width="90">{{reg.city|default:""}}</td>
+        <td width="90">{{reg.mobile}}</td>
+        <td style="max-width:200px;word-wrap:break-word;" wrap>
+          {%if 'm/weiqiban360' in reg.source%}360手机端
+          {%elif 'm/weiqipeixun360' in reg.source%}360手机端
+          {%elif 'm/weiqibanuc' in reg.source%}UC手机端
+          {%elif 'm/weiqipeixunuc' in reg.source%}UC手机端
+          {%elif 'm/weiqibansg' in reg.source%}搜狗手机端
+          {%elif 'm/weiqipeixunsg' in reg.source%}搜狗手机端
+          {%elif 'm/weiqi.' in reg.source%}裂变预约
+          {%elif 'zenweiqi.com/m/c' in reg.source%}百度移动端
+          {%elif 'zenweiqi.com/m/b' in reg.source%}百度移动端
+          {%elif '/weiqijiaoshi.html' in reg.source%}围棋教室页
+          {%elif 'zhuanti/weiqixuexiao/index.html' in reg.source%}百度电脑端
+          {%elif '/weiqinews/' in reg.source%}围棋咨询页
+          {%elif '360.html' in reg.source%}360电脑端
+          {%elif 'sougou.html' in reg.source%}搜狗电脑端
+          {%elif 'zenweiqi.com' in reg.source%}百度电脑端
+          {%else%}{{reg.source}}
+          {%endif%}
+
+
+
+        </td>
+        <td style="max-width:30px;"><input class="changeDone" rid="{{reg.id}}" type="checkbox" {%if reg.done%}checked="checked"{%endif%}></td>
+        <td style="max-width:360px;"><input style="width:360px;" class="changeMemo" rid="{{reg.id}}" m="{{reg.memo|default:''}}" type="text" value='{{reg.memo|default:""}}'></td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div style="text-align:center;padding:20px;clear:both;">
+<a href="#top"><button>返回顶部</button></a>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#nav0").css("color","red");
+$("#subNav14").attr("class","activeNav");
+
+{% include 'subNavJs.html' %}
+
+$(".changeDone").click(function(){
+  var rid = $(this).attr("rid")
+  var done = '2'
+  if($(this).prop("checked")) done = '1'
+  $.post("{%url 'web:api_done'%}", {
+      'id': rid,
+      'done': done
+  }, function (res) {
+      if (res.error == 0) {
+          alert(res.msg);
+      } else {
+          alert(res.msg);
+      }
+  });
+})
+
+$(".changeMemo").blur(function(){
+
+  var rid = $(this).attr("rid")
+  var memo = $(this).val()
+
+  if(memo!=$(this).attr('m'))
+
+  $.post("{%url 'web:api_done'%}", {
+      'id': rid,
+      'memo': memo
+  }, function (res) {
+      if (res.error == 0) {
+          console.log(res.msg);
+      } else {
+          alert(res.msg);
+      }
+  });
+})
+
+$(document).ready(function() {
+	$('#datatable').DataTable({
+	"paging":   true,
+	"searching": false,
+	"info":true,
+  "language": {
+        "lengthMenu": "每页显示 _MENU_",
+        "zeroRecords": "空空如也",
+        "sInfo":"从 _START_ 到 _END_， 共 _TOTAL_ ",
+        "infoEmpty": "没有找到哦",
+        "sSearch":"查询",
+        "oPaginate": {
+        "sFirst":"首页",
+        "sPrevious": 	"上一页",
+        "sNext":     	"下一页",
+        "sLast":     	"末页"
+      },
+        "infoFiltered": "(从 _MAX_ 中搜索)"
+    },
+	"order": [[ 0  , "desc" ]],
+	"columns": [
+    { "orderable": true },
+    { "orderable": false },
+    { "orderable": false },
+    { "orderable": false },
+    { "orderable": true },
+    { "orderable": false },
+    { "orderable": true },
+{ "orderable": false },
+
+
+	            { "orderable": false }
+	          ]
+	});
+  $('#datatable').DataTable().page.len(100).draw();
+});
+
+
+
+
+</script>
+{% endblock %}

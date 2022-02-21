@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+		#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+		#r-result{height:100%;width:20%;float:left;}
+	</style>
+
+
+	<script src="/go_static/js/jquery2.min.js"></script>
+	<script src="/go_static/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=6502c822eeb4bdf143b0ce9f073b5163"></script>
+	<title>真朴校区距离查询</title>
+</head>
+<body>
+
+ 	<div><input style="height:30px;" id="search" placeholder="请输入查询地址"><button style="height:34px;width:100px;padding:4px 6px 4px 6px;color:white;background:green;" id="searchButton">查询</button></div>
+  <div style="" id="log"></div>
+	<div style="height:0" id="allmap"></div-->
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("allmap");
+	var point0 = new BMap.Point(116.404, 39.915);
+	map.centerAndZoom(point0, 12);
+	//map.enableScrollWheelZoom();
+	//map.enableDragging();
+	map.enableInertialDragging();
+
+
+
+	//var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+	//var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+	var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+	//map.addControl(top_left_navigation);
+	map.addControl(top_right_navigation);
+
+//39.909565,116.64863//通州
+	var point = new Array(26);
+	var marker = new Array(26);
+	var label = new Array(26);
+
+	maps = [{'lon':116.362724,'lat':39.81243,'name':'槐房','addr':'丰台区槐房万达广场(新宫地铁站)','tel':'010-67916580',"code": 'hf','id':'5867c0c33010a51fa4f5abe6'},
+	        {'lon':116.64863,'lat':39.909565,'name':'通州','addr':'通州区新华南二街12号院1-2(通州万达南侧)','tel':'010-60539110','code':'tz','id':'5867c3883010a518ac189d41'},
+          {'lon':116.340658,'lat':39.990137,'name':'中关村','addr':'海淀区中关村东路66号世纪科贸大厦(保福寺桥南)','tel':'010-62670287','code':'zgc','id':'58bef43f97a75d4e65592abb'},
+					{'lon':116.312951,'lat':39.984788,'name':'苏州街','addr':'海淀区苏州街18号院长远天地B1座','tel':'010-69943694','code':'sz','id':'58bf7cea97a75d4e65592bd4'},
+          {'lon':116.293105,'lat':39.963215,'name':'金源','addr':'海淀区远大路20号宝蓝世纪大厦','tel':'010-53329267','code':'jy','id':'58bef31197a75d4e65592ab9'},
+					{'lon':116.271589,'lat':39.911481,'name':'五棵松','addr':'海淀区永定路88号长银大厦(西点百货)B座','tel':'010-68107255','code':'wks','id':'58c25e7097a75d495208acbc'},
+					{'lon':116.283073,'lat':39.920062,'name':'卓展','addr':'海淀区复兴路69号卓展购物中心(蓝色港湾)','tel':'88199529','code':'zz','id':'58c2363697a75d2ffb1eca66'},
+					{'lon':116.316281,'lat':39.90711,'name':'公主坟','addr':'海淀区西三环中路甲21号企业网大厦','tel':'010-63973060','code':'gz','id':'58be210b97a75d14f33cfc1e'},
+					{'lon':116.461588,'lat':39.938497,'name':'三里屯','addr':'朝阳区三里屯SOHO5号商场','tel':'010-57853495','code':'slt','id':'58bfa93097a75d6de3380b90'},
+					{'lon':116.423316,'lat':39.90407,'name':'崇文门','addr':'东城区崇外大街新怡商务楼B座(崇文门地铁站)','tel':'010-67084858','code':'xy','id':'58c0f93797a75d6de3380d5b'},
+					{'lon':116.440166,'lat':39.926579,'name':'朝阳门','addr':'东城区朝阳门 银河soho中心(朝阳门地铁站)','tel':'010-65206316','code':'cym','id':'58c0fbf397a75d4702a2d550'},
+					{'lon':116.467314,'lat':39.901073,'name':'富力城','addr':'朝阳区东三环中路65号双井富力广场','tel':'010-59037277','code':'fl','id':'58beeaf597a75d4cb2744e71'},
+					{'lon':116.494459,'lat':39.917618,'name':'远洋','addr':'朝阳区八里庄西里61号楼远洋商务大楼','tel':'010-65567451','code':'yy','id':'58c24df697a75d495208aa25'},
+					{'lon':116.481109,'lat':39.95481,'name':'蓝色港湾','addr':'朝阳区朝阳公园路6号院蓝色港湾儿童城','tel':'010-59051775','code':'lg','id':'591bcd8d97a75d12033b026d'},
+					{'lon':116.421071,'lat':40.03929,'name':'奥运村','addr':'朝阳区红军营南路安鑫办公(北辰购物中心斜对面)','tel':'84922240','code':'ayc','id':'58c2178797a75d2ffb1ec879'},
+					{'lon':116.438959,'lat':40.052634,'name':'华贸','addr':'朝阳区清河营南街7号院3号楼(华贸天地)','tel':'010-59481176','code':'hm','id':'58c25d0297a75d495208acba'},
+					{'lon':116.473367,'lat':40.012617,'name':'望京','addr':'朝阳区望京广顺北大街19号(六佰本商业街)','tel':'010-61842197','code':'wj','id':'58c25e9997a75d495208acbd'},
+					{'lon':116.483187,'lat':39.995259,'name':'悠乐汇','addr':'朝阳区望京广顺南大街悠乐汇A6区609号楼','tel':'010-84787566','code':'yl','id':'58be219697a75d14f33cfc21'},
+					{'lon':116.442627,'lat':39.974111,'name':'西坝河','addr':'朝阳区西坝河西里23号嘉汇中心B座','tel':'010-53672194','code':'xbh','id':'58dcb27497a75d734389eb8f'},
+					{'lon':116.448703,'lat':39.964817,'name':'国展','addr':'朝阳区左家庄国展天虹','tel':'13370128387','code':'th','id':'591ac08797a75d1948a7e26c'},
+					{'lon':116.413453,'lat':40.008353,'name':'亚运村','addr':'朝阳区慧忠里103楼(洛克时代中心A座)','tel':'010-53656452','code':'yyc','id':'58dcb1c797a75d734389eb7f'},
+					{'lon':116.3543,'lat':40.072562,'name':'龙旗','addr':'昌平区回龙观黄平路龙旗广场','tel':'010-82912382','code':'lq','id':'58be1a3597a75d39e020087d'},
+					{'lon':116.317822,'lat':40.034736,'name':'上地','addr':'海淀区农大南路1号院1号楼上地华联','tel':'010-82788370','code':'sd','id':'58be19f997a75d39e020087c'},
+					{'lon':116.360985,'lat':39.928587,'name':'阜成门','addr':'西城区阜外大街2号万通新世界A座','tel':'68394797','code':'fcm','id':'58c2365897a75d2ffb1eca67'},
+					{'lon':116.429543,'lat':39.872024,'name':'方庄','addr':'丰台区方庄蒲黄榆地铁B口物美大卖场','tel':'010-58070180','code':'fz','id':'58c1343b97a75d4702a2d5e1'},
+					{'lon':116.315985,'lat':39.871072,'name':'西局','addr':'丰台区西三环南路55号顺和国际财富中心','tel':'010-57528157','code':'ft','id':'58bef4da97a75d4e65592abd'}
+				]
+	var myIcon = new BMap.Icon("icon.png", new BMap.Size(20,17));
+  showMap()
+
+
+
+
+
+function showMap(){
+	for (var i = 0; i < 26; i ++) {
+		point[i] = new BMap.Point(maps[i].lon,maps[i].lat);
+		marker[i] = new BMap.Marker(point[i],{icon:myIcon});
+    map.addOverlay(marker[i]);
+		label[i] = new BMap.Label(maps[i].name,{offset:new BMap.Size(20,0)});
+	  marker[i].setLabel(label[i]);
+
+  }
+}
+	map.addEventListener("click",function(e){
+		console.log(e.point.lng+','+e.point.lat);
+	})
+
+  $("#searchButton").click(function(){
+    search = $("#search").val()
+		console.log(search)
+		map.clearOverlays();
+		showMap();
+		locate(search);
+    getNearSchools(search)
+
+	})
+
+	function locate(search){
+		console.log('in'+search)
+		var circle = new BMap.Circle(point0,100000,{fillColor:"white", strokeWeight: 1 ,fillOpacity: 0.1, strokeOpacity: 0.1});
+	  map.addOverlay(circle);
+	  var local =  new BMap.LocalSearch(map, {renderOptions: {map: map, autoViewport: false}});
+	  local.searchNearby(search,point0,100000);
+
+
+	}
+  var dist = 0;
+  function getDistance(p1,p2,i){
+
+		console.log('in getdist')
+		//var map = new BMap.Map("container");
+		//map.centerAndZoom(new BMap.Point(116.404, 39.915), 14);
+		var options = {
+		    onSearchComplete: function(results){
+		        if (driving.getStatus() == BMAP_STATUS_SUCCESS){
+		            // 获取第一条方案
+		            var plan = results.getPlan(0);
+		            // 获取方案的驾车线路
+		            var route = plan.getRoute(0);
+		            // 获取每个关键步骤，并输出到页面
+								console.log(i+'-'+route.cg)
+                maps[i].dist = route.cg
+
+								dist = dist+1;
+								console.log(dist)
+								if(dist==26){
+									var list=new Array()
+									dist = 0
+									$("#log").html('')
+									console.log('DONE')
+									for(var j=0;j<maps.length;j++){
+                    list[j]=parseInt(maps[j].dist)
+								  }
+									list.sort(sortNumber)
+									for(var k=0;k<list.length;k++){
+										var school = ''
+										for(var l=0;l<maps.length;l++){
+											if(parseInt(maps[l].dist)==list[k]){
+												school=maps[l].name
+												break
+											}
+										}
+										var distance = Math.round(list[k]/10)*10/1000
+										$("#log").append("<tr><td>"+school+"</td><td align=right>"+distance+"km</td></tr>")
+									}
+								}
+
+		        }
+		    }
+		};
+		var driving = new BMap.DrivingRoute(map, options);
+		driving.search(p1,p2);
+
+	}
+
+  function getNearSchools(p){
+		var myGeo = new BMap.Geocoder();
+	// 将地址解析结果显示在地图上,并调整地图视野
+	myGeo.getPoint(p, function(point){
+		if (point) {
+			var ns = new Array()
+			for(var i=0;i<maps.length;i++){
+			  getDistance(point,new BMap.Point(maps[i].lon,maps[i].lat),i)
+      }
+			var count = 0
+			//while(dist<26){
+				//count++
+			//}
+
+		}else{
+			alert("您选择地址没有解析到结果!");
+		}
+	}, "北京市");
+	}
+
+	function sortNumber(a,b) {
+	    return a - b;
+	}
+
+  //getDistance(new BMap.Point(116.362724,39.81243),new BMap.Point(116.64863,39.909565))
+</script>

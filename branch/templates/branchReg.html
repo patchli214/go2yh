@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'logo.html' %}
+{% include 'nav.html' %}
+<style>
+.active{background:#ffffff;color:black}
+.unactive{background:black;color:white}
+td,th{border-left:#dddddd solid 1px;}
+th{text-align:center}
+</style>
+<div id="subNav" style="top:4px;margin-bottom:10px;">
+<span onclick="goInfo()" id="subNav_branch3" onmouseout="unactive('subNav_branch3')" onmouseover="active('subNav_branch3')">校区基本信息</span>
+<span onclick="goPics()" id="subNav_branch1" onmouseout="unactive('subNav_branch1')" onmouseover="active('subNav_branch1')">分享页面管理</span>
+{%if login_teacher.role > 3%}<span onclick="goSource()" id="subNav_branch2" onmouseout="unactive('subNav_branch2')"  onmouseover="active('subNav_branch2')">渠道管理</span>{%endif%}
+{%if login_teacher.role > 3%}<span onclick="goQuest()" id="subNav_branch3" onmouseout="unactive('subNav_branch3')"  onmouseover="active('subNav_branch3')">学生满意度调查</span>{%endif%}
+
+<span onclick="goLucky()" id="subNav_branch5" >抽奖活动</span>
+<span onclick="goTweet2019()" id="subNav_branch6" onmouseout="unactive('subNav_branch6')"  onmouseover="active('subNav_branch6')">大礼包二维码</span>
+
+
+</div>
+
+    <div>
+    <center style="font-weight:bold;">{% if branch %}校区信息{% else %}增加校区{%endif%}</center>
+
+        <table class="table">
+
+<tr>
+            <td>
+                城市：
+            </td>
+            <td><select class="form-control" id="city">
+                <option value="-1">选择城市</option>
+                {% for city in cities %}
+                    {% if branch.city.id == city.id %}
+                        <option selected="selected"
+                                value="{{ city.id }}">{{ city.cityName }}</option>
+                    {% elif login_teacher.role == 9 %}
+                        <option value="{{ city.id }}">{{ city.cityName }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select></td>
+        </tr>
+
+
+            <tr>
+                <td>
+                    顺序号
+                </td>
+                <td>
+                    <input type="text" id="sn" {%ifnotequal login_teacher.role 9%} readonly="readonly"{%endifnotequal%} value='{% if branch %}{{branch.sn}}{%endif%}'>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="deleted" {%if branch.deleted%}checked="checked"{%endif%}／>已关闭
+&nbsp;&nbsp;<input type="checkbox" id="isY19" {%if branch.isY19%}checked="checked"{%endif%}／>参与元十九
+
+                  </td>
+                </td>
+            </tr>
+
+
+<tr>
+                <td>
+                    校区名
+                </td>
+                <td>
+                    <input type="text" id="branchName" {%ifnotequal login_teacher.role 9%} readonly="readonly"{%endifnotequal%}  value="{% if branch %}{{branch.branchName}}{%endif%}">
+                </td>
+            </tr>
+<tr>
+                <td>
+                    代码
+                </td>
+                <td>
+                    <input type="text" id="branchCode" {%ifnotequal login_teacher.role 9%} readonly="readonly"{%endifnotequal%} value='{% if branch %}{{branch.branchCode|default:""}}{%endif%}'>
+                </td>
+            </tr>
+<tr>
+                <td>
+                    类型
+                </td>
+                <td><select id="type" {%if login_teacher.role != 9%}disabled="disabled"{%endif%}>
+                        <option value="0" {%if not branch.type or branch.type == 0 %}selected="selected"{%endif%}>校区</option>
+                        <option value="1" {%if branch.type == 1 %}selected="selected"{%endif%}>网络及市场</option>
+                        <option value="2" {%if branch.type == 2 %}selected="selected"{%endif%}>职能部门</option>
+                        <option value="3" {%if branch.type == 3 %}selected="selected"{%endif%}>管理部门</option>
+                        <option value="9" {%if branch.type == 9 %}selected="selected"{%endif%}>其他部门</option>
+                    </select>
+                </td>
+            </tr>
+
+<tr>
+                <td>
+                    教室数
+                </td>
+                <td>
+                    <select id="branchRooms">
+                    {% for i in rooms %}
+                    <option value="{{i}}" {%if branch.branchRooms == i%}selected="selected"{%endif%}>{{i}}</option>
+                    {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    地址
+                </td>
+                <td>
+                    <input type="text" id="branchAddr" value="{% if branch %}{{branch.branchAddr}}{%endif%}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    电话
+                </td>
+                <td>
+                    <input type="text" id="branchTel" value="{% if branch %}{{branch.branchTel|default:""}}{%endif%}">
+                </td>
+            </tr>
+
+            {% if branch and login_teacher.role == 9 %}
+            <tr>
+              <td>外地付款部门
+
+              </td>
+              <td>
+                <select id="payBranch">
+                  <option>无</option>
+                  {%for b in payBranches%}
+                  <option value="{{b.id}}" {%for bb in branch.payBranch%}{%if bb == b.id|stringformat:'s'%}selected='selected'{%endif%}{%endfor%}>{{b.branchName}}</option>
+                  {%endfor%}
+                </select>
+(可以为本校区付款的外地行政财务部门)
+            </tr>
+            {%endif%}
+            <tr>
+                <td colspan="2">
+                    {%if login_teacher.role > 3%}	<button class="btn btn-default" onclick="reg()">保存</button>{%endif%}
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>
+                    校区照片<br>
+                    {%if login_teacher.role > 3%}<a href="/go2/branch/branchPic?branch_oid={{branch.id}}"><button>上传</button></a>{%endif%}
+                </td>
+                <td><img src="/go_static/users/{{branch.id}}/classroom.jpg?tag={{tag}}">
+                    <br>
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    $("#subNav_branch3").attr("class","activeNav");
+        function reg() {
+            var city = $("#city").val();
+            var type = $("#type").val();
+            var sn = $("#sn").val();
+            var branchName = $("#branchName").val();
+            var branchAddr = $("#branchAddr").val();
+            var branchRooms = $("#branchRooms").val();
+            var branchTel = $("#branchTel").val();
+            var branchCode = $("#branchCode").val();
+            var deleted = $("#deleted").prop('checked');
+            var isY19 = $("#isY19").prop('checked');
+            var payBranch = $("#payBranch").val();
+
+            if (!branchName ) {
+                alert("请填写校区名");
+                return;
+            }
+
+            $.post("{% url 'branch:api_reg' %}", {
+              "csrfmiddlewaretoken": "{{ csrf_token }}",
+            	{%if branch%}"branchId":'{{branch.id}}',{%endif%}
+                "city":city,
+            	    "branchName": branchName,
+                "branchAddr": branchAddr,
+                "branchTel": branchTel,
+                "branchCode": branchCode,
+                "branchRooms":branchRooms,
+                "deleted":deleted,
+                "isY19":isY19,
+                "type":type,
+                "payBranch":payBranch,
+                "sn": sn
+            }, function (res) {
+                if (res["error"] == 0) {
+                    alert("成功")
+
+                } else {
+                    alert("失败:" + res["msg"])
+                }
+            });
+        }
+
+        function active(id){
+        	$('#'+id).addClass("active");
+        }
+        function unactive(id){
+        	$('#'+id).removeClass("active");
+        }
+        $("#nav5").css("color","red");
+
+        function goReimburse(){
+          document.location.href="{% url 'branch:reimburses'%}"
+        }
+        function goSource(){
+          var url = "{%url 'branch:sources'%}";
+          window.open(url);
+        }
+        function goQuest(){
+          var url = "{%url 'student:quests'%}";
+          window.open(url);
+        }
+        function goPics(){
+          var url = "{%url 'web:pages'%}?type=3";
+          window.open(url);
+        }
+        function goLucky(){
+          var url = "{%url 'web:regList2'%}";
+          window.open(url);
+        }
+        function goTweet2019(){
+          var url = "{%url 'branch:tweet2019'%}";
+          window.open(url);
+        }
+
+    </script>
+{% endblock %}

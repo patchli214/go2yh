@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="js/jquery-1.10.2.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+	<style>
+    body{margin:0;padding: 0;background:#f2b268;height:100%;}
+   .half{float: left;width:50%;text-align:center;line-height:100px;}
+   .third{float: right;width:33%}
+   img{display: block;width:100%}
+   .small{line-height:50px;}
+</style>
+</head>
+<body>
+<div style="width:100%;margin:0;padding:0;"><img src="img/title.gif" width="100%"></div>
+<div id="">
+<img id="" src="img/a1.jpg" width="100%">
+</div>
+
+<div id="1" class="half" style="background:#f2b268">北京校区></div>
+<div id="2" class="half" style="background:#b0e2d6">上海校区></div>
+<div id="3" class="half" style="background:#eec0da">江浙校区></div>
+<div id="4" class="half" style="background:#eaa6a7">重庆校区></div>
+<div id="5" class="half" style="background:#f3dea9">山东校区></div>
+<div id="6" class="half" style="background:#c8caf0">其他校区></div>
+<!--div id="7" class="half small" style="background:#e8d7bb">河南校区></div-->
+<div style="height:10px">&nbsp;</div>
+
+</body>
+</html>
+<script>
+
+$(".half").click(function(){
+window.location.href='d.html?c='+$(this).attr('id')
+});
+var u = navigator.userAgent;
+if(u.indexOf('iPad') > -1){
+    $("#div-contant").css("height","82px");
+}
+
+</script>

@@ -1,0 +1,1151 @@
+{% extends "base.html" %}
+{% block content %}
+    {% include 'logo.html' %}
+    {% include 'nav.html' %}
+<style>
+select{color:black}
+input{color:black}
+.showMemo{cursor:pointer;}
+.showMemo2{cursor:pointer;}
+.dupTr > td{padding:0 10px 0 10px;}
+</style>
+
+{%if excel != '1'%}
+<!-- SEARCH BLOCK BEGIN -->
+<div>
+   <div  style="width:92%;float:left;margin-right: 2px;margin-bottom: 10px;">
+<input style="width:100px;" type="text" id="searchPhone" name="searchPhone" placeholder="电话">
+   <input style="width:60px;" type="text" id="searchName" name="searchName" placeholder="名字">
+   <input style="width:110px;" type="text" id="searchCode" name="searchCode" placeholder="编号、备注">
+   <input style="width:90px;" type="text" id="beginDate" name="beginDate" placeholder="起始日期">
+   <input style="width:90px;" type="text" id="endDate" name="endDate" placeholder="截至日期">
+   <input type="checkbox" id="searchRemind0">下次跟进日期
+   <input type="hidden" id="searchRemind" name="searchRemind">
+   年龄：<select id="beginYear">
+         <option value=""></option>
+         <option value="1">1</option>
+         <option value="2">2</option>
+         <option value="3">3</option>
+         <option value="4">4</option>
+         <option value="5">5</option>
+         <option value="6">6</option>
+         <option value="7">7</option>
+         <option value="8">8</option>
+         <option value="9">9</option>
+         <option value="10">10</option>
+         <option value="11">11</option>
+         <option value="12">12</option>
+         <option value="13">13</option>
+         </select>岁
+   <select id="beginMonth">
+       <option value=""></option>
+       <option value="1">1</option>
+       <option value="2">2</option>
+       <option value="3">3</option>
+       <option value="4">4</option>
+       <option value="5">5</option>
+       <option value="6">6</option>
+       <option value="7">7</option>
+       <option value="8">8</option>
+       <option value="9">9</option>
+       <option value="10">10</option>
+       <option value="11">11</option>
+   </select>个月 到
+   <select id="endYear">
+   <option value=""></option>
+         <option value="2">2</option>
+         <option value="3">3</option>
+         <option value="4">4</option>
+         <option value="5">5</option>
+         <option value="6">6</option>
+         <option value="7">7</option>
+         <option value="8">8</option>
+         <option value="9">9</option>
+         <option value="10">10</option>
+         <option value="11">11</option>
+         <option value="12">12</option>
+         <option value="13">13</option>
+   </select>岁
+   <select id="endMonth"><option value=""></option>
+   <option value="1">1</option>
+       <option value="2">2</option>
+       <option value="3">3</option>
+       <option value="4">4</option>
+       <option value="5">5</option>
+       <option value="6">6</option>
+       <option value="7">7</option>
+       <option value="8">8</option>
+       <option value="9">9</option>
+       <option value="10">10</option>
+       <option value="11">11</option>
+   </select>个月
+   <select id="searchSchool">
+   <option value="">幼儿园/学校</option>
+{%for s in sources%}
+{%if s.typeCode == 'B'%}
+<option value="{{s.sourceName}}">{{s.sourceName}}</option>
+{%endif%}
+{%endfor%}
+</select>
+   {% if login_teacher.branchType == '1' %}
+   <input type="hidden" id="searchRegBranch" value="">
+   {% else %}
+   <select id="searchRegBranch">
+       <option value="">{%if login_teacher.branchType == '1'%}接单部门{%else%}拜访校区{%endif%}</option>
+       <option value="0">本校区</option>
+       <option value="1">{{NB}}</option>
+       <option value="2">其他</option>
+   </select>
+   {% endif %}
+
+   <select id="searchBranch">
+       <option value="">意向校区</option>
+       {%if login_teacher.branchType == '1'%}
+       <option value="-1">未分配</option>
+           {% for b in branchs %}
+               <option value="{{b.id}}">{{b.branchName}}</option>
+           {% endfor %}
+       {%else%}
+       <option value="{{login_teacher.branch}}" {%if searchBranch == login_teacher.branch %}selected="selected"{%endif%}>{{login_teacher.branchName}}</option>
+       <option value="1" {%if searchBranch == '1' %}selected="selected"{%endif%}>其他校区</option>
+       {%endif%}
+   </select>
+
+      <select id="searchRegTeacher">
+       <option value="">{%if login_teacher.branchType == '1'%}接单{%else%}拜访{%endif%}老师</option>
+   {% for t in teachers %}
+       <option value="{{t.id}}">{{t.name}}</option>
+   {% endfor %}
+   </select>
+   <select id="searchTeacher">
+       <option value="">授课老师</option>
+   {% for t in teachers %}
+       <option value="{{t.id}}">{{t.name}}</option>
+   {% endfor %}
+   </select>
+
+   <input type ="checkbox" id="searchDeposit" />定金
+   <select id="searchStatus" name="searchStatus">
+     <option value=''>客户类型</option>
+     <option value="0">未报名</option>
+     <option value="0-C">未报名(非C类)</option>
+     <option value="A">A类</option>
+     <option value="B">B类</option>
+     <option value="C">C类</option>
+     <option value="1">学生</option>
+     <option value="2">退费</option>
+     <option value="3">学完或流失</option>
+     <option value="-1">重复</option>
+     <option value="0-Cf">未报名非C类已完成</option>
+   </select>
+<select id="searchDemo" name="searchDemo">
+     <option value="">试听课</option>
+     <option value="3">全部(不包括取消的)</option>
+     <option value="1">已上</option>
+     <option value="2">已安排未上</option>
+     <option value="5">未到场</option>
+     <option value="0">未安排</option>
+     <option value="4">取消</option>
+   </select>
+<select id="searchSourceType">
+       <option value="">来源</option>
+   {% for s in sourceTypes %}
+       <option value="{{s.typeCode}}">{{s.typeName}}</option>
+   {% endfor %}
+
+   </select>
+
+
+<select id="searchSource">
+       <option value="">渠道</option>
+   {% for s in sources %}
+       <option value="{{s.id}}">{{s.categoryCode}}-{{s.sourceName}}</option>
+   {% endfor %}
+
+   <option value="N">无渠道</option>
+   </select>
+</div>
+<div style="float:right;">
+    <button style="padding:5px;" id="searchButton" class="btn btn-success" onclick="search_student()">查询</button>
+    &nbsp;<button id="exc" style="padding:2px;" class="btn btn-default" onclick="excel()">导出</button>
+</div>
+    <div style="clear:both"></div>
+</div>
+<!-- SEARCH BLOCK END -->
+
+
+{%if login_teacher.branchSN != '26' and login_teacher.branchSN != '27'%}
+<!--div style="text-align:right;padding:6px;">
+试听课按钮颜色含义：<button style="font-size:12px;padding:4px;" class="btn btn-default">试听</button>灰色-未安排试听，<button style="font-size:12px;padding:4px;" class="btn btn-danger">未上</button>红色-已安排未上，<button style="font-size:12px;padding:4px;" class="btn btn-success">已上</button>绿色-已上，<button style="font-size:12px;padding:4px;" class="btn btn-warning">取消</button>橙黄色-已取消</center>
+</div-->
+{%endif%}
+
+
+<table border='1' >
+
+  <!-- DUP BEGIN -->
+          {% for dup in dups %}
+            <tr style="background-color:rgb({%if dup.probability|divisibleby:2%} 255,255,159 {%else%}255,253,56{%endif%});" class="dupTr">
+            <td>{{dup.probability|default:""}}</td>
+
+                  <td nowrap>来源:{{dup.regBranchName|default:""}}</td>
+                  <td nowrap>意向:{{dup.branchName|default:""}}</td>
+                  <td><a href="{% url 'regUser:student_info' dup.id %}">{{ dup.name|default:"无" }}</a></td>
+                  <td>{{dup.prt1mobile}}</td>
+
+                  <td>{{dup.regTeacher.name}}&nbsp;{{dup.regTime|date:"Y-m-d"|default:""}}</td>
+
+          <td style="max-width:360px;">
+<div style="overflow:hidden;min-height:30px;max-height:60px;text-overflow:ellipsis">
+            {{dup.memo}}
+</div>
+          </td>
+
+
+                  <td>
+                  {%if dup.resolved == -2%}
+                  <font color="red">{{dup.resolver.branch.branchName}}保留此记录</font>{%if dup.resolver.branch.id|stringformat:"s" != login_teacher.branch%}
+                    &nbsp;<button onclick="resolveDone(0,'{{dup.id}}','{{dup.prt1mobile}}','{{dup.branch.branchName}}')" class="btn btn-success" style="padding:3px 9px 3px 9px;">同意</button>
+                    &nbsp;<button onclick="resolveDone(-1,'{{dup.id}}','{{dup.prt1mobile}}','{{dup.branch.branchName}}')" class="btn btn-danger" style="padding:3px 9px 3px 9px;">反对</button>
+                    {%else%}，待对方同意{%endif%}
+                  {%elif  dup.resolved == -3%}
+
+                  {% elif dup.regBranch.id|stringformat:"s" == login_teacher.branch|stringformat:"s" %}
+
+                          {% if login_teacher.role > 5  %}
+                      <button onclick="resovle('{{dup.prt1mobile}}')" class="btn btn-danger" style="padding:3px 9px 3px 9px;">解决</button>
+                          {% endif %}
+
+
+                  {%endif%}
+                  </td>
+            </tr>
+          {% endfor %}
+
+  <!-- DUP END -->
+
+</table>
+
+<!-- TABLE HEAD BEGIN -->
+<div id="table-container">
+<table class="table table-hover"  id="maintable">
+       <thead>
+
+        <tr style="background:#eeeeee;">
+        <td width="35"></td>
+
+        {% if login_teacher.branchType == '1'%}
+        <td width="120">编号</td>
+        {%endif%}
+        <td width="20">级别</td>
+        <td nowrap>&nbsp;&nbsp;姓名&nbsp;&nbsp;</td>
+        <td width="20">年龄</td>
+        <td>电话</td>
+        {%if login_teacher.branchType != '1'%}
+        <td>
+        拜访人
+        </td>
+{% endif %}
+
+
+
+        {% if login_teacher.branchType == '1'%}
+        {% else %}
+        <td nowrap>
+        拜访部门
+        </td>
+        {% endif %}
+
+
+
+        </td>
+        <td>意向校区</td>
+        {% if login_teacher.branchType == '1'%}
+        {%else%}
+        <td>来源</td>
+        {%endif%}
+        {%if searchDemo %}
+          {%if searchDemo != '0'%}
+          <td>试听课日期</td>
+          {%else%}
+          <td>录入日期</td>
+          {%endif%}
+        {%elif searchRemind%}
+          <td>下次跟进</td>
+        {%elif searchStatus == '1'%}
+          <td>签约日期</td>
+        {%elif searchStatus == 'C' and beginDate%}
+        <td>C类日期</td>
+        {%elif login_teacher.branchType == '1'%}
+        <td>接单日期</td>
+        {%else%}
+        <td>录入日期</td>
+        {% endif %}
+        {%if not searchRemind and not searchDemo == '1' and not searchDemo == '3'%}
+        <td>下次跟进</td>
+        {%elif searchDemo == '1' or searchDemo == '3'%}
+        <td>试听老师</td>
+        <td>试听情况</td>
+        {%endif%}
+        <td style="max-width:20%">
+        联络记录</td>
+
+
+        <td colspan="3"  style="width:160px;">操作</td>
+        </tr>
+</thead>
+<!-- TABLE HEAD END -->
+
+<tbody>
+<!-- MAIN LIST BEGIN -->
+
+        {% for student in students %}
+            <tr
+             {%if student.probability == 'A'%} class="A" {%endif%}
+             {%if student.probability == 'B'%} class="B" {%endif%}
+             {%if student.probability == 'C'%} class="C" {%endif%}
+
+            >
+                <td width="20">{{forloop.counter}}</td>
+
+                {% if login_teacher.branchType == '1'%}
+                <td width="120">{{student.code|default:""}}</td>
+                {%endif%}
+                <td width="20">{{student.probability|default:""}}</td>
+                <td width="60"><a href="{% url 'regUser:student_info' student.id %}">{%if student.name%}{{student.name|default:"无"}}{%elif student.name2%}{{student.name2|default:"无"}}{%elif student.prt1%}{{student.prt1|default:"无"}}孩子{%else%}无{%endif%}</a></td>
+                <td width="30">{{student.yearMonth|default:""}}</td>
+                <td width="80">{{student.prt1mobile}}</td>
+                {%if login_teacher.branchType != '1'%}
+                <td nowrap>{{student.regTeacherName|default:""}}</td>
+                {%endif%}
+
+
+
+                {% if login_teacher.branchType == '1'%}
+                {%else%}
+                <td nowrap="nowrap">{{student.regBranchName|default:""}}</td>
+                {%endif%}
+                <td nowrap="nowrap">{{student.branchName|default:""}}</td>
+
+                {% if login_teacher.branchType == '1'%}
+                {%else%}
+                <td width="50">
+                  {%if student.sourceType == 'A'%}{%if student.source%}{{student.source.sourceName}}{%else%}网络{%endif%}{%endif%}
+                  {%if student.sourceType == 'B'%}拜访{%endif%}
+                  {%if student.sourceType == 'C'%}{%if student.source%}{{student.source.sourceName}}{%endif%}转介{%endif%}
+                  {%if student.sourceType == 'D'%}社会{%endif%}
+                </td>
+                {%endif%}
+
+        {%if searchDemo %}
+           <td nowrap="nowrap">{{student.regTime|date:"Y-m-d"|default:""}}</td>
+        {%elif searchRemind%}
+          <td nowrap="nowrap">{{student.remindTime|date:"Y-m-d"|default:""}}</td>
+        {%elif searchStatus == '1'%}
+          <td nowrap="nowrap">{{student.regTime|date:"Y-m-d"|default:""}}</td>
+        {%elif searchStatus == 'C' and beginDate%}
+          <td nowrap="nowrap">{{student.cdate|date:"Y-m-d"|default:""}}</td>
+        {%else%}
+        <td nowrap="nowrap">{{student.regTime|date:"Y-m-d"|default:""}}</td>
+        {% endif %}
+
+
+
+
+
+        {%if not searchDemo == '1' and not searchDemo == '3'%}
+        <td width="100" style="cursor:pointer;" onclick="gotrack('{{student.id}}')">{{student.remindTime|date:"Y-m-d"|default:""}}{{student.remind_txt|default:""}}</td>
+        {%elif searchDemo == '1' or searchDemo == '3'%}
+
+        <td>
+        {{student.demoTeacher|default:""}}
+
+        </td>
+        <td>
+        <div class="showDemo" goid="{{student.id}}_demo" style="overflow:hidden;min-height:40px;max-height:100px;width:150px;text-overflow:ellipsis">
+        {{student.demoMemo|default:""}}
+        </div>
+        <div class="showDemo2" id="{{student.id}}_demo" style="display:none;overflow:hidden;min-height:40px;max-height:100px;width:150px;text-overflow:ellipsis">
+        {{student.demoMemo|default:""}}
+        </div>
+        </td>
+        {%endif%}
+        <td width="{{memoWidth}}">
+
+        <div onclick="gotrack('{{student.id}}')" class="showMemo" goid="{{student.id}}" style="{%if student.probability == 'A'%}color:black;{%endif%}overflow:hidden;min-height:40px;max-height:100px;text-overflow:ellipsis">
+        <font color="red">
+        {{student.track|default:""}}
+        </font>
+        <font color="black">
+        {{student.memo}}
+        </font>
+        </div>
+        <div onclick="gotrack('{{student.id}}')"  class="showMemo2" id="{{student.id}}" style="{%if student.probability == 'A'%}color:black;{%endif%}display:none;position:fixed;left:0;top:0;min-height:40px;max-height:700px;width:{{memoWidth}}px;">
+                <font color="red">
+        {{student.track}}
+        </font>
+        <font color="black">
+        {{student.memo}}
+        </font>
+        </div>
+        </td>
+
+                <td width="140" style="max-width:400px;" nowrap>
+                {% if student.dup == -1%}
+                重复录入
+                {% endif %}
+
+                {%if login_teacher.username == 'patch3' or login_teacher.username == 'patch'%}
+                <a href="javascript:removeDup('{{student.id}}','s')">&nbsp;</a>
+                {%endif%}
+
+                {% if student.dup != -1 %}
+                    <button style="font-size:12px;padding:4px;"
+                            {% if student.isDemo == 1 %}
+                                class="btn btn-success" onclick="click_demo('{{ student.id }}');">已上
+                            {% elif student.isDemo == -1 %}
+                                class="btn btn-warning"  onclick="click_demo('{{ student.id }}');">取消
+                            {% elif student.demo%}
+                                class="btn btn-danger" onclick="click_demo('{{ student.id }}');">未上
+                            {% else %}
+                                class="btn btn-default" onclick = "addDemo('{{ student.id }}');">试听
+                            {% endif %}
+
+                    </button>
+                <button  style="font-size:12px;padding:4px; id="depositButton" onclick="go_deposit('{{student.id}}')"
+                {% if student.deposit > 0 and student.depositStatus == 1  %}
+                class="btn btn-success"
+                {% elif student.deposit > 0 and student.depositStatus == 2  %}
+                class="btn btn-warning"
+                {% elif student.deposit > 0 and student.depositStatus == 0 %}
+                class="btn btn-danger"
+                {% elif student.deposit > 0 and not student.depositStatus %}
+                class="btn btn-danger"
+                {% else %}
+                class="btn btn-default"
+                {% endif %}
+                >定金</button>
+                <button  style="font-size:12px;padding:4px;" class=
+                {% if student.status == 1 %}
+                    "btn btn-success"
+                {%  elif student.status == 0 %}
+                    "btn btn-default"
+                {%  elif student.status > 1 %}
+                    "btn btn-warning"
+                {%  endif %}
+                 onclick="click_contract('{{ student.id }}');">合同</button>
+                {% if student.gradeClass %}
+                    <!-- button class="btn btn-success" onclick = "click_class('{{ student.gradeClass }}');">班级</button> -->
+                {%  endif %}
+                {% if not student.gradeClass %}
+                    <!--  button class="btn btn-default" onclick = "classes('{{ student.id }}');">班级</button>-->
+                {%  endif %}
+
+                {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+
+<!-- MAIN LIST END -->
+
+
+
+        </tbody>
+    </table>
+    <div id="bottom_anchor"></div>
+<!-- PAGES BEGIN -->
+
+    <nav style="text-align: center">
+        <ul class="pagination">
+            {% for page in pages %}
+
+                {% if pageNow == page %}
+                    <li class="active" onclick="clickPage({{ page }})"><a>{{ page }}</a></li>
+                {% else %}
+                    <li style="cursor:pointer;" onclick="clickPage({{ page }})"><a>{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+        </ul>
+    </nav>
+<!-- PAGES END -->
+
+{%else%}
+<h4>数据导出</h4>
+以下是符合搜索条件的孩子记录，<font  color="red">请耐心等待“保存”按钮出现，</font>点击“保存”按钮可以存储为csv文件，可用Excel（pc）或 Number（Mac）打开
+<table id="datatable">
+  <thead>
+
+   <tr style="background:#eeeeee;">
+
+
+   {% if login_teacher.branchType == '1'%}
+   <td width="120">编号</td>
+   {%endif%}
+   <td width="20">级别</td>
+   <td>姓名</td>
+   <td width="20">生日</td>
+   <td>电话</td>
+   {%if login_teacher.branchType != '1'%}
+   <td>
+   拜访人
+   </td>
+{% endif %}
+
+
+
+   {% if login_teacher.branchType == '1'%}
+   {% else %}
+   <td nowrap>
+   拜访部门
+   </td>
+   {% endif %}
+
+
+
+   </td>
+   <td>意向校区</td>
+   {% if login_teacher.branchType == '1'%}
+   {%else%}
+   <td>来源</td>
+   {%endif%}
+   {%if searchDemo %}
+     {%if searchDemo != '0'%}
+     <td>试听课日期</td>
+     {%else%}
+     <td>录入日期</td>
+     {%endif%}
+   {%elif searchRemind%}
+     <td>下次跟进</td>
+   {%elif searchStatus == '1'%}
+     <td>签约日期</td>
+   {%elif searchStatus == 'C' and beginDate%}
+   <td>C类日期</td>
+   {%elif login_teacher.branchType == '1'%}
+   <td>接单日期</td>
+   {%else%}
+   <td>录入日期</td>
+   {% endif %}
+   {%if not searchRemind and not searchDemo == '1' and not searchDemo == '3'%}
+   <td>下次跟进</td>
+   {%elif searchDemo == '1' or searchDemo == '3'%}
+   <td>试听老师</td>
+   <td>试听情况</td>
+   {%endif%}
+   <td style="max-width:20%">
+   联络记录</td>
+
+
+   <td  style="width:160px;">阶段</td>
+   </tr>
+</thead>
+<tbody id="tableContent">
+  {% for student in sss %}
+
+     <tr
+  {%if student.probability == 'A'%} class="A" {%endif%}
+       {%if student.probability == 'B'%} class="B" {%endif%}
+       {%if student.probability == 'C'%} class="C" {%endif%}
+
+      >
+
+
+          {% if login_teacher.branchType == '1'%}
+          <td width="120">{{student.code|default:""}}</td>
+          {%endif%}
+          <td width="20">{{student.probability|default:""}}</td>
+          <td width="60">{%if student.name%}{{student.name|default:"无"}}{%elif student.name2%}{{student.name2|default:"无"}}{%elif student.prt1%}{{student.prt1|default:"无"}}孩子{%else%}无{%endif%}</td>
+          <td width="30">{{student.birthday|date:"Y-m-d"|default:""}}</td>
+          <td width="80">{{student.prt1mobile}}</td>
+          {%if login_teacher.branchType != '1'%}
+          <td nowrap>{{student.regTeacherName|default:""}}</td>
+          {%endif%}
+
+
+
+          {% if login_teacher.branchType == '1'%}
+          {%else%}
+          <td nowrap="nowrap">{{student.regBranchName|default:""}}</td>
+          {%endif%}
+          <td nowrap="nowrap">{{student.branchName|default:""}}</td>
+
+          {% if login_teacher.branchType == '1'%}
+          {%else%}
+          <td width="50">
+            {%if student.sourceType == 'A'%}{%if student.source%}{{student.source.sourceName}}{%else%}网络{%endif%}{%endif%}
+            {%if student.sourceType == 'B'%}拜访{%endif%}
+            {%if student.sourceType == 'C'%}转介{%endif%}
+            {%if student.sourceType == 'D'%}社会{%endif%}
+          </td>
+          {%endif%}
+
+  {%if searchDemo %}
+     <td nowrap="nowrap">{{student.regTime|date:"Y-m-d"|default:""}}</td>
+  {%elif searchRemind%}
+    <td nowrap="nowrap">{{student.regTime|date:"Y-m-d"|default:""}}</td>
+  {%elif searchStatus == '1'%}
+    <td nowrap="nowrap">{{student.regTime|date:"Y-m-d"|default:""}}</td>
+  {%elif searchStatus == 'C' and beginDate%}
+    <td nowrap="nowrap">{{student.cdate|date:"Y-m-d"|default:""}}</td>
+  {%else%}
+  <td nowrap="nowrap">{{student.regTime|date:"Y-m-d"|default:""}}</td>
+  {% endif %}
+
+
+
+
+
+  {%if not searchDemo == '1' and not searchDemo == '3'%}
+  <td width="100" style="cursor:pointer;"> {{student.remindTime|date:"Y-m-d"|default:""}}{{student.remind_txt|default:""}}</td>
+  {%elif searchDemo == '1' or searchDemo == '3'%}
+
+  <td>
+  {{student.demoTeacher|default:""}}
+
+  </td>
+  <td>
+  <div class="showDemo" goid="{{student.id}}_demo" style="overflow:hidden;min-height:40px;max-height:100px;width:150px;text-overflow:ellipsis">
+  {{student.demoMemo|default:""}}
+  </div>
+  <div class="showDemo2" id="{{student.id}}_demo" style="display:none;overflow:hidden;min-height:40px;max-height:100px;width:150px;text-overflow:ellipsis">
+  {{student.demoMemo|default:""}}
+  </div>
+  </td>
+  {%endif%}
+  <td width="{{memoWidth}}">
+
+  <div  class="showMemo" goid="{{student.id}}" style="{%if student.probability == 'A'%}color:black;{%endif%}overflow:hidden;min-height:40px;max-height:100px;text-overflow:ellipsis">
+  <font>
+  {{student.track|default:""}}
+  </font>
+  <font color="black">
+  {{student.memo}}
+  </font>
+  </div>
+  <div  class="showMemo2" id="{{student.id}}" style="{%if student.probability == 'A'%}color:black;{%endif%}display:none;position:fixed;left:0;top:0;min-height:40px;max-height:700px;width:{{memoWidth}}px;">
+          <font >
+  {{student.track}}
+  </font>
+  <font color="black">
+  {{student.memo}}
+  </font>
+  </div>
+  </td>
+
+          <td width="140" style="max-width:400px;" nowrap>
+          {% if student.dup == -1%}
+          重复录入
+          {% endif %}
+
+          {%if login_teacher.role == 7 or login_teacher.username == 'patch3' or login_teacher.username == 'patch4'%}
+
+          {%endif%}
+
+          {% if student.dup != -1 %}
+
+                      {% if student.isDemo == 1 %}
+                          试听已上
+
+                      {% elif student.demo%}
+                          已约试听
+
+                      {% endif %}
+
+
+
+          {% if student.deposit > 0 and student.depositStatus == 1  %}
+          定金转合同
+          {% elif student.deposit > 0 and student.depositStatus == 2  %}
+          定金已退
+          {% elif student.deposit > 0 and student.depositStatus == 0 %}
+          已收定金
+          {% elif student.deposit > 0 and not student.depositStatus %}
+          已收定金
+
+          {% endif %}
+
+
+          {% if student.status == 1 %}
+              合同有效
+          {%  elif student.status == 0 %}
+
+          {%  elif student.status > 1 %}
+              合同失效
+          {%  endif %}
+
+
+
+          {% endif %}
+          </td>
+      </tr>
+
+  {% endfor %}
+
+</tbody>
+</table>
+{%endif%}
+{% endblock %}
+{% block scripts %}
+    <script>
+
+    function moveScroll(){
+        var scroll = $(window).scrollTop();
+        var anchor_top = $("#maintable").offset().top;
+        var anchor_bottom = $("#bottom_anchor").offset().top;
+        if (scroll>anchor_top && scroll<anchor_bottom) {
+        clone_table = $("#clone");
+        if(clone_table.length == 0){
+            clone_table = $("#maintable").clone();
+            clone_table.attr('id', 'clone');
+            clone_table.css({position:'fixed',
+                     'pointer-events': 'none',
+                     top:0});
+            clone_table.width($("#maintable").width());
+            $("#table-container").append(clone_table);
+            $("#clone").css({visibility:'hidden'});
+            $("#clone thead").css({'visibility':'visible','pointer-events':'auto'});
+        }
+        } else {
+        $("#clone").remove();
+        }
+    }
+    $(window).scroll(moveScroll);
+
+    function resolveDone(resovled,oid,tel,branchName) {
+      var msg = '确定同意保留'+branchName+'的数据吗？'
+      if(resovled==-1)
+        msg = '确定反对？'
+    	if(confirm(msg)){
+          $.post("{% url 'regUser:resolve_api'%}", {
+        	  'prt1mobile':tel,
+            'validStudent':oid,
+            'resolved':resovled
+          }, function (res) {
+            if (res.error == 0) {
+                alert(res.msg);
+                location.reload(true);
+            } else {
+                alert(res.msg);
+            }
+          });
+    	}
+    }
+
+
+        function search_student(ex) {
+          if($("#searchDemo").val()!=""){
+        		if($("#beginDate").val()||$("#endDate").val()){
+        			console.log('ok');
+        		}else{
+        			alert("请指定试听课日期范围");
+        			return;
+        		}
+        	}
+            $("#searchButton").html("<font color='grey'>查询中...</font>")
+            checkRemind()
+        	a = $("#searchDeposit:checked").val();
+        	if($("#searchRemind0").prop("checked")){
+        		$("#searchRemind").val('1');
+        		if($("#beginDate").val()||$("#endDate").val()){
+        			console.log('ok');
+        		}else{
+        			alert("请指定日期范围");
+        			return;
+        		}
+        	}
+        	var url = '{% url 'regUser:student_list' %}'
+        	url = url +'?searchTeacher='+$("#searchTeacher").val()
+        			+'&searchRegTeacher='+$("#searchRegTeacher").val()
+        			+'&searchName='+$("#searchName").val()
+        			+'&searchPhone='+$("#searchPhone").val()
+        			+'&beginDate='+$("#beginDate").val()
+        			+'&endDate='+$("#endDate").val()
+        			+'&searchStatus='+$("#searchStatus").val()
+        			+'&searchDemo='+$("#searchDemo").val()
+        	        +'&searchRegBranch='+$("#searchRegBranch").val()
+        	        +'&searchSourceType='+$("#searchSourceType").val()
+        	        +'&searchSource='+$("#searchSource").val()
+        	        +'&beginYear='+$("#beginYear").val()
+        			+'&endYear='+$("#endYear").val()
+        			+'&beginMonth='+$("#beginMonth").val()
+        			+'&searchCode='+$("#searchCode").val()
+        			+'&endMonth='+$("#endMonth").val()
+        			+'&searchRemind='+$("#searchRemind").val()
+        			+'&searchSchool='+$("#searchSchool").val()
+        	        +'&searchBranch='+$("#searchBranch").val();
+
+        	if(a=='on')
+        		url = url + "&searchDeposit=1";
+
+            //var url = '/go?searchRegTeacher='+$("#searchRegTeacher").val()+'&searchName='+$("#searchName").val()+'&searchPhone='+$("#searchPhone").val()+'&beginDate='+$("#beginDate").val()+'&endDate='+$("#endDate").val();
+          if(ex=='1')
+              url = url + '&excel=1'
+            window.location.href=url;
+        }
+        function clickPage(page){
+        	var url = '{% url 'regUser:student_list' %}'
+        	url = url +'?searchTeacher='+$("#searchTeacher").val()
+			+'&searchRegTeacher='+$("#searchRegTeacher").val()
+			+'&searchName='+$("#searchName").val()
+			+'&searchPhone='+$("#searchPhone").val()
+			+'&beginDate='+$("#beginDate").val()
+			+'&endDate='+$("#endDate").val()
+			+'&searchStatus='+$("#searchStatus").val()
+			+'&searchRegBranch='+$("#searchRegBranch").val()
+        	+'&searchBranch='+$("#searchBranch").val()
+        	+'&searchSchool='+$("#searchSchool").val()
+        	+'&searchCode='+$("#searchCode").val()
+        	+'&searchSourceType='+$("#searchSourceType").val()
+        	+'&searchSource='+$("#searchSource").val()
+        	+'&beginYear='+$("#beginYear").val()
+        	+'&endYear='+$("#endYear").val()
+        	+'&searchRemind={{searchRemind|default:""}}'
+        	+'&beginMonth='+$("#beginMonth").val()
+			+'&searchCode='+$("#searchCode").val()
+			+'&endMonth='+$("#endMonth").val()
+			+'&searchDemo='+$("#searchDemo").val();
+        	url = url+'&page='+page;
+        	window.location.href = url;
+        }
+
+        function addDemo(oid) {
+            click_demo(oid);
+        }
+
+        function go_deposit(oid) {
+        	if(isZB()){
+        		alert("没有权限");
+        		return;
+        	}
+            var url = "{% url 'regUser:student_deposit' %}";
+            url = url+"?student_oid="+oid;
+            document.location.href=url;
+        }
+        function click_demo(oid) {
+        	//if(isZB()){
+        	if(false){
+        		alert("没有权限");
+        		return;
+        	}
+        	var url = '{% url 'gradeClass:studentDemo' '111111111111111111111111'%}';
+        	url = url.replace("111111111111111111111111", oid);
+            document.location.href=url;
+        }
+        function click_contract(oid) {
+        	//if(isZB()){
+        	if(false){
+        		alert("没有权限");
+        		return;
+        	}
+            var url = "{%url 'contract:studentContracts'%}?student_oid="+oid;
+            document.location.href=url;
+        }
+
+        function click_class(class_oid) {
+        	if(isZB()){
+        		alert("没有权限");
+        		return;
+        	}
+        	var url = "{% url 'gradeClass:edit_gradeClass' '1' '111111111111111111111111' %}";
+        	url = url.replace("111111111111111111111111", class_oid);
+        	//var url = '/go2/gradeClass/editGradeClass/1/'+class_oid;
+            document.location.href=url;
+        }
+
+        function classes(student_oid) {
+            var url = 'gradeClass/gradeClassList?student_oid'+student_oid;
+            window.open(url);
+        }
+        function resovle(prt1mobile) {
+            var url = "{% url 'regUser:resolve0' %}"+"?prt1mobile="+prt1mobile;
+            window.location.href=url;
+        }
+
+        function isZB(){
+        	var ret = false;
+        	{%if login_teacher.branchType == '1'%}
+        	ret = true;
+        	{%endif%}
+        	return ret;
+        }
+        $("#nav1").css("color","red");
+        $("#nav1").css("font-weight","bold");
+        {% if searchPhone%}
+        $("#searchPhone").val('{{searchPhone}}')
+        $("#searchPhone").css("color","red")
+        {%endif%}
+        {% if searchName%}
+        $("#searchName").val('{{searchName}}')
+        $("#searchName").css("color","red")
+        {%endif%}
+        {% if beginDate%}
+        $("#beginDate").val('{{beginDate}}')
+        $("#beginDate").css("color","red")
+        {%endif%}
+        {% if endDate%}
+        $("#endDate").val('{{endDate}}')
+        $("#endDate").css("color","red")
+        {%endif%}
+        {% if searchDeposit and searchDeposit == '1' %}
+        document.getElementById("searchDeposit").checked = true;
+        {%endif%}
+        {% if searchRemind and searchRemind == '1' %}
+        $("#searchRemind0").prop("checked",true);
+        {%endif%}
+        {% if searchRegTeacher%}
+        $("#searchRegTeacher").val('{{searchRegTeacher}}')
+        $("#searchRegTeacher").css("color","red")
+        {%endif%}
+        {% if searchTeacher%}
+        $("#searchTeacher").val('{{searchTeacher}}')
+        $("#searchTeacher").css("color","red")
+        {%endif%}
+        {% if searchStatus%}
+        $("#searchStatus").val('{{searchStatus}}')
+        $("#searchStatus").css("color","red")
+        {%endif%}
+        {% if searchSourceType%}
+        $("#searchSourceType").val('{{searchSourceType}}')
+        $("#searchSourceType").css("color","red")
+        {%endif%}
+        {% if searchSource%}
+        $("#searchSource").val('{{searchSource}}')
+        $("#searchSource").css("color","red")
+        {%endif%}
+        {% if searchRegBranch%}
+        $("#searchRegBranch").val('{{searchRegBranch}}')
+        $("#searchRegBranch").css("color","red")
+        {%endif%}
+        {% if searchBranch%}
+        $("#searchBranch").val('{{searchBranch}}')
+        $("#searchBranch").css("color","red")
+        {%endif%}
+        {% if searchCode%}
+        $("#searchCode").val('{{searchCode}}')
+        $("#searchCode").css("color","red")
+        {%endif%}
+        {% if searchSchool%}
+        $("#searchSchool").val('{{searchSchool}}')
+        $("#searchSchool").css("color","red")
+        {%endif%}
+        {% if searchDemo%}
+        $("#searchDemo").val('{{searchDemo}}')
+        $("#searchDemo").css("color","red")
+        {%endif%}
+        {% if beginYear%}
+        $("#beginYear").val('{{beginYear}}')
+        $("#beginYear").css("color","red")
+        $("#beginMonth").val('{{beginMonth}}')
+        $("#beginMonth").css("color","red")
+        {%endif%}
+        {% if endYear%}
+        $("#endYear").val('{{endYear}}')
+        $("#endYear").css("color","red")
+        $("#endMonth").val('{{endMonth}}')
+        $("#endMonth").css("color","red")
+        {%endif%}
+
+        $('#beginDate').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d'
+        });
+        $('#endDate').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d'
+        });
+{%if excel != '1'%}
+        document.onkeydown=function(event){
+            e = event ? event :(window.event ? window.event : null);
+        	    if(e.keyCode==13){
+        	    	search_student();
+             	}
+        }
+{%endif%}
+        function removeDup(id,s){
+        	var tip = '确认删除？';
+        	if(s = 's')tip = '这么隐蔽都被你发现啦？真的删除么？';
+        	if(confirm(tip)){
+        	    window.location.href="/go2/regUser/removeDup?id="+id;
+        	}
+        }
+
+        $("#searchDemo").change(function(){
+        	if($("#searchDemo").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#searchPhone").change(function(){
+        	if($("#searchPhone").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#searchSchool").change(function(){
+        	if($("#searchSchool").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#searchName").change(function(){
+        	if($("#searchName").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#searchCode").change(function(){
+        	if($("#searchCode").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#searchRegTeacher").change(function(){
+        	if($("#searchRegTeacher").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#searchTeacher").change(function(){
+        	if($("#searchTeacher").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#searchStatus").change(function(){
+        	if($("#searchStatus").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#searchSourceType").change(function(){
+        	if($("#searchSourceType").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#searchSource").change(function(){
+        	if($("#searchSource").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#searchDeposit").click(function(){
+        	if($("#searchDeposit").prop("checked")){
+        		$("#searchRemind0").prop("checked",false);
+        	}
+        });
+        $("#beginYear").change(function(){
+        	if($("#beginYear").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#beginMonth").change(function(){
+        	if($("#beginMonth").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#endYear").change(function(){
+        	if($("#endYear").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+        $("#endMonth").change(function(){
+        	if($("#endMonth").val()!='')
+        	    $("#searchRemind0").prop("checked",false);
+        });
+
+
+        $("#searchRemind0").click(function(){
+            checkRemind()
+        });
+function checkRemind(){
+	if($("#searchRemind0").prop("checked")){
+        		$("#searchDemo").val('');
+        		$("#searchPhone").val('');
+        		$("#searchName").val('');
+        		$("#searchRegBranch").val('');
+        		$("#beginYear").val('');
+        		$("#beginMonth").val('');
+        		$("#endYear").val('');
+        		$("#endMonth").val('');
+        		$("#searchRegTeacher").val('');
+        		$("#searchTeacher").val('');
+        		$("#searchStatus").val('');
+        		$("#searchSourceType").val('');
+        		$("#searchSource").val('');
+        		$("#searchSchool").val('');
+        		$("#searchCode").val('');
+        		$("#searchDeposit").prop('checked',false);
+        	}
+}
+$(".showMemo").hover(function (e) {
+	var x = $(this).offset()
+	var top = x.top
+	top = top - $(window).scrollTop()
+	var left = x.left
+	var div = $("#"+$(this).attr("goid"))
+	div.css("top",top+"px")
+	div.css("left",left+"px")
+	div.css("opacity","1")
+	div.css("background","white")
+	div.css("border","1px solid black")
+	div.css("display","block")
+})
+$(".showMemo2").hover(function(){},function (e) {
+	$(this).css("display","none")
+})
+$(window).scroll(function(){$(".showMemo2").css("display","none")})
+
+$(".showDemo-").hover(function (e) {
+	var x = $(this).offset()
+	var top = x.top
+	top = top - $(window).scrollTop()
+	var left = x.left
+	var div = $("#"+$(this).attr("goid"))
+	div.css("top",top+"px")
+	div.css("left",left+"px")
+	div.css("opacity","1")
+	div.css("background","white")
+	div.css("border","1px solid black")
+	div.css("display","block")
+})
+$(".showDemo2-").hover(function(){},function (e) {
+	$(this).css("display","none")
+})
+$(window).scroll(function(){$(".showDemo2-").css("display","none")})
+
+function gotrack(student_oid){
+	var url = "{%url 'regUser:student_info' '111111111111111111111111'%}"
+	url = url.replace("111111111111111111111111", student_oid);
+	window.location.href=url
+}
+
+$(document).ready(function(){
+  {%if excel == '1'%}
+  $('title').html('{{login_teacher.branchName}}客户列表')
+  $('#datatable').DataTable({
+      stateSave: true,
+      "language": {
+            "lengthMenu": "每页显示 _MENU_ 孩子",
+            "zeroRecords": "空空如也",
+            "sInfo":"从 _START_ 到 _END_， 共 _TOTAL_ 孩子",
+            "infoEmpty": "没有找到哦",
+            "sSearch":"查询",
+            "oPaginate": {
+            "sFirst":"首页",
+            "sPrevious": 	"上一页",
+            "sNext":     	"下一页",
+            "sLast":     	"末页"
+          },
+            "infoFiltered": "(从 _MAX_ 中搜索)"
+        },
+        dom: 'Bfrtip',
+        buttons: [
+              { extend: 'copy', text: '复制' },
+              { extend: 'csv', text: '保存' },
+              { extend: 'print', text: '打印' }
+          ],
+        "columns": [
+        {%if login_teacher.branchType == '1' and login_teacher.role > 3 and login_teacher.role < 8%}
+        {%else%}
+              { "orderable": true },
+              { "orderable": true },
+        {%endif%}
+              { "orderable": true },
+              { "orderable": true },
+              { "orderable": true },
+              { "orderable": true },
+              { "orderable": true },
+              { "orderable": true },
+              { "orderable": true },
+              { "orderable": true },
+              { "orderable": false },
+              { "orderable": false }
+              ]
+  });
+  $('#datatable').DataTable().page.len(6).draw();
+  {%endif%}
+})
+function excel(){
+  $("#exc").html('正在导出...')
+search_student('1')
+}
+</script>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="padding-top:10px;padding-bottom:3;">
+<a href="{%url 'statistic:indexBranch'%}"><返回</a>
+</div>
+<hr style="margin-top:2px;margin-bottom:10px"/>
+
+<center><h4>月度课时消费统计</h4></center>
+<div style="width:100%;margin:0 auto;text-align:center;">
+<select id="branch">
+  {%if login_teacher.role == login_teacher.RoleFin%}
+  <option value="">选择校区</option>
+  {%endif%}
+   {% for b in branchs %}
+      <option value="{{b.id}}" {% if branch == b.id|stringformat:"s" %}selected="select"{% endif %}>{{b.branchName}}</option>
+   {% endfor %}
+</select>
+<select id="year">
+<option value="">选择年份</option>
+<option value="2017">2017</option>
+<option value="2018">2018</option>
+
+</select>
+<select id="month">
+<option value="">选择月份</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+</select>
+<button onclick="search()">查询</button>
+<span id="tip"></span>
+</div>
+<div style="width:100%;margin:0 auto;text-align:center;padding-bottom:80px">
+{%if month%}
+<h4>{{branchName}} {{year}}年{{month}}月</h4>
+
+<table border="1" width="80%" align="center">
+<tr>
+<td>老师</td>
+<td>课时</td>
+<td>平均课时费</td>
+<td>消费额(前四次课消费)</td>
+<td>工资系数</td>
+<td>课时工资</td>
+</tr>
+{%for searchMonth in all%}
+{%if searchMonth.lessons > 0%}
+
+{%if not searchMonth.teacherName%}
+<tr>
+<td></td>
+<td>课时</td>
+<td>平均课时费</td>
+<td>消费额</td>
+<td></td>
+<td></td>
+</tr>
+{%endif%}
+<tr {%if searchMonth.teacherName and not searchMonth.teacher_oid%}style="color:#999999"{%endif%}>
+<td>{%if searchMonth.teacherName and not searchMonth.teacher_oid%}&nbsp;&nbsp;&nbsp;&nbsp;<a target="_blank" href="/go2/gradeClass/studentLessons?id={{searchMonth.student.id}}">{{searchMonth.teacherName}}-{{searchMonth.student.name}}</a>{%elif searchMonth.teacherName%}{{searchMonth.teacherName}}{%else%}全部{%endif%}</td>
+<td {%if searchMonth.lessons > 5 and not searchMonth.teacher_oid and searchMonth.teacherName%}style="color:red"{%endif%}>{{searchMonth.lessons|floatformat|default:''}}</td>
+<td>{{searchMonth.eve|default:''}}</td>
+<td>{{searchMonth.sum|default:''}}{%if searchMonth.teacherName and searchMonth.sumFirst4 > 0%}&nbsp;&nbsp;({{searchMonth.sumFirst4}}){%endif%}</td>
+<td>{%if searchMonth.payRatio%}{{searchMonth.payRatio|default:''}}％{%endif%}</td>
+<td>{{searchMonth.duePay|default:''}}</td>
+</tr>
+{%endif%}
+
+{%endfor%}
+
+</table>
+{%endif%}
+</div>
+{%endblock%}
+
+{% block scripts %}
+    <script>
+    function search(){
+        $("#tip").html('<font color="red">查询中请稍等...</font>');
+        var month = $("#month").val();
+        var year = $("#year").val();
+        var branch = $("#branch").val();
+        var url = "{%url 'statistic:branchIncome'%}?year="+year+"&month="+month+"&branch="+branch;
+        window.location.href=url
+    }
+    $("#year").val('{{year}}');
+    $("#month").val('{{month}}');
+    {%if branch%}
+    $("#branch").val('{{branch}}');
+    {%endif%}
+    </script>
+{% endblock %}

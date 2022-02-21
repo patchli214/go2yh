@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+<a name="top"></a>
+
+<div style="padding-top:10px;padding-bottom:3;float:left;">
+<a href="/go2/branch/reg?branchId={{login_teacher.branch}}"><返回</a>
+</div>
+<div style="float:left;font-size:20px;font-weight:bold;padding:10px 10px 0 20px;">抽奖列表</div>
+<div style="float:right;padding:10px 20px 0 20px;"><input id="keyword" value="{{kw|default:''}}" placeholder="验证码或手机号">&nbsp;<button id="searchButton">查询</button></div>
+
+
+<link rel="stylesheet" href="/go_static/media/css/jquery.dataTables.css">
+        <style>
+
+    .inactiveNam{background:#555555;color:white;}
+
+    .showMemo{cursor:pointer;}
+    .showMemo2{cursor:pointer;}
+    td{padding:1px;}
+    </style>
+
+
+<!--div>
+  <center>
+  开始日期<input id="beginDate" value="{{beginDate|default:''}}">
+  结束日期<input id="endDate" value="{{endDate|default:''}}">
+  <button>查询</button>
+</center></div-->
+<div style="margin-left:0px;clear:both;">
+<table id="datatable" >
+        <thead>
+        <tr>
+        <th width="100">注册时间</th>
+        <th>称呼</th>
+
+        <th>电话</th>
+        <th>转介老师校区</th>
+        <th>转介老师</th>
+
+        <th>是否在校</th>
+        <th>所在或意向校区</th>
+
+        <th style="max-width:200px;">验证码</th>
+
+        <th>备注</th>
+        <th>已兑奖</th>
+        <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for reg in list %}
+
+            <tr {% if reg.done %}style="background:#f3fff2"{%endif%}>
+
+                <td width="120" nowrap>{{reg.regTime|date:"Y-m-d H:i"}}</td>
+
+                <td width="60">{{reg.name|default:""}}</td>
+
+                <td>{{reg.mobile|default:""}}</td>
+
+                <td  nowrap>{{reg.branchName|default:''}}</td>
+        <td width="90">{{reg.teacherName|default:''}}</td>
+        <td width="90">{{reg.isStudent|default:''}}</td>
+        <td  nowrap>{%if reg.selectBranch != '请选择'%}{{reg.selectBranch|default:''}}{%endif%}</td>
+        <td style="max-width:200px;word-wrap:break-word;" wrap>
+          {{reg.source|default:''}}
+        </td>
+        <td>{{reg.memo|default:''}}</td>
+          <td>{% if reg.done and reg.studentId%}<a href="{% url 'regUser:student_info' reg.studentId %}">{{reg.studentName|default:''}}{{reg.studentMobile|default:''}}</a>{%endif%}</td>
+        <td >{% if not reg.done %}<button onclick="use('{{reg.source}}','{{reg.memo}}')">兑奖</button>{%endif%}</td>
+
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div style="text-align:center;padding:20px;clear:both;">
+<a href="#top"><button>返回顶部</button></a>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+$("#searchButton").click(function(){
+  var kw = $("#keyword").val()
+
+    document.location.href="{%url 'web:regList2'%}?kw="+kw
+
+})
+function use(voucher,value){
+  window.open("{%url 'web:useVoucher'%}?voucher="+voucher+"&value="+value)
+}
+$(document).ready(function() {
+	$('#datatable').DataTable({
+	"paging":   true,
+	"searching": false,
+	"info":true,
+  "language": {
+        "lengthMenu": "每页显示 _MENU_",
+        "zeroRecords": "空空如也",
+        "sInfo":"从 _START_ 到 _END_， 共 _TOTAL_ ",
+        "infoEmpty": "没有找到哦",
+        "sSearch":"查询",
+        "oPaginate": {
+        "sFirst":"首页",
+        "sPrevious": 	"上一页",
+        "sNext":     	"下一页",
+        "sLast":     	"末页"
+      },
+        "infoFiltered": "(从 _MAX_ 中搜索)"
+    },
+	"order": [[ 0  , "desc" ]],
+
+	});
+  $('#datatable').DataTable().page.len(100).draw();
+});
+
+
+
+
+</script>
+{% endblock %}

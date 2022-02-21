@@ -1,0 +1,87 @@
+
+
+<div id="subNav" style="margin-top:14px">
+{%if login_teacher.role < login_teacher.RoleFin and login_teacher.branch == '5867c26f0bb1e63b74d6cd62'%}
+<span id="subNav14">预约列表</span>
+{%endif%}
+
+{%if login_teacher.branchType != '2' and login_teacher.role < login_teacher.RoleFin%}
+  <span id="subNav1">今日应联系</span>
+  <span id="subNav2">未完成提醒</span>
+  {%if login_teacher.branchType == '1' and login_teacher.role < 9%}
+    <span id="subNav13">未来7天提醒</span>
+  {%endif%}
+  <span id="subNav3">被遗忘</span>&nbsp;&nbsp;|
+  {%if login_teacher.branchType != '1'%}
+    <span id="subNav15">应收学费</span>
+    <span id="subNav4">新生续费</span>
+    <span id="subNav5">老生续费</span>&nbsp;&nbsp;|
+    <span id="subNav12">生日提醒</span>&nbsp;&nbsp;|
+    <span id="subNav6">今日课表</span>&nbsp;&nbsp;
+  {%else%}
+    <span id="subNav9">校区今日应联系</span>
+    <span id="subNav10">校区未完成提醒</span>
+    <span id="subNav11">校区遗忘</span>
+  {%endif%}
+{%endif%}
+
+{%if login_teacher.cityFR == login_teacher.id%}
+   <span id="subNav20">已批准退费</span><span style="padding-left:10px">|</span>
+{%endif%}
+{%if login_teacher.cityFA == login_teacher.id%}
+   <span id="subNav21">退费申请</span>
+{%endif%}
+{%if login_teacher.cityRT == login_teacher.id%}
+   <span id="subNav22">开票申请</span>
+   <span>|</span>
+   <span id="subNav23">开票记录</span>
+   <span>|</span>
+{%endif%}
+{%if login_teacher.cityRB == login_teacher.id%}
+   <span id="subNav25" class="badge2" >报销申请(有发票)&nbsp;&nbsp;</span>
+   <span style="padding-left:10px">|</span>
+   <span id="subNav27">报销记录(有发票)</span>
+{%endif%}
+{%if login_teacher.cityRB2 == login_teacher.id%}
+   <span id="subNav26" class="badge2" style="padding-right:8px;">报销申请(无发票)</span>
+   <span style="width:20px;padding-left:10px">|</span>
+   <span id="subNav28" style="padding-left:10px;">报销记录</span>
+{%endif%}
+
+{%if login_teacher.branchType == '2'%}
+   <span style="width:20px;padding-left:10px">|</span>
+   <span id="subNav30" style="padding-right:8px;">应收学费</span>
+
+{%endif%}
+{%if showTest == 1%}
+<span id="" style="background:white;float:right;padding-right:8px;">&nbsp;<a href="/go2/teacher/testUser">test密码</a></span>
+{%endif%}
+</div>
+<script>
+{%if login_teacher.cityRB == login_teacher.id%}
+$.post("{% url 'workflow:reimburseApps_api'%}", {
+  "hasReceipt":1
+}, function (res) {
+    if (res.error == 0) {
+        if(res.num>0)
+            $("#subNav25").attr("data-badge",res.num)
+    } else {
+        alert("失败");
+    }
+});
+{%endif%}
+
+{%if login_teacher.cityRB2 == login_teacher.id%}
+$.post("{% url 'workflow:reimburseApps_api'%}", {
+  "hasReceipt":0
+}, function (res) {
+    if (res.error == 0) {
+        if(res.num>0)
+            $("#subNav26").attr("data-badge",res.num)
+    } else {
+        alert("失败");
+    }
+});
+{%endif%}
+
+</script>

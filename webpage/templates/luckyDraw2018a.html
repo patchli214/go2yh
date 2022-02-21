@@ -1,0 +1,162 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+body {
+	font-family: 微软雅黑, Arial;color:white;background: #fd8e01;
+}
+
+div {
+	padding: 10px 30px 10px 30px;text-align:center;
+}
+.timer{padding:0;font-weight:bold;font-size:26px;}
+#submitBtn {
+	padding: 10px 40px 10px 40px;
+	font-size: 16px;
+}
+
+label.valid {
+	width: 24px;
+	height: 24px;
+	background: url(assets/img/valid.png) center center no-repeat;
+	display: inline-block;
+	text-indent: -9999px;
+}
+
+label.error {
+	font-weight: bold;
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
+}
+.timer {
+  font-size: {%if isStart == 0%}20{% elif isStart == 1 %}20{% endif %}px;
+}
+.timer2 span {
+	font-weight: normal;
+	color: #000;
+}
+</style>
+
+</head>
+<body>
+<div style="padding-top:25px;font-size:20px;">
+
+	<img style="background:white;border-radius:50%;padding:2px;" src="/go_static/img/logo.png"  width="30"/>&nbsp;真朴儿童围棋教室
+
+</div>
+
+<div style="padding-top:5px;font-size:16px;">
+
+<h4>双十一 全民大抽奖 立即抵学费</h4>
+<div>
+特等奖 3600元<br>
+一等奖 1111元<br>
+二等奖 511元<br>
+三等奖 211元<br>
+四等奖 11元<br>
+</div>
+</div>
+{%if isStart == 2%}
+<div style="font-size:32px;">抽奖已结束</div>
+<div>兑奖截止日期：2019年3月1日</div>
+{%elif isStart == 0%}
+<div style="font-size:22px;">距离抽奖开始日期<br>「 2018-11-06 10:00 」还有：</div>
+<!--div class="timer2 j-timer-second"></div-->
+<div style="font-size:22px;color:black;">{{hours}}小时，{{minutes}}分，{{seconds}}秒</div>
+
+
+<center><button style="font-size:30px;" class="btn btn-success" onclick="alert('刷新页面');location.reload()">刷新</button>
+<script src="/go_static/js/timezz.min.js"></script>
+<script>
+  new TimezZ('.j-timer-second', {
+    date: 'Nov 06, 2018 10:00:00',
+    daysName: ' 天,',
+    hoursName: ' 小时,',
+    minutesName: ' 分钟,',
+    secondsName: ' 秒',
+
+  });
+</script>
+{%else%}
+<!--div style="font-size:22px;">距离抽奖结束<br>「 2018-11-11 晚11:00 」还有：</div>
+<div class="timer2 j-timer-second"></div-->
+<script src="/go_static/js/timezz.min.js"></script>
+<script>
+  new TimezZ('.j-timer-second', {
+    date: 'Nov 11, 2018 23:00:00',
+    daysName: ' 天,',
+    hoursName: ' 小时,',
+    minutesName: ' 分钟,',
+    secondsName: ' 秒',
+    tagNumber: 'b',
+    tagLetter: 'span',
+  });
+</script>
+<div style="background:white;color:black;">
+  <div>请填写下面信息然后抽奖<br>
+		<font color="red">中奖短信会发送到您填写的手机号</font><br>
+		（每个手机号可以抽奖一次）
+	</div>
+	<form id="qform" action="luckyDraw2018b" method="post"
+		class="form-inline">
+{% csrf_token %}
+
+		<div>
+           孩子称呼 <input  style="max-width:300px;width:50%;" type="text" name="name"
+				id="name" value="" placeholder="小名或大名" class="form-control1">
+		</div>
+		<div >
+		现在是否在真朴围棋学习？
+		    <label class="radio-inline"> <input type="radio"
+				name="isStudent" value="是" id="is" />是
+			</label> <label class="radio-inline"> <input type="radio"
+				name="isStudent" value="否" id="not" />否
+			</label>
+		</div>
+		<div>所在校区或意向校区
+			<select id="branch" name="branch">
+				<option value="">请选择</option>
+				{%for b in branches%}
+			<option value="{{b.branchName}}">{{b.branchName}}</option>
+			{%endfor%}
+		</select>
+	</div>
+		<div>手机号
+			 <input style="max-width:400px;width:60%;" type="text" name="mobile"
+				id="mobile" value="" placeholder="用于接收中奖短信"
+				class="form-control1">
+		</div>
+		<div>
+			<input style="max-width: 300px;width:80%;height:80px;font-size:16px;background:red" type="submit" class="btn btn-danger" value="抽奖" />
+</div>
+<input type="hidden" name="tid" value="{{tid}}" />
+				</form>
+		</div>
+</div>
+{%endif%}
+{% endblock %}
+{% block scripts %}
+<script>
+
+	$('#qform').validate({
+		rules : {
+      name:{required:true},
+			mobile : {
+				minlength : 11,
+				required : true
+			},
+			isStudent:{required:true}
+		},
+		messages : {
+			      name:{required:"请填写孩子称呼"},
+            prt1mobile : {
+                required : "手机号必填"
+            },
+						isStudent:{required:"请选择是否在真朴围棋学习"}
+        },
+	});
+
+</script>
+{% endblock %}

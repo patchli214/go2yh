@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'back.html' %}
+<script>
+var canAdd = true;
+</script>
+  {% for demo in demos %}
+
+  {% if not demo.demoIsFinish and demo.start_date|date:'Y-m-d' == datenow|date:'Y-m-d' and demo.school_time > datenow|date:'H:i'%}
+  <script>
+  canAdd = false;
+  </script>
+  {%endif%}
+  {% if not demo.demoIsFinish and demo.start_date|date:'Y-m-d' > datenow|date:'Y-m-d'%}
+  <script>
+  canAdd = false;
+  </script>
+  {%endif%}
+  <form id="form{{forloop.counter}}">
+    <input type="hidden" id="demo_oid" value="{{demo.id}}">
+<div style="background:#{%if demo.demoIsFinish == 1%}158127{%elif demo.demoIsFinish == -1%}999826{%else%}cf0b0b{%endif%};color:white;padding:10px;font-size:16px;">
+试听课{{forloop.counter}}&nbsp;{%if demo.demoIsFinish == 1%}已上{%elif demo.demoIsFinish == -1%}已取消{%else%}未上{%endif%}</div>
+<div  style="background:#{%if demo.demoIsFinish == 1%}caf3b6{%elif demo.demoIsFinish == -1%}f7f6c0{%else%}fedede{%endif%};padding:10px;">
+    <table>
+    <tr>
+            <td width="30%">
+                孩子:
+            </td>
+            <td>{{student.name|default:""}} {{student.name2|default:""}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                时间:
+            </td>
+            <td>
+                <input type="text" id="start_date" value='{{ demo.start_date|date:"Y-m-d" }}' {%if demo.deleted == 1%}disabled{%endif%}>
+                <input type="text" id="school_time" value='{{ demo.school_time }}'>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                老师:
+            </td>
+            <td>
+            <select id="teacher" readonly="readonly">
+
+                    {% for teacher in teachers %}
+                    <option value="{{teacher.id}}"
+                        {% if teacher.id == demo.teacher.id %}
+                            selected="selected"
+                        {% endif %}
+                        >{{teacher.name}}</option>
+                    {% endfor %}
+
+                    </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                教室:
+            </td>
+            <td>
+            <select id="classroom">
+                    <option value="">无</option>
+                    {% for classroom in classrooms %}
+                        <option value={{ classroom }} {% if demo.classroom == classroom %}selected{% endif %}>
+                            {{ classroom }}教室
+                        </option>
+                    {% endfor %}
+                </select>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                状态:
+            </td>
+            <td>
+                <input type="checkbox" id="isDemo"
+                       {% if demo.demoIsFinish == 1 %}checked{% endif %}>是否已上
+
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                备注:
+            </td>
+            <td>
+                <textarea id="demo_info" type="text"
+                          style="height: 120px;width:90%;resize:none; ">{{ demo.info|default:"" }}</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:15px"  colspan="2" class="text-center">
+                {%if not demo.demoIsFinish%}<span id="cancelButton" onclick="cancelDemo('form{{forloop.counter}}','{{student.name }} {{student.name2|default:""}} {{ demo.start_date|date:"Y-m-d" }} {{ demo.school_time }}')" deleteId='form{{forloop.counter}}' confirmContent="{{student.name }} {{student.name2|default:""}} {{ demo.start_date|date:"Y-m-d" }} {{ demo.school_time }}" class="btn btn-danger cancel">取消此试听</span>{%endif%}
+                {%if demo.demoIsFinish != -1%}<div id="modifyButton" class="btn btn-success" onclick="save_demo('form{{forloop.counter}}')">修改</div>{%endif%}
+            </td>
+        </tr>
+    </table>
+    </div>
+    </form>
+{%endfor%}
+<div id="newDemo">
+ <div style="background:#999999;color:white;padding:10px;font-size:16px;">新试听</div>
+    <form id="newForm">
+    <div style="background:#eeeeee;padding:10px;">
+<table>
+    <tr>
+            <td width="30%">
+                孩子:
+            </td>
+            <td>{{student.name}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                时间:
+            </td>
+            <td>
+                <input type="text" id="start_date">
+                <input type="text" id="school_time">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                老师:
+            </td>
+            <td>
+            <select id="teacher">
+                    {% for teacher in teachers %}
+                    <option value="{{teacher.id}}">{{teacher.name}}</option>
+                    {% endfor %}
+                    </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                教室:
+            </td>
+            <td>
+            <select id="classroom">
+                    <option value="">无</option>
+                    {% for classroom in classrooms %}
+                        <option value='{{ classroom }}'>
+                            {{ classroom }}教室
+                        </option>
+                    {% endfor %}
+                </select>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                状态:
+            </td>
+            <td>
+                <input type="checkbox" id="isDemo">是否已上
+
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                备注:
+            </td>
+            <td>
+                <textarea id="demo_info" type="text"
+                          style="height: 120px;width:90%;resize:none; "></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:15px" colspan="2" class="text-center">
+                <div id="saveButton" class="btn btn-success" onclick="save_demo('newForm')">保存</div>
+            </td>
+        </tr>
+    </table>
+    </div>
+    </form>
+    </div>
+
+
+<!-- confirm Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">真的要取消试听课吗？</h4>
+            </div>
+            <div class="modal-body" id="info-body">
+
+<div id="confirmContent"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button id="goRemove" type="button" class="btn btn-danger" data-dismiss="modal">确定取消试听课</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <input type="hidden" id="deleteId">
+
+{% endblock %}
+{% block scripts %}
+<script>
+    if(!canAdd){
+    	$("#newDemo").css("display","none");
+    }
+    function save_demo(formId) {
+        	var teacher = $("form[id="+formId+"] select[id='teacher']").val();
+
+        	var classroom = $("form[id="+formId+"] select[id='classroom']").val();
+            if(classroom==''){
+            	alert("请选择教室")
+            	return
+            }
+            var isDemo = $("form[id="+formId+"] input[id='isDemo']:checked").val();
+            var demo_info = $("form[id="+formId+"] textarea[id='demo_info']").val();
+            var start_date = $("form[id="+formId+"] input[id='start_date']").val();
+            if(start_date==''){
+            	alert("请选择日期")
+            	return
+            }
+            var datenow = '{{datenow|date:"Y-m-d"}}';
+            if(start_date>datenow&&isDemo=='on'){
+              alert('未到试听课日期，不能修改为已上')
+
+              return
+            }
+            var school_time = $("form[id="+formId+"] input[id='school_time']").val();
+            if(school_time==''){
+            	alert("请选择时间")
+            	return
+            }
+            if(school_time<'08:00'||school_time>'20:00'){alert('时间有误！必须在08:00-20:00之间');return}
+            var demo_oid = $("form[id="+formId+"] input[id='demo_oid']").val();
+            var url = "{% url 'gradeClass:api_save_demo' %}";
+            $(".btn btn-danger cancel").attr("disabled","disabled")
+        	    $("#saveButton").attr("disabled","disabled")
+        	    $("#saveButton").html('保存中...')
+        	    $("#modifyButton").attr("disabled","disabled")
+        	    $("#modifyButton").html('保存中...')
+            $.post(url, {
+            	"demo_oid":demo_oid,
+            	"teacher":teacher,
+            	"classroom":classroom,
+            	"student_oid":'{{student.id}}',
+            	"start_date":start_date,
+            	"school_time":school_time,
+                "isDemo": isDemo,
+                "demo_info": demo_info
+            }, function (res) {
+            	console.log(res);
+            	console.log(res.error);
+            	if(res.error==1){
+            		alert(res["msg"]);
+            	}
+            	else{
+            		console.log(res.msg);
+            	    var url = "{%url 'gradeClass:schedule'%}";
+
+            	    {%if login_teacher.branchType == '1'%}
+                	    url = res["url"]
+                	{%endif%}
+
+            	    document.location.href=url;
+            	    console.log('save done');
+            	}
+
+            });
+        }
+
+
+
+        function remove_demo(formId) {
+        	  var demo_info = $("form[id="+formId+"] textarea[id='demo_info']").val();
+            var demo_oid = $("form[id="+formId+"] input[id='demo_oid']").val();
+
+        	  if(!demo_info){alert('取消前请填写备注！');return;}
+
+        	    $(".btn btn-danger cancel").attr("disabled","disabled")
+        	    $(".btn btn-danger cancel").html('正在取消...')
+        	    $("#saveButton").attr("disabled","disabled")
+        	    $("#modifyButton").attr("disabled","disabled")
+        	    var url = "{% url 'gradeClass:api_cancel_demo' %}";
+                $.post(url, {
+                	"demo_info":demo_info,
+                    "gradeClass_oid": demo_oid
+                }, function (res) {
+                	if(res["error"]==1)alert(res["msg"]);
+                	else{
+                	    var url = "{%url 'gradeClass:schedule'%}";
+                	    {%if login_teacher.branchType == '1'%}
+                	        url = res["url"]
+                	    {%endif%}
+                	    document.location.href=url;
+                	    //window.location.assign(url);
+                	}
+                });
+
+        }
+
+        $('form[id=newForm] input[id=start_date]').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d'
+        });
+
+        //上课时间或日程时间
+        $('form[id=newForm] input[id=school_time]').datetimepicker({
+            datepicker: false,
+            allowTimes:[
+                        '8:00','8:30','9:00','9:30','10:00','10:30','11:00',
+                        '11:30','12:00','12:30', '13:00','13:30','14:00',
+                        '14:30','15:00','15:30','16:00','16:30','17:00','17:30',
+                        '18:00', '18:30', '19:00', '19:30', '20:00'
+                       ]
+            ,
+            format: 'H:i'
+        });
+        {% for demo in demos %}
+
+        $('form[id=form{{forloop.counter}}] input[id=start_date]').datetimepicker({
+        	timepicker: false,
+            format: 'Y-m-d'
+        });
+        $('form[id=form{{forloop.counter}}] input[id=school_time]').datetimepicker({
+            datepicker: false,
+            allowTimes:[
+                        '8:00','8:30','9:00','9:30','10:00','10:30','11:00',
+                        '11:30','12:00','12:30', '13:00','13:30','14:00',
+                        '14:30','15:00','15:30','16:00','16:30','17:00','17:30',
+                        '18:00', '18:30', '19:00', '19:30', '20:00'
+                       ]
+            ,
+            format: 'H:i'
+        });
+        {%endfor%}
+
+
+    $("#goRemove").click(function(){
+      remove_demo($("#deleteId").val())
+    })
+    function cancelDemo(formid,tip){
+
+      console.log(formid)
+      var demo_info = $("form[id="+formid+"] textarea[id='demo_info']").val();
+
+      if(!demo_info){alert('取消前请填写备注！');return;}
+        $("#confirmModal").modal();
+        $("#deleteId").val(formid)
+        $("#confirmContent").html(tip)
+        console.log('deleteId-'+$("#deleteId").val())
+    }
+    </script>
+{% endblock %}

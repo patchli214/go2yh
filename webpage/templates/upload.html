@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    <style>
+    </style>
+{% endblock %}
+{% block content %}
+{% include 'back.html' %}
+最大上传图片大小：6M，如上传失败，请尝试缩小图片再上传
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+    {{ form }}
+    <br><br>
+<input type="submit" value="上传">
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+
+$("#id_student_oid").val('{%if student_oid%}{{student_oid}}{%else%}0{%endif%}');
+$("#id_teacher_oid").val('{%if teacher_oid%}{{teacher_oid}}{%else%}0{%endif%}');
+$("#id_contractId").val('{%if contractId%}{{contractId}}{%else%}0{%endif%}');
+$("#id_type").val('{{type}}');
+</script>
+{% endblock %}

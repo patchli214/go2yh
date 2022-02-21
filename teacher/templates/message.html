@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="padding-top:10px;padding-bottom:3;float:left;">
+<a href="/"><返回</a>
+</div>
+<div style="width:100%;margin:0 auto;text-align:center;font-size:16px;">消息列表</div>
+<div>
+  <table id="datatable" class="table table-hover">
+    <thead>
+    <tr>
+
+      <th width="100">发送者</th>
+      <th width="140" nowrap>发送时间</th>
+      <th>消息</th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+{%for message in messages%}
+    <tr {%if message.isRead == 0%}style="color:red"{%endif%}>
+
+      <td>{{message.fromBranchName|default:""}}-{{message.fromTeacherName|default:""}}</td>
+      <td>{{message.sendTime|date:"Y-m-d H:i"|default:""}}</td>
+      <td>{%if message.todoUrl%}<a href='{{message.todoUrl}}'>{%elif message.phone%}<a class="telto" href='tel:{{message.phone}}'>{%endif%}{{message.message}}{%if message.todoUrl or message.phone%}</a>{%endif%}</td>
+
+    </tr>
+{%endfor%}
+</tbody>
+</table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function() {
+  if(!mobileCheck()){
+    $(".telto").attr("href","#")
+  }
+  $.post("{% url 'teacher:api_readMessage'%}", {
+  }, function (res) {
+      if (res.error == 0) {
+          console.log('read')
+      } else {
+          console.log('fail')
+      }
+  });
+	$('#datatable').DataTable({
+	    stateSave: true,
+	    "language": {
+            "lengthMenu": "每页显示 _MENU_ ",
+            "zeroRecords": "空空如也",
+            "sInfo":"从 _START_ 到 _END_， 共 _TOTAL_ ",
+            "infoEmpty": "没有找到哦",
+            "sSearch":"查询",
+            "oPaginate": {
+		        "sFirst":"首页",
+		        "sPrevious": 	"上一页",
+		        "sNext":     	"下一页",
+		        "sLast":     	"末页"
+	        },
+            "infoFiltered": "(从 _MAX_ 中搜索)"
+        },
+        "order": [[ 2, "desc" ]],
+        "columns": [
+              { "orderable": false },
+	            { "orderable": true },
+	            { "orderable": true },
+	            { "orderable": false }
+	            ]
+	});
+});
+
+
+</script>
+{% endblock %}

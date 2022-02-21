@@ -1,0 +1,58 @@
+<html>
+<head>
+    <title>CRM帮助－网络部客户管理流程</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/go_static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/go_static/css/bootstrap3.4-icons.css">
+    <link rel="stylesheet" href="/go_static/css/zhenpu.css">
+
+    <script src="/go_static/js/jquery2.min.js"></script>
+    <script src="/go_static/js/bootstrap.min.js"></script>
+    <script src="/go_static/js/jquery.validate.js"></script>
+    <script src="/go_static/js/utils.js"></script>
+    <script src="/go_static/js/config.js"></script>
+
+    <!--datetimepicker-->
+    <link rel="stylesheet" type="text/css" href="/go_static/js/DateTimePicker/jquery.datetimepicker.css"/>
+    <script src="/go_static/js/DateTimePicker/build/jquery.datetimepicker.full.min.js"></script>
+<style>
+.block{cursor:pointer;padding-left:6px;padding-right:16px;padding-top:6px;float:left;height:114px;}
+</style>
+</head>
+<body >
+<div style="margin:10px;">
+  <a href="/go_static/howto/index.html"><返回帮助主页</a>
+</div>
+<div style="width:100%;height:100px; background:orange;"><center><a href="index.html"><img style="border:4px solid orange;" src="/go_static/img/howto/howto.png" height="100%"></a></center></div>
+<center><h4>网络部客户管理流程</h4></center>
+<div style="margin:20px;">
+网络部接到的咨询客户今后将逐步记录进CRM系统，便于校区和网络部跟踪，便于数据统计分析<br>
+目前参与这个工作的试点校区是：槐房万达，通州万达，沙河，崇文门，朝阳门<br>
+每周会增加一些校区进来，问题会不断改进，功能将不断完善。谢谢大家的参与！<br>
+<br>
+基本流程如下：<br>
+1、网络部在crm录入客户信息，系统会自动发送微信给所分配校区主任和运营老师,如下图所示：<br>
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/proc01.png" style="max-width:600px;width:100%;"></div>
+2、运营老师收到微信提醒，登录进入crm系统后，工作台首页会显示刚才网络部推送的那个客户信息，如下图：<br>
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/proc02.png" style="max-width:1000px;width:100%;"></div>
+3、点击孩子名字可以看到详情：<br>
+<div style="margin:20px;border:1px solid black;"><img src="/go_static/img/howto/proc03.png" style="max-width:1000px;width:100%;"></div>
+4、复制备注信息加“收到”，粘贴到招生三剑客群<br>
+5、运营老师及时联系客户，然后到上面crm孩子详情页面间，点“联络记录”按钮，增加联络记录，然后点“修改提醒”按钮，修改下次提醒时间（到时crm系统工作台首页会提醒联系这个家长）<br>
+6、如果安排了试听课，需要到crm系统登记试听课安排，请参看帮助页面：<a href="demo.html">如何添加试听课</a><br>
+7、如果签单，需要到crm系统登记成交情况，请参看<a href="contract.html">签约和班级管理</a>，然后到三剑客群报喜<br>
+8、网络部每天定时查看crm，检视校区网络客户的跟踪情况，如有必要，提醒运营老师跟踪<br>
+9、网络部定时检视各校区统计信息，汇总各项统计数据（校区运营老师只要及时填写了联系、试听、成交信息到crm，就不用再做统计工作了）
+
+
+</div>
+</body>
+</html>
+<script>
+$(".block").click(function(){
+	window.location.href="/go_static/howto/"+$(this).attr("id")+".html";
+})
+</script>
