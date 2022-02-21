@@ -224,7 +224,8 @@ h4{margin:4px;}
   {%endif%}
   {% endfor %}
   </select>
-  {%if login_teacher.branch|stringformat:"s" == nb.id|stringformat:"s"%}
+  
+  {%if login_teacher.branchType == '1'%}
   <select id="branch2" name="branch2" class="">
   <option value=''>意向校区2</option>
   {% for b in branchs %}
