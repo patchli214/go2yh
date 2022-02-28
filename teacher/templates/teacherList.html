@@ -55,7 +55,7 @@
 
                   {%endif%}
 
-                      {% if login_teacher.id|stringformat:"s" == teacher.id|stringformat:"s" or login_teacher.role >= teacher.role and login_teacher.role >= 7 %}
+                      {% if login_teacher.id|stringformat:"s" == teacher.id|stringformat:"s" or teacher.role < 9 and login_teacher.role >= 7 %}
                       <button id="modifyBtn" onclick="edit_teacher('{{teacher.id}}')" class="btn btn-success">修改</button>
                       {% endif %}
 

@@ -139,7 +139,7 @@
         </tr>
             <tr>
                 <td colspan="2"  align="center">
-                  {% if login_teacher.id|stringformat:"s" == teacher.id|stringformat:"s" or login_teacher.role >= teacher.role and login_teacher.role >= 7 %}
+                  {% if login_teacher.id|stringformat:"s" == teacher.id|stringformat:"s" or teacher.role < 9 and login_teacher.role >= 7 %}
                     <button class="btn btn-default" onclick="reg()">保存</button>
                   {%endif%}
                 </td>
