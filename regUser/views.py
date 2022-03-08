@@ -205,7 +205,7 @@ def rr(request):
                                        "title":title,
                                        "source":source})
 
-
+#st——库中已存在数据，student——新录入数据
 def checkIfDup(student,st,s,regBranch,branch,branch2,branch3,branch4):
     #regBranch一方为网络部,一方branch校区，是另一方regBranch校区
     if str(st.regBranch.id) == constant.NET_BRANCH or str(regBranch.id) == constant.NET_BRANCH or str(st.regBranch.id) == constant.NET_BRANCH2 or str(regBranch.id) == constant.NET_BRANCH2:
@@ -218,6 +218,12 @@ def checkIfDup(student,st,s,regBranch,branch,branch2,branch3,branch4):
             student.dup = -1
         elif str(st.regBranch.id) == branch4:
             student.dup = -1
+
+    if str(st.regBranch.id) == constant.NET_BRANCH or str(regBranch.id) == constant.NET_BRANCH:
+        if str(st.regBranch.id) == constant.NET_BRANCH2 or str(regBranch.id) == constant.NET_BRANCH2:
+            if str(st.regBranch.id) != str(regBranch.id):
+                student.dup = -1
+
     if student.dup == -1:
         student.resolved = -1
         s.resolved = -1
