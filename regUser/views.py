@@ -2073,7 +2073,16 @@ def dboard12(request):
 def checkDup(all,login_teacher):
     has = False
     hasNet = False
+    bran1 = None
     for other in all:
+                if other.regBranch.type == 1:
+                    #收单部门之间可以显示冲突
+                    if str(other.regBranch.id) != bran1:
+                        has = True
+                        hasNet = True
+                        break
+                    else:
+                        bran1 = str(other.regBranch.id)
                 if other.branch and str(other.branch.id) == str(login_teacher.branch):
                     #意向校区是自己校区
                     has = True
@@ -2265,7 +2274,7 @@ def student_list(request):
     #===========================================================================
     # 冲突记录
     #===========================================================================
-    queryDup = Q(dup=-1)&Q(regBranch=login_teacher.branch)&(Q(resolved=-1)|Q(resolved=-2)|Q(resolved=-3))
+    queryDup = Q(dup=-1)&(Q(regBranch=login_teacher.branch)|Q(branch=login_teacher.branch))&(Q(resolved=-1)|Q(resolved=-2)|Q(resolved=-3))
     dup =  Student.objects.filter(queryDup).order_by("prt1mobile")
 
     millis1 = int(round(time.time() * 1000))
@@ -2279,11 +2288,17 @@ def student_list(request):
     has1 = False
     orderby = "-callInTime"
     i = 0
+    lastMobile = None
     for s in dup:
+      if lastMobile == s.prt1mobile:
+        print('---------------SAME----------------')
+      else:
+        lastMobile = s.prt1mobile
         if constant.DEBUG:
             millis1 = int(round(time.time() * 1000))
             print 'after dup every:'+str(millis1-millis0)
             millis0 = millis1
+
         qu = Q(prt1mobile=s.prt1mobile)|Q(prt2mobile=s.prt1mobile)
         if s.prt2mobile and len(s.prt2mobile) > 5:
             qu = qu|Q(prt1mobile=s.prt2mobile)|Q(prt2mobile=s.prt2mobile)
