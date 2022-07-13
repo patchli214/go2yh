@@ -1215,7 +1215,9 @@ def allRemainBranch(request):
         stat.showAll = stat.show + stat.showNet
         stat.newdeal = len(newdeal)-len(newdealNet)
         stat.newdealNet = len(newdealNet)
-        stat.reservation = stat.show + len(unshow)
+        #20220328 未到场bug修复：校区unshow=unshow-netUnshow
+        stat.reservation = stat.show + len(unshow)-len(netUnshow)
+        #20220328 未到场bug END
         stat.reservationNet = len(netShow) + len(netUnshow)
         stat.reservationAll = stat.reservation + stat.reservationNet
         stat.newdealAll = len(newdeal)
