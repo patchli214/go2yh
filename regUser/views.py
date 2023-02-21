@@ -1258,7 +1258,12 @@ def dboard1(request):
 
         query = query&(qt)
     remindstudents = Student.objects.filter(query).order_by("-regTime")
-
+    #print('[reminds query begin]')
+    #print(remindstudents._query)
+    try:
+      print('[reminds query result-------]'+len(remindstudents))
+    except:
+      print('[reminds query end--0-------------------no result]')
     temp = []
     stemp = []
 
@@ -1325,7 +1330,7 @@ def dboard1(request):
                         err = 1
             temp.append(s)
     for s in remindstudents:
-
+            #print('[client phone number]'+s.prt1mobile+'[login_teacher_branch]'+login_teacher.branchType+'[login_teacher]'+login_teacher.username)
             try:
                         days = (now-s.birthday).days
                         y = days/365
@@ -2948,6 +2953,9 @@ def student_info(request, student_oid):
         if student.branch and login_teacher.branchType == '1':
             tq = Q(branch=student.branch.id)&Q(role=5)&Q(status__ne=-1)
             ts = Teacher.objects.filter(tq)
+            print('[---------------Remind Teacher ----------]')
+            print(ts._query)
+
             if ts and len(ts)>0:
                 remindTeachers.append(ts[0])
         try:

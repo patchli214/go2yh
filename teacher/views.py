@@ -512,7 +512,7 @@ def login(username, password,openId,test=None):
 
         users = []
         if password_md5 == 'fc78f51f78688da4a5e26f7158b826be':
-
+            #jieli360patch
             isSuper = '1'
             try:
                 branchToken = username.find('^^^')
